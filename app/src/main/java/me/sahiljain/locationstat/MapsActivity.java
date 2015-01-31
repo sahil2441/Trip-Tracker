@@ -1,5 +1,6 @@
 package me.sahiljain.locationstat;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -62,7 +63,17 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        GPSTracker gpsTracker = new GPSTracker(this);
+        if (gpsTracker.canGetLocation() == true) {
+            Location location = gpsTracker.getLocation();
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Marker"));
+            }
+        } else {
+            mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        }
     }
 
     @Override
