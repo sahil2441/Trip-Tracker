@@ -3,5 +3,8 @@
 
     <string name="app_name">Location Stat</string>
     <string name="title_activity_maps">Map</string>
+    <string name="settings">settings</string>
+    <string name="setUpHomeLoc">Set up Home Location</string>
+    <string name="setUpWorkLoc">Set up Work Location</string>
 
 </resources>

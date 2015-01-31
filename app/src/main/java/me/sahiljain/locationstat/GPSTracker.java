@@ -83,16 +83,20 @@ public final class GPSTracker implements LocationListener {
                 if (isGPSEnabled) {
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        longitude = location.getLongitude();
-                        latitude = location.getLatitude();
+                        if (location != null) {
+                            longitude = location.getLongitude();
+                            latitude = location.getLatitude();
+                        }
                     }
                 }
 
                 if (isNetworkEnabled) {
-                    if (locationManager == null) {
+                    if (location == null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        longitude = location.getLongitude();
-                        latitude = location.getLatitude();
+                        if (location != null) {
+                            longitude = location.getLongitude();
+                            latitude = location.getLatitude();
+                        }
                     }
                 }
             }
