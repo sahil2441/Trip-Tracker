@@ -68,6 +68,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     @Override
     public void onMapClick(LatLng latLng) {
         mMap.addMarker(new MarkerOptions().position(latLng).
-                icon(BitmapDescriptorFactory.fromResource(R.drawable.rsz_icon)));
+                icon(BitmapDescriptorFactory.fromResource(R.drawable.icon)));
     }
 }
