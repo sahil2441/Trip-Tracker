@@ -10,6 +10,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener {
+    /**
+     * This is just a test
+     */
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
