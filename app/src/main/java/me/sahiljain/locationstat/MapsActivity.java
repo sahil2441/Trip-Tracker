@@ -139,7 +139,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         /**
          * Set up the device with QuickBlox
          */
-        intApplication();
+//        intApplication();
 
         context = getApplicationContext();
 
@@ -158,13 +158,50 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         }
     }
 
-    private void intApplication() {
+    private void intApplication(final String regId) {
         // Set your QuickBlox application credentials here
         QBSettings.getInstance().fastConfigInit("19423", "ZjmEEQ8XMdaabrc", "s3YLhXZCvETThZS");
 
         // Create quickblox session with user
         QBAuth.createSession("abc", "12345678", new QBEntityCallbackImpl<QBSession>() {
+                    @Override
+                    public void onSuccess(QBSession result, Bundle params) {
 
+                        /**
+                         *If session is created succesfully then the user is subscribed.
+                         *
+                         *  Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
+                         * messages to your app. Not needed for this demo since the device sends upstream messages
+                         * to a server that echoes back the message using the 'from' address in the message.
+                         */
+                        Log.d(TAG, "Subscribing. . . .");
+
+                        String deviceID;
+
+                        final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                        if (telephonyManager.getDeviceId() != null) {
+                            deviceID = telephonyManager.getDeviceId();//use for mobiles
+                        } else {
+                            deviceID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+                        }
+                        QBMessages.subscribeToPushNotificationsTask(regId, deviceID,
+                                QBEnvironment.DEVELOPMENT, new QBEntityCallbackImpl<ArrayList<QBSubscription>>() {
+                                    @Override
+                                    public void onSuccess(ArrayList<QBSubscription> result, Bundle params) {
+                                        Log.d(TAG, "Subscribed. . . . ");
+                                    }
+
+                                    @Override
+                                    public void onError(List<String> errors) {
+                                    }
+                                }
+                        );
+                    }
+
+                    @Override
+                    public void onError(List<String> errors) {
+
+                    }
                 }
         );
     }
@@ -193,7 +230,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            sendRegistrationIdToBackend(regId);
+                            intApplication(regId);
                         }
                     });
                     // For this demo: we don't need to send it because the device will send
@@ -225,41 +262,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.commit();
-    }
-
-
-    /**
-     * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
-     * messages to your app. Not needed for this demo since the device sends upstream messages
-     * to a server that echoes back the message using the 'from' address in the message.
-     *
-     * @param regId
-     */
-    private void sendRegistrationIdToBackend(String regId) {
-        // Your implementation here.
-
-        Log.d(TAG, "Subscribing. . . .");
-
-        String deviceID;
-
-        final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (telephonyManager.getDeviceId() != null) {
-            deviceID = telephonyManager.getDeviceId();//use for mobiles
-        } else {
-            deviceID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        }
-        QBMessages.subscribeToPushNotificationsTask(regId, deviceID,
-                QBEnvironment.DEVELOPMENT, new QBEntityCallbackImpl<ArrayList<QBSubscription>>() {
-                    @Override
-                    public void onSuccess(ArrayList<QBSubscription> result, Bundle params) {
-                        Log.d(TAG, "Subscribed. . . . ");
-                    }
-
-                    @Override
-                    public void onError(List<String> errors) {
-                    }
-                }
-        );
     }
 
     /**
@@ -303,7 +305,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             throw new RuntimeException("Couldn't get the package name" + e);
         }
     }
-
 
     /**
      * @return Application's {@code SharedPreferences}.
