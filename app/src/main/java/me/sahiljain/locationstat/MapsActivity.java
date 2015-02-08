@@ -233,9 +233,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                             intApplication(regId);
                         }
                     });
-                    // For this demo: we don't need to send it because the device will send
-                    // upstream messages to a server that echo back the message using the
-                    // 'from' address in the message.
 
                     // Persist the regID - no need to register again.
                     storeRegistrationId(context, regId);
