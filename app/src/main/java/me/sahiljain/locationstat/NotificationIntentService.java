@@ -62,12 +62,28 @@ public class NotificationIntentService extends IntentService {
                 for (int i = 0; i < 5; i++) {
                     Log.i(TAG, "Working......" + i + "/5 " + SystemClock.elapsedRealtime());
                 }
-                sendNotification("Received : " + extras.toString());
+                String message = getMessageFromBundle(extras.toString());
+                sendNotification(message);
                 Log.i(TAG, "Received : " + extras.toString());
             }
             // Release the wake lock provided by the WakefulBroadcastReceiver.
             NotificationReceiver.completeWakefulIntent(intent);
         }
+    }
+
+    private String getMessageFromBundle(String string) {
+
+        String message = "";
+        int indexOfMessage = string.indexOf("message");
+        int indexOfAndroidSupport = string.indexOf("android.support.content.wakelockid");
+
+        indexOfMessage += 8;
+        indexOfAndroidSupport -= 2;
+        //int size=indexOfAndroidSupport-indexOfMessage+1;
+        for (int i = indexOfMessage; i < indexOfAndroidSupport; i++) {
+            message += string.charAt(i);
+        }
+        return message;
     }
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
