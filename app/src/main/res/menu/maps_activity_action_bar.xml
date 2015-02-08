@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/set_up_home_loc"
-        android:title="@string/setUpHomeLoc"></item>
+        android:title="@string/setUpHomeLoc" />
     <item
         android:id="@+id/set_up_work_loc"
-        android:title="@string/setUpWorkLoc"></item>
+        android:title="@string/setUpWorkLoc" />
 
 </menu>
