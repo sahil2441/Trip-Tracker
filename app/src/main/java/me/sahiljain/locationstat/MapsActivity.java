@@ -183,6 +183,17 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         /**
          * Send Push Message
          */
+/*
+        ParseQuery pushQuery=ParseInstallation.getQuery();
+        pushQuery.whereEqualTo("objectId","SRG1tyJHLo");
+        ParseUser currentUser=ParseUser.getCurrentUser();
+        String message="Hi!";
+
+        ParsePush push=new ParsePush();
+        push.setQuery(pushQuery);
+        push.setMessage(message);
+        push.sendInBackground();
+*/
     }
 
     @Override
