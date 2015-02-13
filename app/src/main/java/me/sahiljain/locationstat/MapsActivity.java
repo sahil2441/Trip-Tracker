@@ -7,9 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -39,7 +37,6 @@ import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
@@ -183,23 +180,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         setLocation_work(location);
 
         context = getApplicationContext();
-/*
-        */
-/**
- * Check device for Play Services APK. If check succeeds, proceed with GCM registration.
- *//*
-
-        if (checkPlayServices()) {
-            gcm = GoogleCloudMessaging.getInstance(context);
-            regId = getRegistrationId(context);
-
-            if (regId.isEmpty()) {
-                registerInBackground();
-            }
-        } else {
-            Log.i(TAG, "No valid Google Play Services APK found");
-        }
-*/
+        /**
+         * Send Push Message
+         */
     }
 
     @Override
@@ -234,98 +217,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         ParseInstallation.getCurrentInstallation().saveInBackground();
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
-    }
-
-    /**
-     * Set up the device with QuickBlox
-     * This method is called only once -when the device is succesfully registered with GCM
-     */
-
-    private void initApplication(final String regId) {
-    }
-
-    /**
-     * Registers the application with GCM servers asynchronously.
-     * <p/>
-     * Stores the registration ID and the app versionCode in the application's
-     * shared preferences.
-     */
-    private void registerInBackground() {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(context);
-                    }
-                    regId = gcm.register(SENDER_ID);
-                    msg = "Device Registered, Registration ID = " + regId;
-
-                    // You should send the registration ID to your server over HTTP, so it
-                    // can use GCM/HTTP or CCS to send messages to your app.
-                    Handler handler = new Handler(context.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            initApplication(regId);
-                        }
-                    });
-
-                    // Persist the regID - no need to register again.
-                    storeRegistrationId(context, regId);
-                } catch (IOException e) {
-                    msg = "Error:" + e.getMessage();
-                }
-                return msg;
-
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-//                mDisplay.append(msg + "\n");
-            }
-        }.execute(null, null, null);
-
-    }
-
-    private void storeRegistrationId(Context context, String regId) {
-        SharedPreferences sharedPreferences = getGcmPreferences(context);
-        int appVersion = getAppVersion(context);
-        Log.i(TAG, "Saving Registration ID on app version : " + appVersion);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PROPERTY_REG_ID, regId);
-        editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
-    }
-
-    /**
-     * Gets the current registration ID for application on GCM service, if there is one.
-     * <p/>
-     * If result is empty, the app needs to register.
-     *
-     * @return registration ID, or empty string if there is no existing
-     * registration ID.
-     */
-
-    private String getRegistrationId(Context context) {
-        final SharedPreferences sharedPreferences = getGcmPreferences(context);
-        String registrationId = sharedPreferences.getString("PROPERTY_REG_ID", "");
-        if (registrationId.isEmpty()) {
-            Log.i(TAG, "Registration not Found.");
-            return "";
-        }
-        // Check if app was updated; if so, it must clear the registration ID
-        // since the existing regID is not guaranteed to work with the new
-        // app version.
-
-        int registeredVersion = sharedPreferences.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
-        int currentVersion = getAppVersion(context);
-        if (registeredVersion != currentVersion) {
-            Log.i(TAG, "App version Changed");
-            return "";
-        }
-        return registrationId;
     }
 
     /**
@@ -446,16 +337,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         editor1.putFloat("location_work_latitude", (float) getLocation_work().getLatitude());
         editor1.putFloat("location_work_longitude", (float) getLocation_work().getLongitude());
         editor1.commit();
-
-/*
-        Uri uri=Uri.parse("smsto:+9557282071");
-        Intent intent=new Intent(Intent.ACTION_SENDTO,uri);
-        intent.setPackage("com.whatsapp");
-        intent.putExtra("sms_body","Text here");
-        intent.putExtra("chat",true);
-        startActivity(intent);
-*/
-
     }
 
     private void setUpMap() {
