@@ -2,6 +2,7 @@ package me.sahiljain.locationstat;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,9 +10,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.AppEventsLogger;
+import com.facebook.RequestAsyncTask;
+import com.facebook.android.Facebook;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -28,17 +30,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.quickblox.auth.QBAuth;
-import com.quickblox.auth.model.QBSession;
-import com.quickblox.core.QBEntityCallbackImpl;
-import com.quickblox.core.QBSettings;
-import com.quickblox.messages.QBMessages;
-import com.quickblox.messages.model.QBEnvironment;
-import com.quickblox.messages.model.QBSubscription;
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
 
@@ -81,7 +80,22 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
      */
     String SENDER_ID = "694932255843";
 
-    TextView mDisplay;
+    private FacebookLogin facebookLogin;
+    //Instance of facebook class
+    private Facebook facebook;
+    private RequestAsyncTask requestAsyncTask;
+    String FILENAME = "AndroidSSO_Data";
+    private SharedPreferences sharedPreferences;
+
+    public String getFacebookAccessToken() {
+        return facebookAccessToken;
+    }
+
+    public void setFacebookAccessToken(String facebookAccessToken) {
+        this.facebookAccessToken = facebookAccessToken;
+    }
+
+    String facebookAccessToken = "";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,8 +141,24 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        setUpMapIfNeeded();
+
+        //Initialize Parse
+        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
+
+        setContentView(R.layout.main_login_screen);
+
+        if (savedInstanceState == null) {
+            // Add the fragment on initial activity setup
+            facebookLogin = new FacebookLogin();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, facebookLogin)
+                    .commit();
+        } else {
+            // Or set the fragment from restored state info
+            facebookLogin = (FacebookLogin) getSupportFragmentManager()
+                    .findFragmentById(android.R.id.content);
+        }
 
         Location location = getLocationFromSharedPreferences("location_home", 0);
         setLocation_home(location);
@@ -136,12 +166,31 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         location = getLocationFromSharedPreferences("location_work", 1);
         setLocation_work(location);
 
-        /**
-         * Set up the device with QuickBlox
-         */
-//        intApplication();
-
         context = getApplicationContext();
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        ParseFacebookUtils.logIn(Arrays.asList("email"), this, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser parseUser, ParseException e) {
+                        if (parseUser == null) {
+                            Log.d(TAG, "User cancelled the authentication");
+                        } else if (parseUser.isNew()) {
+                            Log.d(TAG, "New user signed up");
+                        } else {
+                            Log.d(TAG, "USer signed in through Facebook");
+                        }
+                    }
+                }
+        );
+        ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+
+
 
         /**
          * Check device for Play Services APK. If check succeeds, proceed with GCM registration.
@@ -156,54 +205,19 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         } else {
             Log.i(TAG, "No valid Google Play Services APK found");
         }
+
+        setContentView(R.layout.activity_maps);
+        setUpMapIfNeeded();
+
+
     }
 
-    private void intApplication(final String regId) {
-        // Set your QuickBlox application credentials here
-        QBSettings.getInstance().fastConfigInit("19423", "ZjmEEQ8XMdaabrc", "s3YLhXZCvETThZS");
+    /**
+     * Set up the device with QuickBlox
+     * This method is called only once -when the device is succesfully registered with GCM
+     */
 
-        // Create quickblox session with user
-        QBAuth.createSession("abc", "12345678", new QBEntityCallbackImpl<QBSession>() {
-                    @Override
-                    public void onSuccess(QBSession result, Bundle params) {
-
-                        /**
-                         *If session is created succesfully then the user is subscribed.
-                         *
-                         *  Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
-                         * messages to your app. Not needed for this demo since the device sends upstream messages
-                         * to a server that echoes back the message using the 'from' address in the message.
-                         */
-                        Log.d(TAG, "Subscribing. . . .");
-
-                        String deviceID;
-
-                        final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                        if (telephonyManager.getDeviceId() != null) {
-                            deviceID = telephonyManager.getDeviceId();//use for mobiles
-                        } else {
-                            deviceID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-                        }
-                        QBMessages.subscribeToPushNotificationsTask(regId, deviceID,
-                                QBEnvironment.DEVELOPMENT, new QBEntityCallbackImpl<ArrayList<QBSubscription>>() {
-                                    @Override
-                                    public void onSuccess(ArrayList<QBSubscription> result, Bundle params) {
-                                        Log.d(TAG, "Subscribed. . . . ");
-                                    }
-
-                                    @Override
-                                    public void onError(List<String> errors) {
-                                    }
-                                }
-                        );
-                    }
-
-                    @Override
-                    public void onError(List<String> errors) {
-
-                    }
-                }
-        );
+    private void initApplication(final String regId) {
     }
 
     /**
@@ -230,7 +244,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            intApplication(regId);
+                            initApplication(regId);
                         }
                     });
 
@@ -346,11 +360,34 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        /**
+         * To accurately track the time people spend in your app,
+         * you should also log a deactivate event in the onPause() method of
+         * each activity where you added the activateApp() method above:
+         */
+
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
         // Check device for Play Services APK.
         checkPlayServices();
+
+        /**
+         * App Events let you measure installs on your mobile app ads,
+         * create high value audiences for targeting, and view
+         * analytics including user demographics.
+         */
+
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
     }
 
     private void setUpMapIfNeeded() {
