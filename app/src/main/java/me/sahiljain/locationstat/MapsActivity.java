@@ -34,7 +34,10 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -138,26 +141,39 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         this.location_home = location_home;
     }
 
+    private final String FACEBOOK_LOGIN_STATUS = "facebookLoginStatus";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Initialize Parse
         Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
+        SharedPreferences preferences = getSharedPreferences(FACEBOOK_LOGIN_STATUS, 0);
+        if (preferences.getBoolean("fbLoginStatus", false) == false) {
+            setContentView(R.layout.main_login_screen);
 
-        setContentView(R.layout.main_login_screen);
 
-        if (savedInstanceState == null) {
-            // Add the fragment on initial activity setup
-            facebookLogin = new FacebookLogin();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(android.R.id.content, facebookLogin)
-                    .commit();
+            if (savedInstanceState == null) {
+                // Add the fragment on initial activity setup
+                facebookLogin = new FacebookLogin();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(android.R.id.content, facebookLogin)
+                        .commit();
+            } else {
+                // Or set the fragment from restored state info
+                facebookLogin = (FacebookLogin) getSupportFragmentManager()
+                        .findFragmentById(android.R.id.content);
+                //show the Main screen here:
+//            setContentView(R.layout.activity_maps);
+            }
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("fbLoginStatus", true);
+            editor.commit();
         } else {
-            // Or set the fragment from restored state info
-            facebookLogin = (FacebookLogin) getSupportFragmentManager()
-                    .findFragmentById(android.R.id.content);
+            setContentView(R.layout.activity_maps);
+            setUpMapIfNeeded();
         }
 
         Location location = getLocationFromSharedPreferences("location_home", 0);
@@ -167,8 +183,23 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         setLocation_work(location);
 
         context = getApplicationContext();
+/*
+        */
+/**
+ * Check device for Play Services APK. If check succeeds, proceed with GCM registration.
+ *//*
 
+        if (checkPlayServices()) {
+            gcm = GoogleCloudMessaging.getInstance(context);
+            regId = getRegistrationId(context);
 
+            if (regId.isEmpty()) {
+                registerInBackground();
+            }
+        } else {
+            Log.i(TAG, "No valid Google Play Services APK found");
+        }
+*/
     }
 
     @Override
@@ -182,34 +213,27 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                             Log.d(TAG, "User cancelled the authentication");
                         } else if (parseUser.isNew()) {
                             Log.d(TAG, "New user signed up");
+                            ParsePush.subscribeInBackground("", new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Log.d(TAG, "User Subscribed Successfully");
+                                    } else {
+                                        Log.d(TAG, "User didn't subscribe Successfully");
+                                    }
+                                }
+                            });
                         } else {
                             Log.d(TAG, "USer signed in through Facebook");
                         }
                     }
                 }
         );
-        ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
-
-
-
-        /**
-         * Check device for Play Services APK. If check succeeds, proceed with GCM registration.
-         */
-        if (checkPlayServices()) {
-            gcm = GoogleCloudMessaging.getInstance(context);
-            regId = getRegistrationId(context);
-
-            if (regId.isEmpty()) {
-                registerInBackground();
-            }
-        } else {
-            Log.i(TAG, "No valid Google Play Services APK found");
-        }
-
+//        ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+        // Save the current Installation to Parse.
+        ParseInstallation.getCurrentInstallation().saveInBackground();
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
-
-
     }
 
     /**
@@ -379,6 +403,10 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         super.onResume();
         // Check device for Play Services APK.
         checkPlayServices();
+        //Restore map state
+//        setContentView(R.layout.activity_maps);
+//        setUpMapIfNeeded();
+
 
         /**
          * App Events let you measure installs on your mobile app ads,

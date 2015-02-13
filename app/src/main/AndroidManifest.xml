@@ -17,7 +17,7 @@
     <permission
         android:protectionLevel="signature"
         android:name="me.sahiljain.locationstat.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.parse.starter.permission.C2D_MESSAGE" />
+    <uses-permission android:name="me.sahiljain.locationstat.permission.C2D_MESSAGE" />
 
 
     <!--
@@ -52,6 +52,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.parse.push.gcm_sender_id"
+            android:value="id:694932255843" />
 
         <activity
             android:name=".MapsActivity"
@@ -76,17 +79,16 @@
           The com.google.android.c2dm.permission.SEND permission is necessary
           so only GCM services can send data messages for the app.
         -->
-        <receiver
-            android:name=".NotificationReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <!-- Receives the actual messages. -->
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="me.sahiljain.locationstat" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name="me.sahiljain.locationstat.NotificationIntentService" />
+        <!--       <receiver
+                   android:name=".NotificationReceiver"
+                   android:permission="com.google.android.c2dm.permission.SEND">
+                   <intent-filter>
+                       &lt;!&ndash; Receives the actual messages. &ndash;&gt;
+                       <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                       <category android:name="me.sahiljain.locationstat" />
+                   </intent-filter>
+               </receiver>
+       -->
 
         <!--PARSE Code-->
         <service android:name="com.parse.PushService" />
