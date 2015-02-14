@@ -1,11 +1,7 @@
 package me.sahiljain.locationstat;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,38 +10,31 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.AppEventsLogger;
-import com.facebook.RequestAsyncTask;
-import com.facebook.android.Facebook;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import java.util.Arrays;
+import com.parse.SignUpCallback;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
 
     boolean set_up_home_location = false;
     boolean set_up_work_location = false;
     private Location location_home;
-
-    private Context context;
 
     public Location getLocation_work() {
         return location_work;
@@ -64,71 +53,8 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
      */
     static final String TAG = "Location Stat";
 
-    GoogleCloudMessaging gcm;
-
-    String regId;
-
-    public static final String PROPERTY_REG_ID = "registration_id";
-
-    private static final String PROPERTY_APP_VERSION = "appVersion";
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    /**
-     * Substitute you own sender ID here. This is the project number you got
-     * from the API Console, as described in "Getting Started."
-     */
-    String SENDER_ID = "694932255843";
-
-    private FacebookLogin facebookLogin;
-    //Instance of facebook class
-    private Facebook facebook;
-    private RequestAsyncTask requestAsyncTask;
-    String FILENAME = "AndroidSSO_Data";
-    private SharedPreferences sharedPreferences;
-
-    public String getFacebookAccessToken() {
-        return facebookAccessToken;
-    }
-
-    public void setFacebookAccessToken(String facebookAccessToken) {
-        this.facebookAccessToken = facebookAccessToken;
-    }
-
-    String facebookAccessToken = "";
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.maps_activity_action_bar, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.set_up_home_loc) {
-            openSetUpHomeLoc();
-            return true;
-        }
-
-        if (item.getItemId() == R.id.set_up_work_loc) {
-            openSetUpWorkLoc();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void openSetUpWorkLoc() {
-        set_up_work_location = true;
-        mMap.setOnMapClickListener(this);
-
-    }
-
-    private void openSetUpHomeLoc() {
-        set_up_home_location = true;
-        mMap.setOnMapClickListener(this);
-    }
-
 
     public Location getLocation_home() {
         return location_home;
@@ -138,39 +64,75 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         this.location_home = location_home;
     }
 
-    private final String FACEBOOK_LOGIN_STATUS = "facebookLoginStatus";
+    private final String LOGIN_DETAILS = "Login";
+
+    private boolean sign_up_status = false;
+
+    private final String PASSWORD = "mypass";
+
+    private final String LOGIN_STATUS = "loginStatus";
+
+    private String globalUserName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences(LOGIN_DETAILS, MODE_PRIVATE);
 
         //Initialize Parse
         Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
-        SharedPreferences preferences = getSharedPreferences(FACEBOOK_LOGIN_STATUS, 0);
-        if (preferences.getBoolean("fbLoginStatus", false) == false) {
-            setContentView(R.layout.main_login_screen);
 
+        if (preferences.getBoolean(LOGIN_STATUS, false) == false) {
+            setContentView(R.layout.sign_up_mobile);
 
-            if (savedInstanceState == null) {
-                // Add the fragment on initial activity setup
-                facebookLogin = new FacebookLogin();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(android.R.id.content, facebookLogin)
-                        .commit();
-            } else {
-                // Or set the fragment from restored state info
-                facebookLogin = (FacebookLogin) getSupportFragmentManager()
-                        .findFragmentById(android.R.id.content);
-                //show the Main screen here:
-//            setContentView(R.layout.activity_maps);
-            }
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("fbLoginStatus", true);
-            editor.commit();
+            final TextView tv_country_code = (TextView) findViewById(R.id.country_code_input);
+            final TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
+
+            Button createAccountbutton = (Button) findViewById(R.id.create_Account);
+            createAccountbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ParseUser user = new ParseUser();
+                    final String userName = tv_country_code.getText().toString() + tv_mobile_no.getText().toString();
+                    globalUserName = userName;
+
+                    user.setUsername(userName);
+                    user.setPassword(PASSWORD);
+                    user.signUpInBackground(new SignUpCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                //Congrats!
+                                Log.d(TAG, "New user signed up");
+                                ParsePush.subscribeInBackground("", new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+                                            Log.d(TAG, "User Subscribed Successfully");
+                                        } else {
+                                            Log.d(TAG, "User didn't subscribe Successfully");
+                                        }
+                                    }
+                                });
+                                sign_up_status = true;
+                                updateLoginDetails();
+
+                            } else {
+                                //Shit!
+                                Log.d(TAG, "New user couldn't get signed up");
+                            }
+                        }
+
+                    });
+                    ParseInstallation.getCurrentInstallation().saveInBackground();
+                }
+            });
+
         } else {
-            setContentView(R.layout.activity_maps);
-            setUpMapIfNeeded();
+            String userID = preferences.getString("userID", "");
+            ParseUser.logInInBackground(userID, PASSWORD);
+//            setContentView(R.layout.activity_maps);
+//            setUpMapIfNeeded();
         }
 
         Location location = getLocationFromSharedPreferences("location_home", 0);
@@ -179,7 +141,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         location = getLocationFromSharedPreferences("location_work", 1);
         setLocation_work(location);
 
-        context = getApplicationContext();
         /**
          * Send Push Message
          */
@@ -196,62 +157,21 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 */
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    /**
+     * Method called only once- when the user is successfully subscribed for the first time.
+     */
 
-        ParseFacebookUtils.logIn(Arrays.asList("email"), this, new LogInCallback() {
-                    @Override
-                    public void done(ParseUser parseUser, ParseException e) {
-                        if (parseUser == null) {
-                            Log.d(TAG, "User cancelled the authentication");
-                        } else if (parseUser.isNew()) {
-                            Log.d(TAG, "New user signed up");
-                            ParsePush.subscribeInBackground("", new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        Log.d(TAG, "User Subscribed Successfully");
-                                    } else {
-                                        Log.d(TAG, "User didn't subscribe Successfully");
-                                    }
-                                }
-                            });
-                        } else {
-                            Log.d(TAG, "USer signed in through Facebook");
-                        }
-                    }
-                }
-        );
-//        ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
-        // Save the current Installation to Parse.
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+    private void updateLoginDetails() {
+        SharedPreferences preferences = getSharedPreferences(LOGIN_DETAILS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(LOGIN_STATUS, true);
+        editor.putString("userID", globalUserName);
+        editor.putString("password", PASSWORD);
+        editor.commit();
+
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
     }
-
-    /**
-     * @return Application's version code from the {@code PackageManager}.
-     */
-    private static int getAppVersion(Context context) {
-        try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            //should never happen
-            throw new RuntimeException("Couldn't get the package name" + e);
-        }
-    }
-
-    /**
-     * @return Application's {@code SharedPreferences}.
-     */
-    private SharedPreferences getGcmPreferences(Context context) {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
-        return getSharedPreferences(MapsActivity.class.getSimpleName(), Context.MODE_PRIVATE);
-    }
-
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -303,13 +223,14 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onResume() {
         super.onResume();
+        SharedPreferences preferences = getSharedPreferences(LOGIN_DETAILS, MODE_PRIVATE);
         // Check device for Play Services APK.
         checkPlayServices();
-        //Restore map state
-//        setContentView(R.layout.activity_maps);
-//        setUpMapIfNeeded();
-
-
+//        Restore map state
+        if (preferences.getBoolean(LOGIN_STATUS, false) == true) {
+            setContentView(R.layout.activity_maps);
+            setUpMapIfNeeded();
+        }
         /**
          * App Events let you measure installs on your mobile app ads,
          * create high value audiences for targeting, and view
@@ -418,8 +339,37 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     }
 
-    //Send an upstream message
-    public void onclick(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.maps_activity_action_bar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.set_up_home_loc) {
+            openSetUpHomeLoc();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.set_up_work_loc) {
+            openSetUpWorkLoc();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openSetUpWorkLoc() {
+        set_up_work_location = true;
+        mMap.setOnMapClickListener(this);
 
     }
+
+    private void openSetUpHomeLoc() {
+        set_up_home_location = true;
+        mMap.setOnMapClickListener(this);
+    }
+
+
 }
