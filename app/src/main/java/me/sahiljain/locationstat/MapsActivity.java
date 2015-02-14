@@ -1,6 +1,7 @@
 package me.sahiljain.locationstat;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.facebook.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -66,13 +66,16 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     private final String LOGIN_DETAILS = "Login";
 
-    private boolean sign_up_status = false;
-
     private final String PASSWORD = "mypass";
 
     private final String LOGIN_STATUS = "loginStatus";
 
     private String globalUserName = "";
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +107,13 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                             if (e == null) {
                                 //Congrats!
                                 Log.d(TAG, "New user signed up");
-                                ParsePush.subscribeInBackground("", new SaveCallback() {
+
+/*                              ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                                ArrayList<String> channels = new ArrayList<String>();
+                                channels.add(userName);
+                                installation.addAllUnique("channels", channels);
+*/
+                                ParsePush.subscribeInBackground("c" + userName, new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
                                         if (e == null) {
@@ -114,25 +123,21 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                                         }
                                     }
                                 });
-                                sign_up_status = true;
                                 updateLoginDetails();
 
                             } else {
                                 //Shit!
                                 Log.d(TAG, "New user couldn't get signed up");
                             }
+                            ParseInstallation.getCurrentInstallation().saveInBackground();
                         }
-
                     });
-                    ParseInstallation.getCurrentInstallation().saveInBackground();
                 }
             });
 
         } else {
             String userID = preferences.getString("userID", "");
             ParseUser.logInInBackground(userID, PASSWORD);
-//            setContentView(R.layout.activity_maps);
-//            setUpMapIfNeeded();
         }
 
         Location location = getLocationFromSharedPreferences("location_home", 0);
@@ -140,21 +145,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
         location = getLocationFromSharedPreferences("location_work", 1);
         setLocation_work(location);
-
-        /**
-         * Send Push Message
-         */
-/*
-        ParseQuery pushQuery=ParseInstallation.getQuery();
-        pushQuery.whereEqualTo("objectId","SRG1tyJHLo");
-        ParseUser currentUser=ParseUser.getCurrentUser();
-        String message="Hi!";
-
-        ParsePush push=new ParsePush();
-        push.setQuery(pushQuery);
-        push.setMessage(message);
-        push.sendInBackground();
-*/
     }
 
     /**
@@ -171,7 +161,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+
+        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+        getApplicationContext().startService(intent);
     }
+
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -208,16 +202,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onPause() {
         super.onPause();
-
-        /**
-         * To accurately track the time people spend in your app,
-         * you should also log a deactivate event in the onPause() method of
-         * each activity where you added the activateApp() method above:
-         */
-
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
-
     }
 
     @Override
@@ -230,15 +214,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         if (preferences.getBoolean(LOGIN_STATUS, false) == true) {
             setContentView(R.layout.activity_maps);
             setUpMapIfNeeded();
+            Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+            getApplicationContext().startService(intent);
         }
-        /**
-         * App Events let you measure installs on your mobile app ads,
-         * create high value audiences for targeting, and view
-         * analytics including user demographics.
-         */
-
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
     }
 
     private void setUpMapIfNeeded() {
