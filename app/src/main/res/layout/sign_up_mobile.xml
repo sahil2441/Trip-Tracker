@@ -77,11 +77,14 @@
         android:layout_weight="0.10" />
 
     <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/progressBar"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.10" />
+        android:layout_weight="0.25"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+
 
 </LinearLayout>

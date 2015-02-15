@@ -10,16 +10,16 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
 /**
  * Created by sahil on 14/2/15.
+ * This class sends the notification to 'Parse' which in turn sends it to GCM.
  */
 public class NotificationService extends Service {
-    private final String LOGIN_DETAILS = "Login";
+    private final String LOCATION_STAT_SHARED_PREFERNCES = "locationStatSharedPreferences";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -62,12 +62,15 @@ public class NotificationService extends Service {
     }
 
     private void sendNotification() {
+/*
+        //Initialize Parse
         Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
+*/
         /**
          * Send Push Message
          */
         ParseQuery pushQuery = ParseInstallation.getQuery();
-        SharedPreferences preferences = getSharedPreferences(LOGIN_DETAILS, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         String username = preferences.getString("userID", "");
 
         pushQuery.whereEqualTo("channels", "c" + username);

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -22,7 +23,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
@@ -64,7 +64,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         this.location_home = location_home;
     }
 
-    private final String LOGIN_DETAILS = "Login";
+    private final String LOCATION_STAT_SHARED_PREFERNCES = "locationStatSharedPreferences";
 
     private final String PASSWORD = "mypass";
 
@@ -74,16 +74,22 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     protected void onStart() {
+/*
+        //Initialize Parse
+        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
+*/
         super.onStart();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preferences = getSharedPreferences(LOGIN_DETAILS, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
 
+/*
         //Initialize Parse
         Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
+*/
 
         if (preferences.getBoolean(LOGIN_STATUS, false) == false) {
             setContentView(R.layout.sign_up_mobile);
@@ -95,6 +101,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             createAccountbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    findViewById(R.id.create_Account).setEnabled(false);
+                    new progressBarAsyncTask().execute();
+
                     ParseUser user = new ParseUser();
                     final String userName = tv_country_code.getText().toString() + tv_mobile_no.getText().toString();
                     globalUserName = userName;
@@ -108,11 +117,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                                 //Congrats!
                                 Log.d(TAG, "New user signed up");
 
-/*                              ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-                                ArrayList<String> channels = new ArrayList<String>();
-                                channels.add(userName);
-                                installation.addAllUnique("channels", channels);
-*/
                                 ParsePush.subscribeInBackground("c" + userName, new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
@@ -132,6 +136,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                             ParseInstallation.getCurrentInstallation().saveInBackground();
                         }
                     });
+                    findViewById(R.id.progressBar).setVisibility(View.GONE);
                 }
             });
 
@@ -147,12 +152,35 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         setLocation_work(location);
     }
 
+    private class progressBarAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        }
+    }
     /**
      * Method called only once- when the user is successfully subscribed for the first time.
      */
 
     private void updateLoginDetails() {
-        SharedPreferences preferences = getSharedPreferences(LOGIN_DETAILS, MODE_PRIVATE);
+/*
+        //Initialize Parse
+        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
+*/
+
+        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(LOGIN_STATUS, true);
         editor.putString("userID", globalUserName);
@@ -201,13 +229,22 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     protected void onPause() {
+/*
+        //Initialize Parse
+        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
+*/
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences preferences = getSharedPreferences(LOGIN_DETAILS, MODE_PRIVATE);
+/*
+        //Initialize Parse
+        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
+*/
+
+        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         // Check device for Play Services APK.
         checkPlayServices();
 //        Restore map state
@@ -329,13 +366,21 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         if (item.getItemId() == R.id.set_up_home_loc) {
             openSetUpHomeLoc();
             return true;
-        }
-
-        if (item.getItemId() == R.id.set_up_work_loc) {
+        } else if (item.getItemId() == R.id.set_up_work_loc) {
             openSetUpWorkLoc();
             return true;
+        } else if (item.getItemId() == R.id.action_notifications) {
+            openNotificationsWindow();
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openNotificationsWindow() {
+        Intent notificationsIntent = new Intent(this, NotificationWindow.class);
+        String value = "openNotificationWindow";
+        notificationsIntent.putExtra("key", value);
+        this.startActivity(notificationsIntent);
     }
 
     private void openSetUpWorkLoc() {
