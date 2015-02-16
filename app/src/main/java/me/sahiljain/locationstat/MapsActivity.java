@@ -1,18 +1,19 @@
 package me.sahiljain.locationstat;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -23,12 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.ParseException;
-import com.parse.ParseInstallation;
-import com.parse.ParsePush;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
 
@@ -70,14 +66,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     private final String LOGIN_STATUS = "loginStatus";
 
-    private String globalUserName = "";
+    private final String NO_OF_INSTANCES_OF_MAIN_ACTIVITY = "no_of_instances_of_main_activity";
+
 
     @Override
     protected void onStart() {
-/*
-        //Initialize Parse
-        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
-*/
         super.onStart();
     }
 
@@ -86,59 +79,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
 
-/*
-        //Initialize Parse
-        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
-*/
-
         if (preferences.getBoolean(LOGIN_STATUS, false) == false) {
-            setContentView(R.layout.sign_up_mobile);
-
-            final TextView tv_country_code = (TextView) findViewById(R.id.country_code_input);
-            final TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
-
-            Button createAccountbutton = (Button) findViewById(R.id.create_Account);
-            createAccountbutton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    findViewById(R.id.create_Account).setEnabled(false);
-                    new progressBarAsyncTask().execute();
-
-                    ParseUser user = new ParseUser();
-                    final String userName = tv_country_code.getText().toString() + tv_mobile_no.getText().toString();
-                    globalUserName = userName;
-
-                    user.setUsername(userName);
-                    user.setPassword(PASSWORD);
-                    user.signUpInBackground(new SignUpCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                //Congrats!
-                                Log.d(TAG, "New user signed up");
-
-                                ParsePush.subscribeInBackground("c" + userName, new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        if (e == null) {
-                                            Log.d(TAG, "User Subscribed Successfully");
-                                        } else {
-                                            Log.d(TAG, "User didn't subscribe Successfully");
-                                        }
-                                    }
-                                });
-                                updateLoginDetails();
-
-                            } else {
-                                //Shit!
-                                Log.d(TAG, "New user couldn't get signed up");
-                            }
-                            ParseInstallation.getCurrentInstallation().saveInBackground();
-                        }
-                    });
-                    findViewById(R.id.progressBar).setVisibility(View.GONE);
-                }
-            });
+            Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUpWindow.class);
+            startActivity(welcomeSignUpWindowIntent);
 
         } else {
             String userID = preferences.getString("userID", "");
@@ -150,48 +93,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
         location = getLocationFromSharedPreferences("location_work", 1);
         setLocation_work(location);
-    }
-
-    private class progressBarAsyncTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-        }
-    }
-    /**
-     * Method called only once- when the user is successfully subscribed for the first time.
-     */
-
-    private void updateLoginDetails() {
-/*
-        //Initialize Parse
-        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
-*/
-
-        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(LOGIN_STATUS, true);
-        editor.putString("userID", globalUserName);
-        editor.putString("password", PASSWORD);
-        editor.commit();
-
-        setContentView(R.layout.activity_maps);
-        setUpMapIfNeeded();
-
-        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
-        getApplicationContext().startService(intent);
     }
 
     /**
@@ -229,31 +130,43 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     protected void onPause() {
-/*
-        //Initialize Parse
-        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
-*/
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-/*
-        //Initialize Parse
-        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
-*/
-
         SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        int instances = preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, 0);
         // Check device for Play Services APK.
         checkPlayServices();
 //        Restore map state
         if (preferences.getBoolean(LOGIN_STATUS, false) == true) {
-            setContentView(R.layout.activity_maps);
-            setUpMapIfNeeded();
+            try {
+                setContentView(R.layout.activity_maps);
+                setUpMapIfNeeded();
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, instances + 1);
+                editor.commit();
+            } catch (Exception e) {
+                Log.d(TAG, "Exception caught OnResume() at setcontentView()");
+
+            }
+
             Intent intent = new Intent(getApplicationContext(), NotificationService.class);
             getApplicationContext().startService(intent);
         }
+    }
+
+    @Override
+    public View onCreateView(String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+        return super.onCreateView(name, context, attrs);
+
     }
 
     private void setUpMapIfNeeded() {
@@ -371,16 +284,45 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             return true;
         } else if (item.getItemId() == R.id.action_notifications) {
             openNotificationsWindow();
+        } else if (item.getItemId() == R.id.add_friend) {
+            openAddFriendWindow();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void openAddFriendWindow() {
+        Intent addFriendIntent = new Intent(this, AddFriendWindow.class);
+        this.startActivity(addFriendIntent);
+        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        int instances = preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, 0);
+        if (instances > 1) {
+            this.finish();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, instances--);
+        }
+    }
+
     private void openNotificationsWindow() {
         Intent notificationsIntent = new Intent(this, NotificationWindow.class);
-        String value = "openNotificationWindow";
-        notificationsIntent.putExtra("key", value);
         this.startActivity(notificationsIntent);
+        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        int instances = preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, 0);
+        if (instances > 1) {
+            this.finish();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, instances--);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        int instances = preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, 0);
+        if (instances > 1) {
+            //Pop-up that says: Tap again to exit
+        }
     }
 
     private void openSetUpWorkLoc() {

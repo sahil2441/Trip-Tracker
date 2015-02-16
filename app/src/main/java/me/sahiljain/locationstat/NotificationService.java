@@ -31,7 +31,7 @@ public class NotificationService extends Service {
             @Override
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                sendNotification();
+//                sendNotification();
 
             }
 
@@ -62,10 +62,6 @@ public class NotificationService extends Service {
     }
 
     private void sendNotification() {
-/*
-        //Initialize Parse
-        Parse.initialize(this, "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F", "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z");
-*/
         /**
          * Send Push Message
          */

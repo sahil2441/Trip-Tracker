@@ -88,6 +88,27 @@
                 android:value=".MapsActivity" />
         </activity>
 
+        <!-- Another child of the main activity -->
+        <activity
+            android:name=".AddFriendWindow"
+            android:label="Add a Friend"
+            android:parentActivityName=".MapsActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+
+        <!-- Another child of the main activity -->
+        <activity
+            android:name=".WelcomeSignUpWindow"
+            android:label="Welcome!"
+            android:parentActivityName=".MapsActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
 
         <!--
           WakefulBroadcastReceiver that will receive intents from GCM
