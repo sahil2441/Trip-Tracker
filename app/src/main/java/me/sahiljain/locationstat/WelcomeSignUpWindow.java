@@ -105,11 +105,19 @@ public class WelcomeSignUpWindow extends Activity {
         editor.putString("password", PASSWORD);
         editor.commit();
 
+        //Start the notification service
         Intent intent = new Intent(getApplicationContext(), NotificationService.class);
         getApplicationContext().startService(intent);
-
-        Intent parentActivityIntent = getParentActivityIntent();
-        startActivity(parentActivityIntent);
+        this.finish();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 }

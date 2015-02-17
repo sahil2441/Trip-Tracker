@@ -1,7 +1,8 @@
 package me.sahiljain.locationstat;
 
-import android.content.Intent;
+import android.annotation.TargetApi;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -51,19 +52,11 @@ public class AddFriendWindow extends ActionBarActivity {
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        Intent mapsActivityIntent = new Intent(this, MapsActivity.class);
-        startActivity(mapsActivityIntent);
-
-/*
-        SharedPreferences preferences=getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES,MODE_PRIVATE);
-        int instances=preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY,0);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY,instances+1);
-        editor.commit();
-*/
+        onNavigateUp();
     }
 }

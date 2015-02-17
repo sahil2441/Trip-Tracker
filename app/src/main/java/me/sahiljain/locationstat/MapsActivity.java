@@ -1,10 +1,12 @@
 package me.sahiljain.locationstat;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
@@ -128,6 +130,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onPause() {
         super.onPause();
@@ -138,21 +141,19 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         super.onDestroy();
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onResume() {
         super.onResume();
         SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        int instances = preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, 0);
         // Check device for Play Services APK.
         checkPlayServices();
+
 //        Restore map state
         if (preferences.getBoolean(LOGIN_STATUS, false) == true) {
             try {
                 setContentView(R.layout.activity_maps);
                 setUpMapIfNeeded();
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, instances + 1);
-                editor.commit();
             } catch (Exception e) {
                 Log.d(TAG, "Exception caught OnResume() at setcontentView()");
 
@@ -294,35 +295,16 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     private void openAddFriendWindow() {
         Intent addFriendIntent = new Intent(this, AddFriendWindow.class);
         this.startActivity(addFriendIntent);
-        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        int instances = preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, 0);
-        if (instances > 1) {
-            this.finish();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, instances--);
-        }
     }
 
     private void openNotificationsWindow() {
         Intent notificationsIntent = new Intent(this, NotificationWindow.class);
         this.startActivity(notificationsIntent);
-        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        int instances = preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, 0);
-        if (instances > 1) {
-            this.finish();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, instances--);
-        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        int instances = preferences.getInt(NO_OF_INSTANCES_OF_MAIN_ACTIVITY, 0);
-        if (instances > 1) {
-            //Pop-up that says: Tap again to exit
-        }
     }
 
     private void openSetUpWorkLoc() {
@@ -335,6 +317,4 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         set_up_home_location = true;
         mMap.setOnMapClickListener(this);
     }
-
-
 }
