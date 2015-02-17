@@ -8,4 +8,6 @@
     <string name="PROJECT_NUMBER">694932255843</string>
     <string name="facebook_app_id">1565595550347918</string>
     <string name="action_notification">Notifications</string>
+    <string name="use_current_location_dialog">Use Current Location?</string>
+
 </resources>

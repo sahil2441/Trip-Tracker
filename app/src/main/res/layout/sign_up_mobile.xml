@@ -77,13 +77,10 @@
         android:layout_weight="0.10" />
 
     <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
         android:layout_width="118dp"
         android:layout_height="wrap_content"
         android:id="@+id/welcome_screen_progress_bar"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.58"
         android:visibility="invisible" />
-
-
 </LinearLayout>

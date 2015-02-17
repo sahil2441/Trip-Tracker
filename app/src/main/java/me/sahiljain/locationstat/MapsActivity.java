@@ -1,7 +1,6 @@
 package me.sahiljain.locationstat;
 
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +8,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -28,7 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
-public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
+public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener,
+        UseCurrentLocationDialog.UseCurrentLocationDialogListener {
 
     boolean set_up_home_location = false;
     boolean set_up_work_location = false;
@@ -44,7 +45,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     private Location location_work;
 
-    Dialog dialog;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     /**
      * Tag used on log messages.
@@ -68,8 +68,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     private final String LOGIN_STATUS = "loginStatus";
 
-    private final String NO_OF_INSTANCES_OF_MAIN_ACTIVITY = "no_of_instances_of_main_activity";
-
+    private static final String TAP_ANYWHERE_NOTIFICATION = "Tap Anywhere on screen to set Location";
 
     @Override
     protected void onStart() {
@@ -90,11 +89,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             ParseUser.logInInBackground(userID, PASSWORD);
         }
 
-        Location location = getLocationFromSharedPreferences("location_home", 0);
-        setLocation_home(location);
+        Location locationHome = getHomeLocationFromSharedPreferences();
+        setLocation_home(locationHome);
 
-        location = getLocationFromSharedPreferences("location_work", 1);
-        setLocation_work(location);
+        Location locationWork = getWorkLocationFromSharedPreferences();
+        setLocation_work(locationWork);
     }
 
     /**
@@ -117,11 +116,23 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         return true;
     }
 
-    private Location getLocationFromSharedPreferences(String key, int i) {
+    private Location getHomeLocationFromSharedPreferences() {
 
-        SharedPreferences sharedPreferences = getSharedPreferences(key, i);
+        SharedPreferences sharedPreferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         double latitude = (double) sharedPreferences.getFloat("location_home_latitude", 0);
         double longitude = (double) sharedPreferences.getFloat("location_home_longitude", 0);
+
+        Location location = new Location("dummy");
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        return location;
+    }
+
+    private Location getWorkLocationFromSharedPreferences() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        double latitude = (double) sharedPreferences.getFloat("location_work_latitude", 0);
+        double longitude = (double) sharedPreferences.getFloat("location_work_longitude", 0);
 
         Location location = new Location("dummy");
         location.setLatitude(latitude);
@@ -187,13 +198,13 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     protected void onStop() {
         super.onStop();
 
-        SharedPreferences location_home = getSharedPreferences("location_home", 0);
+        SharedPreferences location_home = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = location_home.edit();
         editor.putFloat("location_home_latitude", (float) getLocation_home().getLatitude());
         editor.putFloat("location_home_longitude", (float) getLocation_home().getLongitude());
         editor.commit();
 
-        SharedPreferences location_work = getSharedPreferences("location_work", 1);
+        SharedPreferences location_work = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         SharedPreferences.Editor editor1 = location_work.edit();
         editor1.putFloat("location_work_latitude", (float) getLocation_work().getLatitude());
         editor1.putFloat("location_work_longitude", (float) getLocation_work().getLongitude());
@@ -201,21 +212,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     private void setUpMap() {
-        GPSTracker gpsTracker = new GPSTracker(this);
         Location location = null;
+        GPSTracker gpsTracker = new GPSTracker(this);
         if (gpsTracker.canGetLocation() == true) {
             location = gpsTracker.getLocation();
         }
-
-/*
-        if (location != null) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("GPS Location"));
-        } else {
-            mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-        }
-*/
         if (location != null) {
             centerMapOnMYLocation(location);
 
@@ -227,19 +228,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         mMap.setMyLocationEnabled(true);
         LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom));
-        setupDialog();
-    }
-
-    private void setupDialog() {
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.popupview);
-        TextView textView = (TextView) dialog.findViewById(R.id.popup_text);
-        textView.setText("Tap screen to set your home location");
-//        dialog.show();
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
+
         if (set_up_home_location == true) {
             mMap.addMarker(new MarkerOptions().position(latLng).title("Home").
                     icon(BitmapDescriptorFactory.fromResource(R.drawable.homeiconsmall)));
@@ -251,6 +244,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
             this.setLocation_home(location);
             set_up_home_location = false;
+
+            //Show Toast
+            Toast toast = Toast.makeText(this, "Home Location Saved", Toast.LENGTH_SHORT);
+            toast.show();
+
         }
         if (set_up_work_location == true) {
             mMap.addMarker(new MarkerOptions().position(latLng).title("Work").
@@ -264,8 +262,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
             this.setLocation_work(location);
             set_up_work_location = false;
-        }
 
+            //Show Toast
+            Toast toast = Toast.makeText(this, "Work Location Saved", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     @Override
@@ -302,19 +303,55 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         this.startActivity(notificationsIntent);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     private void openSetUpWorkLoc() {
         set_up_work_location = true;
-        mMap.setOnMapClickListener(this);
+        set_up_home_location = false;
+        mMap.clear();
 
+        // Create an instance of the dialog and show it
+        DialogFragment dialog = new UseCurrentLocationDialog();
+        dialog.show(getSupportFragmentManager(), String.valueOf(UseCurrentLocationDialog.class));
     }
 
     private void openSetUpHomeLoc() {
         set_up_home_location = true;
+        set_up_work_location = false;
+        mMap.clear();
+
+        // Create an instance of the dialog and show it
+        DialogFragment dialog = new UseCurrentLocationDialog();
+        dialog.show(getSupportFragmentManager(), String.valueOf(UseCurrentLocationDialog.class));
+    }
+
+    /**
+     * Two methods implemented from the
+     * 'UseCurrentLocationDialogue' class
+     *
+     * @param dialogFragment
+     */
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialogFragment) {
+        Location location = null;
+        GPSTracker gpsTracker = new GPSTracker(this);
+        if (gpsTracker.canGetLocation() == true) {
+            location = gpsTracker.getLocation();
+        }
+        if ((this.set_up_home_location) && (location != null)) {
+            this.setLocation_home(location);
+            Toast toast = Toast.makeText(this, "Current Location Saved as Home Location", Toast.LENGTH_SHORT);
+            toast.show();
+        } else if ((this.set_up_work_location) && (location != null)) {
+            this.setLocation_work(location);
+            Toast toast = Toast.makeText(this, "Current Location Saved as Work Location", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialogFragment) {
+        Toast toast = Toast.makeText(this, TAP_ANYWHERE_NOTIFICATION, Toast.LENGTH_LONG);
+        toast.show();
         mMap.setOnMapClickListener(this);
     }
 }

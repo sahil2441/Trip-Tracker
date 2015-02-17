@@ -88,9 +88,7 @@ public final class GPSTracker implements LocationListener {
                             latitude = location.getLatitude();
                         }
                     }
-                }
-
-                if (isNetworkEnabled) {
+                } else if (isNetworkEnabled) {
                     if (location == null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
