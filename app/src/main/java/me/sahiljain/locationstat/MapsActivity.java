@@ -354,4 +354,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         toast.show();
         mMap.setOnMapClickListener(this);
     }
+
+    @Override
+    protected void onUserLeaveHint() {
+        finish();
+    }
 }
