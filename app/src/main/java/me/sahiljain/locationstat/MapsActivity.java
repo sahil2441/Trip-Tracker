@@ -169,11 +169,59 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                 Log.d(TAG, "Exception caught OnResume() at setcontentView()");
 
             }
+/*
+            SupportMapFragment mapFragment= (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
+            //Getting a reference to the map
+            GoogleMap map=mapFragment.getMap();
+
+            Button findButton = (Button) findViewById(R.id.search_button_in_maps);
+            findButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText editText= (EditText) findViewById(R.id.edit_text_maps);
+                    String searchLocation=editText.getText().toString();
+                    if(searchLocation!=null&&!searchLocation.equals("")){
+                        new GeocoderTask().execute(searchLocation);
+                    }
+                }
+            });
+*/
             Intent intent = new Intent(getApplicationContext(), NotificationService.class);
             getApplicationContext().startService(intent);
         }
     }
+/*
+    private class GeocoderTask extends AsyncTask<String,Void,List<Address>>{
+        @Override
+        protected List<Address> doInBackground(String...searchLocation) {
+            //Create an instance of Geocoder class
+            Geocoder geocoder=new Geocoder(getBaseContext());
+            List<Address> addresses=null;
+            try{
+                //Try to get a max of three results for the search
+                addresses=geocoder.getFromLocationName(searchLocation[0],1);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return addresses;
+        }
+
+        @Override
+        protected void onPostExecute(List<Address> addresses) {
+            if(addresses==null||addresses.size()==0){
+                Toast.makeText(getBaseContext(),"No LocationFound",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Address address=addresses.get(0);
+                Location location=new Location("dummyProvider");
+                location.setLongitude(address.getLongitude());
+                location.setLatitude(address.getLatitude());
+                centerMapOnMYLocation(location);
+            }
+        }
+    }
+*/
 
     @Override
     public View onCreateView(String name, @NonNull Context context, @NonNull AttributeSet attrs) {
@@ -359,4 +407,5 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     protected void onUserLeaveHint() {
         finish();
     }
+
 }

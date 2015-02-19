@@ -5,8 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -41,6 +41,10 @@ public class NotificationIntentService extends IntentService {
 
     public static final int NOTIFICATION_ID = 1;
 
+    private static final String NOTIFICATIONS_SHARED_PREFERENCES = "Notifications_SP";
+    private static final String NOTIFICATIONS_SIZE = "Notifications_Size";
+
+
     @Override
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
@@ -62,39 +66,45 @@ public class NotificationIntentService extends IntentService {
             }
             // If it's a regular GCM message, do some work.
             else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                // This loop represents the service doing some work.
-                for (int i = 0; i < 5; i++) {
-                    Log.i(TAG, "Working......" + i + "/5 " + SystemClock.elapsedRealtime());
-                }
                 String message = getMessageFromBundle(extras.toString());
                 /**
                  * Set contents in notification list view using adapter
                  */
                 ArrayList<String> arrayList = new ArrayList<String>();
                 arrayList.add(message);
-//                setContentIntoNotificationTab(arrayList);
 //                sendNotification(message);
-                storeInDatabase(message);
                 Log.i(TAG, "Received : " + extras.toString());
+                saveMessageToSharedPreferences(message);
+
+
             }
             // Release the wake lock provided by the WakefulBroadcastReceiver.
             NotificationReceiver.completeWakefulIntent(intent);
         }
+
     }
 
-    private void storeInDatabase(String message) {
+    private void saveMessageToSharedPreferences(String message) {
+        SharedPreferences preferences = getSharedPreferences(NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
+        int size = preferences.getInt(NOTIFICATIONS_SIZE, 0);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("i" + size, message);
+        size++;
+        editor.putInt(NOTIFICATIONS_SIZE, size);
+        editor.commit();
     }
 
     private String getMessageFromBundle(String string) {
 
         String message = "";
-        int indexOfMessage = string.indexOf("message");
-        int indexOfAndroidSupport = string.indexOf("android.support.content.wakelockid");
+        int indexOfAlert = string.indexOf("alert");
+        int indexOfPushHash = string.indexOf("push_hash");
 
-        indexOfMessage += 8;
-        indexOfAndroidSupport -= 2;
+        indexOfAlert += 8;
+        indexOfPushHash -= 3;
         //int size=indexOfAndroidSupport-indexOfMessage+1;
-        for (int i = indexOfMessage; i < indexOfAndroidSupport; i++) {
+        for (int i = indexOfAlert; i < indexOfPushHash; i++) {
             message += string.charAt(i);
         }
         return message;
@@ -108,11 +118,11 @@ public class NotificationIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.
-                getActivity(this, 0, new Intent(this, MapsActivity.class), 0);
+                getActivity(this, 0, new Intent(this, NotificationWindow.class), 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this).
                 setSmallIcon(R.drawable.homeiconsmall)
-                .setContentTitle("Location Stat Notification")
+                .setContentTitle("Location Stat")
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(message))
                 .setContentText(message);

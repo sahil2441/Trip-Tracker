@@ -19,6 +19,9 @@ import com.parse.ParseQuery;
  * This class sends the notification to 'Parse' which in turn sends it to GCM.
  */
 public class NotificationService extends Service {
+    private static final String NOTIFICATIONS_SHARED_PREFERENCES = "Notifications_SP";
+    private static final String NOTIFICATIONS_SIZE = "Notifications_Size";
+
     private final String LOCATION_STAT_SHARED_PREFERNCES = "locationStatSharedPreferences";
 
     @Override
@@ -31,7 +34,7 @@ public class NotificationService extends Service {
             @Override
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-//                sendNotification();
+                sendNotification();
 
             }
 
@@ -70,7 +73,9 @@ public class NotificationService extends Service {
         String username = preferences.getString("userID", "");
 
         pushQuery.whereEqualTo("channels", "c" + username);
-        String message = "Hi!";
+        SharedPreferences sharedPreferences = getSharedPreferences(NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
+        int n = sharedPreferences.getInt(NOTIFICATIONS_SIZE, 0);
+        String message = "Hi!" + n;
 
         ParsePush push = new ParsePush();
         push.setQuery(pushQuery);

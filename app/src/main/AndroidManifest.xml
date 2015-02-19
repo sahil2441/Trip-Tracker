@@ -142,7 +142,7 @@
         <!--The following receiver does the actual work of
         handling notifications and subscribing the user to a channel-->
         <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:name="me.sahiljain.locationstat.ParseNotificationReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />

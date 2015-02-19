@@ -108,6 +108,12 @@ public class WelcomeSignUpWindow extends Activity {
         //Start the notification service
         Intent intent = new Intent(getApplicationContext(), NotificationService.class);
         getApplicationContext().startService(intent);
+
+        //Start Main Activity
+        Intent intentMainActivity = new Intent(this, MapsActivity.class);
+        this.startActivity(intentMainActivity);
+
+        //Finish this Activity
         this.finish();
     }
 
