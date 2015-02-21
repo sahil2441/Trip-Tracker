@@ -14,16 +14,13 @@ import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
+import me.sahiljain.locationstat.main.Constants;
+
 /**
  * Created by sahil on 14/2/15.
  * This class sends the notification to 'Parse' which in turn sends it to GCM.
  */
 public class NotificationService extends Service {
-    private static final String NOTIFICATIONS_SHARED_PREFERENCES = "Notifications_SP";
-    private static final String NOTIFICATIONS_SIZE = "Notifications_Size";
-
-    private final String LOCATION_STAT_SHARED_PREFERNCES = "locationStatSharedPreferences";
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -69,12 +66,12 @@ public class NotificationService extends Service {
          * Send Push Message
          */
         ParseQuery pushQuery = ParseInstallation.getQuery();
-        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         String username = preferences.getString("userID", "");
 
         pushQuery.whereEqualTo("channels", "c" + username);
-        SharedPreferences sharedPreferences = getSharedPreferences(NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
-        int n = sharedPreferences.getInt(NOTIFICATIONS_SIZE, 0);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
+        int n = sharedPreferences.getInt(Constants.NOTIFICATIONS_SIZE, 0);
         String message = "Hi!" + n;
 
         ParsePush push = new ParsePush();

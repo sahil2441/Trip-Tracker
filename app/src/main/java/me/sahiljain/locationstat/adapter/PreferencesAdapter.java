@@ -11,12 +11,12 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.sahiljain.locationstat.R;
+import me.sahiljain.locationstat.main.Constants;
 
 /**
  * Created by sahil on 21/2/15.
  */
 public class PreferencesAdapter extends ArrayAdapter<String> {
-    private static final String ADD_A_FRIEND = "Add a Friend";
 
     private Context context;
     private List<String> list;
@@ -35,8 +35,12 @@ public class PreferencesAdapter extends ArrayAdapter<String> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.logo_preferences_list_item);
         textView.setText(list.get(position));
 
-        if (list.get(position).equalsIgnoreCase(ADD_A_FRIEND)) {
+        if (list.get(position).equalsIgnoreCase(Constants.ADD_A_FRIEND)) {
             imageView.setImageResource(R.drawable.add_friend);
+        } else if (list.get(position).equalsIgnoreCase(Constants.PROFILE)) {
+            imageView.setImageResource(R.drawable.profile);
+        } else if (list.get(position).equalsIgnoreCase(Constants.NOTIFICATION_SETTINGS)) {
+            imageView.setImageResource(R.drawable.notification_bell);
         }
         return rowView;
     }

@@ -19,6 +19,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import me.sahiljain.locationstat.main.Constants;
 import me.sahiljain.locationstat.main.MapsActivity;
 import me.sahiljain.locationstat.notificationService.NotificationService;
 import me.sahiljain.locationstat.R;
@@ -28,18 +29,7 @@ import me.sahiljain.locationstat.R;
  */
 public class WelcomeSignUp extends Activity {
 
-    private final String PASSWORD = "mypass";
-
     private String globalUserName = "";
-
-    private final String LOCATION_STAT_SHARED_PREFERNCES = "locationStatSharedPreferences";
-
-    private final String LOGIN_STATUS = "loginStatus";
-    /**
-     * Tag used on log messages.
-     */
-    static final String TAG = "Location Stat";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,21 +53,21 @@ public class WelcomeSignUp extends Activity {
                 globalUserName = userName;
 
                 user.setUsername(userName);
-                user.setPassword(PASSWORD);
+                user.setPassword(Constants.PASSWORD);
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
                             //Congrats!
-                            Log.d(TAG, "New user signed up");
+                            Log.d(Constants.TAG, "New user signed up");
 
                             ParsePush.subscribeInBackground("c" + userName, new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
                                     if (e == null) {
-                                        Log.d(TAG, "User Subscribed Successfully");
+                                        Log.d(Constants.TAG, "User Subscribed Successfully");
                                     } else {
-                                        Log.d(TAG, "User didn't subscribe Successfully");
+                                        Log.d(Constants.TAG, "User didn't subscribe Successfully");
                                     }
                                 }
                             });
@@ -85,7 +75,7 @@ public class WelcomeSignUp extends Activity {
 
                         } else {
                             //Shit!
-                            Log.d(TAG, "New user couldn't get signed up");
+                            Log.d(Constants.TAG, "New user couldn't get signed up");
                         }
                         ParseInstallation.getCurrentInstallation().saveInBackground();
                     }
@@ -102,11 +92,12 @@ public class WelcomeSignUp extends Activity {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void updateLoginDetails() {
-        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences
+                (Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(LOGIN_STATUS, true);
+        editor.putBoolean(Constants.LOGIN_STATUS, true);
         editor.putString("userID", globalUserName);
-        editor.putString("password", PASSWORD);
+        editor.putString("password", Constants.PASSWORD);
         editor.commit();
 
         //Start the notification service

@@ -10,22 +10,16 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.sahiljain.locationstat.notificationService.NotificationListAdapter;
 import me.sahiljain.locationstat.R;
+import me.sahiljain.locationstat.adapter.NotificationsAdapter;
+import me.sahiljain.locationstat.main.Constants;
 
 /**
+ * This class represents the Notification window
+ * that has the listView
  * Created by sahil on 15/2/15.
  */
 public class Notification extends ActionBarActivity {
-    private static final String NOTIFICATIONS_SHARED_PREFERENCES = "Notifications_SP";
-    private static final String NOTIFICATIONS_SIZE = "Notifications_Size";
-
-    private List<String> list;
-
-    private NotificationListAdapter adapter;
-
-    private ListView listView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +27,20 @@ public class Notification extends ActionBarActivity {
         setContentView(R.layout.notifications);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        listView = (ListView) findViewById(R.id.notification_list_view);
-        list = new ArrayList<String>();
+        ListView listView = (ListView) findViewById(R.id.notification_list_view);
+
         //Extract list from Shared Preferences
+        List<String> list = new ArrayList<String>();
         list = getListFromSharedPreferences();
-        adapter = new NotificationListAdapter(this, list);
+
+        NotificationsAdapter adapter = new NotificationsAdapter(this, list);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
     }
 
     private List<String> getListFromSharedPreferences() {
-        SharedPreferences preferences = getSharedPreferences(NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
-        int size = preferences.getInt(NOTIFICATIONS_SIZE, 0);
+        SharedPreferences preferences = getSharedPreferences(Constants.NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
+        int size = preferences.getInt(Constants.NOTIFICATIONS_SIZE, 0);
         List<String> newList = new ArrayList<String>();
 
         for (int i = 0; i < size; i++) {
@@ -59,6 +55,5 @@ public class Notification extends ActionBarActivity {
         super.onBackPressed();
         onNavigateUp();
         this.finish();
-
     }
 }

@@ -15,11 +15,15 @@ public final class GPSTracker implements LocationListener {
     Context mContext;
 
     boolean isGPSEnabled;
+
     boolean isNetworkEnabled;
+
     boolean canGetLocation = false;
 
     Location location;
+
     double latitude;
+
     double longitude;
 
     LocationManager locationManager;

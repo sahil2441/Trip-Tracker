@@ -1,9 +1,8 @@
 <resources>
-    <string name="google_maps_key_instructions" templateMergeStrategy="replace"><!--
+    <string name="google_maps_key_instructions" templateMergeStrategy="replace">
+        <!--
 
-    TODO: Before you run your application, you need a Google Maps API key.
-
-    To get one, follow this link, follow the directions and press "Create" at the end:
+ To get one, follow this link, follow the directions and press "Create" at the end:
 
 https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=A6:6E:61:3C:E0:36:4F:FA:A7:1B:48:B1:04:F2:29:77:B5:62:B3:BB%3Bme.sahiljain.locationstat
 

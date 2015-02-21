@@ -15,6 +15,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.util.ArrayList;
 
 import me.sahiljain.locationstat.R;
+import me.sahiljain.locationstat.main.Constants;
 import me.sahiljain.locationstat.windows.Notification;
 
 /**
@@ -38,15 +39,7 @@ public class NotificationIntentService extends IntentService {
 
     }
 
-    public static final String TAG = "Notification Intent Service";
-
     private NotificationManager notificationManager;
-
-    public static final int NOTIFICATION_ID = 1;
-
-    private static final String NOTIFICATIONS_SHARED_PREFERENCES = "Notifications_SP";
-    private static final String NOTIFICATIONS_SIZE = "Notifications_Size";
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -76,7 +69,7 @@ public class NotificationIntentService extends IntentService {
                 ArrayList<String> arrayList = new ArrayList<String>();
                 arrayList.add(message);
 //                sendNotification(message);
-                Log.i(TAG, "Received : " + extras.toString());
+                Log.i(Constants.NOTIFICATION_SERVICE_TAG, "Received : " + extras.toString());
                 saveMessageToSharedPreferences(message);
 
 
@@ -88,13 +81,13 @@ public class NotificationIntentService extends IntentService {
     }
 
     private void saveMessageToSharedPreferences(String message) {
-        SharedPreferences preferences = getSharedPreferences(NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
-        int size = preferences.getInt(NOTIFICATIONS_SIZE, 0);
+        SharedPreferences preferences = getSharedPreferences(Constants.NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
+        int size = preferences.getInt(Constants.NOTIFICATIONS_SIZE, 0);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("i" + size, message);
         size++;
-        editor.putInt(NOTIFICATIONS_SIZE, size);
+        editor.putInt(Constants.NOTIFICATIONS_SIZE, size);
         editor.commit();
     }
 
@@ -130,6 +123,6 @@ public class NotificationIntentService extends IntentService {
                         .bigText(message))
                 .setContentText(message);
         builder.setContentIntent(contentIntent);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+        notificationManager.notify(Constants.NOTIFICATION_ID, builder.build());
     }
 }

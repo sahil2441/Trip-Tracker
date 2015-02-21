@@ -11,12 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import me.sahiljain.locationstat.R;
+import me.sahiljain.locationstat.main.Constants;
 
 /**
  * Created by sahil on 16/2/15.
  */
 public class AddFriend extends ActionBarActivity {
-    private final String LOCATION_STAT_SHARED_PREFERNCES = "locationStatSharedPreferences";
 
     private ProgressBar progressBar;
 
@@ -24,7 +24,7 @@ public class AddFriend extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_friend);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final TextView tv_country_code = (TextView) findViewById(R.id.add_friend_country_code_input);
         final TextView tv_mobile_no = (TextView) findViewById(R.id.add_friend_mobile_no_input);
@@ -44,7 +44,7 @@ public class AddFriend extends ActionBarActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 final String friendName = tv_country_code.getText().toString() + tv_mobile_no.getText().toString();
-                SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+                SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("friendName", friendName);
                 editor.commit();

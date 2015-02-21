@@ -1,21 +1,17 @@
 package me.sahiljain.locationstat.main;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -41,7 +37,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         UseCurrentLocationDialog.UseCurrentLocationDialogListener {
 
     boolean set_up_home_location = false;
+
     boolean set_up_work_location = false;
+
     private Location location_home;
 
     public Location getLocation_work() {
@@ -55,11 +53,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     private Location location_work;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    /**
-     * Tag used on log messages.
-     */
-    static final String TAG = "Location Stat";
-    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     public Location getLocation_home() {
         return location_home;
@@ -69,14 +62,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         this.location_home = location_home;
     }
 
-    private final String LOCATION_STAT_SHARED_PREFERNCES = "locationStatSharedPreferences";
-
-    private final String PASSWORD = "mypass";
-
-    private final String LOGIN_STATUS = "loginStatus";
-
-    private static final String TAP_ANYWHERE_NOTIFICATION = "Tap Anywhere on screen to set Location";
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -85,15 +70,16 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences
+                (Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
 
-        if (preferences.getBoolean(LOGIN_STATUS, false) == false) {
+        if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == false) {
             Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUp.class);
             startActivity(welcomeSignUpWindowIntent);
 
         } else {
             String userID = preferences.getString("userID", "");
-            ParseUser.logInInBackground(userID, PASSWORD);
+            ParseUser.logInInBackground(userID, Constants.PASSWORD);
         }
 
         Location locationHome = getHomeLocationFromSharedPreferences();
@@ -113,10 +99,10 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this, Constants.PLAY_SERVICES_RESOLUTION_REQUEST).show();
 
             } else {
-                Log.i(TAG, "The device is not supported");
+                Log.i(Constants.TAG, "The device is not supported");
             }
             return false;
         }
@@ -125,7 +111,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     private Location getHomeLocationFromSharedPreferences() {
 
-        SharedPreferences sharedPreferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         double latitude = (double) sharedPreferences.getFloat("location_home_latitude", 0);
         double longitude = (double) sharedPreferences.getFloat("location_home_longitude", 0);
 
@@ -137,7 +123,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     private Location getWorkLocationFromSharedPreferences() {
 
-        SharedPreferences sharedPreferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         double latitude = (double) sharedPreferences.getFloat("location_work_latitude", 0);
         double longitude = (double) sharedPreferences.getFloat("location_work_longitude", 0);
 
@@ -150,30 +136,19 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         // Check device for Play Services APK.
         checkPlayServices();
 
 //        Restore map state
-        if (preferences.getBoolean(LOGIN_STATUS, false) == true) {
+        if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == true) {
             try {
                 setContentView(R.layout.activity_maps);
                 setUpMapIfNeeded();
             } catch (Exception e) {
-                Log.d(TAG, "Exception caught OnResume() at setContentView()");
+                Log.d(Constants.TAG, "Exception caught OnResume() at setContentView()");
 
             }
 /*
@@ -230,12 +205,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 */
 
-    @Override
-    public View onCreateView(String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);
-
-    }
-
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -253,13 +222,13 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     protected void onStop() {
         super.onStop();
 
-        SharedPreferences location_home = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences location_home = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = location_home.edit();
         editor.putFloat("location_home_latitude", (float) getLocation_home().getLatitude());
         editor.putFloat("location_home_longitude", (float) getLocation_home().getLongitude());
         editor.commit();
 
-        SharedPreferences location_work = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences location_work = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         SharedPreferences.Editor editor1 = location_work.edit();
         editor1.putFloat("location_work_latitude", (float) getLocation_work().getLatitude());
         editor1.putFloat("location_work_longitude", (float) getLocation_work().getLongitude());
@@ -332,8 +301,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     /**
-     * For two options in menu bar
-     * --preferences and notification icon
+     * Total 5 options in the action Bar
      *
      * @param item
      * @return
@@ -356,6 +324,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     private void openStartJourney() {
+        //TODO Change this
         Intent intent = new Intent(this, StartJourney.class);
         this.startActivity(intent);
     }
@@ -417,13 +386,14 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialogFragment) {
-        Toast toast = Toast.makeText(this, TAP_ANYWHERE_NOTIFICATION, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, Constants.TAP_ANYWHERE_NOTIFICATION, Toast.LENGTH_LONG);
         toast.show();
         mMap.setOnMapClickListener(this);
     }
 
     @Override
     protected void onUserLeaveHint() {
+        //TODO: Bug here--on press home
 //        finish();
     }
 

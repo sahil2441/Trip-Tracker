@@ -18,12 +18,12 @@ import java.util.List;
 
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.PreferencesAdapter;
+import me.sahiljain.locationstat.main.Constants;
 
 /**
  * Created by sahil on 21/2/15.
  */
 public class Preferences extends ActionBarActivity {
-    private static final String ADD_A_FRIEND = "Add a Friend";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,27 +33,28 @@ public class Preferences extends ActionBarActivity {
          * Set up List View
          */
         List<String> list = new ArrayList<String>();
-        list.add(ADD_A_FRIEND);
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.preferences_list_item, list);
+        list.add(Constants.ADD_A_FRIEND);
+        list.add(Constants.PROFILE);
+        list.add(Constants.NOTIFICATION_SETTINGS);
 
         ListView listView = (ListView) findViewById(R.id.list_view_preferences);
         listView.setAdapter(new PreferencesAdapter(this, list));
 
-/*
-        //set up intent to call parent activity
-        final Intent intentMapsActivity=new Intent(this, MapsActivity.class);
-*/
         //intent to call up addFriend activity
         final Intent intentAddFriend = new Intent(this, AddFriend.class);
+
+        //intent for notification settings
+        final Intent intentNotificationSettings = new Intent(this, NotificationSettings.class);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView textView = (TextView) ((LinearLayout) view).findViewById(R.id.text_view_preferences_list_item);
                 String s = textView.getText().toString();
 
-                if (s.equals(ADD_A_FRIEND)) {
+                if (s.equals(Constants.ADD_A_FRIEND)) {
                     startActivity(intentAddFriend);
+                } else if (s.equals(Constants.NOTIFICATION_SETTINGS)) {
+                    startActivity(intentNotificationSettings);
                 }
             }
         });
