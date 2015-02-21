@@ -1,31 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical">
-
-    <!--
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:layout_alignParentRight="true"
-                android:text="Find"
-                android:id="@+id/search_button_in_maps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:layout_toLeftOf="@+id/search_button_in_maps"
-                android:hint="Enter Location"
-                android:inputType="text"
-                android:id="@+id/edit_text_maps"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
-    -->
-
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -36,4 +12,37 @@
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp"
+        android:padding="5sp">
+
+        <EditText
+
+            android:background="#FFFFFF"
+            android:textColor="#848484"
+            android:textColorHint="#D8D8D8"
+            android:cursorVisible="false"
+            android:textCursorDrawable="@null"
+            android:layout_marginTop="6sp"
+            android:layout_toLeftOf="@+id/search_button_in_maps"
+            android:hint="Enter Location"
+            android:inputType="text"
+            android:id="@+id/edit_text_maps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:clickable="true"
+            android:paddingTop="12sp" />
+
+        <Button
+            android:text="Find"
+            android:id="@+id/search_button_in_maps"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+</RelativeLayout>

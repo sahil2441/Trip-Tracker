@@ -42,4 +42,6 @@ public class Constants {
 
     public static final String NOTIFICATIONS_SIZE = "Notifications_Size";
 
+    public static final String SEARCH_RESULTS = "Notifications_Size";
+
 }

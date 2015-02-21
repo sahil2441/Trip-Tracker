@@ -3,7 +3,10 @@ package me.sahiljain.locationstat.main;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -23,6 +30,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.dialog.UseCurrentLocationDialog;
@@ -142,7 +151,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         // Check device for Play Services APK.
         checkPlayServices();
 
-//        Restore map state
+        //Restore map state
         if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == true) {
             try {
                 setContentView(R.layout.activity_maps);
@@ -151,59 +160,90 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                 Log.d(Constants.TAG, "Exception caught OnResume() at setContentView()");
 
             }
-/*
-            SupportMapFragment mapFragment= (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
             //Getting a reference to the map
-            GoogleMap map=mapFragment.getMap();
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            GoogleMap map = mapFragment.getMap();
 
-            Button findButton = (Button) findViewById(R.id.search_button_in_maps);
-            findButton.setOnClickListener(new View.OnClickListener() {
+            final EditText editText = (EditText) findViewById(R.id.edit_text_maps);
+            editText.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    EditText editText= (EditText) findViewById(R.id.edit_text_maps);
-                    String searchLocation=editText.getText().toString();
-                    if(searchLocation!=null&&!searchLocation.equals("")){
-                        new GeocoderTask().execute(searchLocation);
+                public boolean onTouch(View v, MotionEvent event) {
+                    editText.setCursorVisible(true);
+                    return false;
+                }
+            });
+            Button findButton = (Button) findViewById(R.id.search_button_in_maps);
+            if (findButton != null) {
+                findButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText editText = (EditText) findViewById(R.id.edit_text_maps);
+                        String searchLocation = editText.getText().toString();
+                        if (searchLocation != null && !searchLocation.equals("")) {
+                            new GeoCoderTask().execute(searchLocation);
+                        }
                     }
+                });
+            }
+
+
+/*
+            editText.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    setContentView(R.layout.search_results);
+                    ListView listView = (ListView) findViewById(R.id.list_view_search_results);
+                    Button findButton = (Button) findViewById(R.id.search_button_in_maps);
+                    return false;
                 }
             });
 */
+            //Start Service
             Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
             getApplicationContext().startService(notificationServiceIntent);
         }
     }
-/*
-    private class GeocoderTask extends AsyncTask<String,Void,List<Address>>{
+
+    private class GeoCoderTask extends AsyncTask<String, Void, List<Address>> {
         @Override
-        protected List<Address> doInBackground(String...searchLocation) {
+        protected List<Address> doInBackground(String... searchLocation) {
             //Create an instance of Geocoder class
-            Geocoder geocoder=new Geocoder(getBaseContext());
-            List<Address> addresses=null;
-            try{
-                //Try to get a max of three results for the search
-                addresses=geocoder.getFromLocationName(searchLocation[0],1);
-            }catch (Exception e){
+            Geocoder geocoder = new Geocoder(getBaseContext());
+            List<Address> addresses = null;
+            try {
+                //Try to get a max of 6 results for the search
+                addresses = geocoder.getFromLocationName(searchLocation[0], 6);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+            //TODO: Launch new activity form here--that has map in background and 6 rsults in list view.
+            //on click of those results we launch main activity with intent
+
             return addresses;
         }
 
         @Override
         protected void onPostExecute(List<Address> addresses) {
-            if(addresses==null||addresses.size()==0){
-                Toast.makeText(getBaseContext(),"No LocationFound",Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Address address=addresses.get(0);
-                Location location=new Location("dummyProvider");
+            if (addresses == null || addresses.size() == 0) {
+                Toast.makeText(getBaseContext(), "No LocationFound", Toast.LENGTH_SHORT).show();
+            } else {
+/*
+                Address address = addresses.get(0);
+                Location location = new Location("dummyProvider");
                 location.setLongitude(address.getLongitude());
                 location.setLatitude(address.getLatitude());
                 centerMapOnMYLocation(location);
+*/
+                SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                for (int i = 0; i < 5; i++) {
+//                    editor.putFloat(Constants.SEARCH_RESULTS+i,addresses[i].getla)
+
+                }
             }
         }
     }
-*/
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
@@ -394,7 +434,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onUserLeaveHint() {
         //TODO: Bug here--on press home
-//        finish();
+        finish();
     }
 
 }
