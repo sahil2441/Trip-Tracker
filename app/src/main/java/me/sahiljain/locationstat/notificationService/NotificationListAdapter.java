@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.notificationService;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import me.sahiljain.locationstat.R;
 
 /**
  * Created by sahil on 19/2/15.
@@ -44,7 +46,7 @@ public class NotificationListAdapter extends BaseAdapter {
         String s = list.get(position);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.notification_list_item, null);
-        TextView textView = (TextView) convertView.findViewById(R.id.notification_list_item);
+        TextView textView = (TextView) convertView.findViewById(R.id.text_view_notification_list_item);
         textView.setText(s);
         return convertView;
     }

@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.main;
 
 import android.app.Application;
 

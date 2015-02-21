@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.notificationService;
 
 import android.app.Service;
 import android.content.Context;
@@ -34,7 +34,7 @@ public class NotificationService extends Service {
             @Override
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                sendNotification();
+//                sendNotification();
 
             }
 

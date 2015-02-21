@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+
+import me.sahiljain.locationstat.R;
 
 /**
  * Created by sahil on 17/2/15.

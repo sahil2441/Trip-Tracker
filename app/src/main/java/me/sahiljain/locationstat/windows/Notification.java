@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.windows;
 
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
@@ -10,14 +10,15 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.sahiljain.locationstat.notificationService.NotificationListAdapter;
+import me.sahiljain.locationstat.R;
+
 /**
  * Created by sahil on 15/2/15.
  */
-public class NotificationWindow extends ActionBarActivity {
+public class Notification extends ActionBarActivity {
     private static final String NOTIFICATIONS_SHARED_PREFERENCES = "Notifications_SP";
     private static final String NOTIFICATIONS_SIZE = "Notifications_Size";
-
-    private static final String NOTIFICATIONS_FLAG = "Notifications_Flag";
 
     private List<String> list;
 
@@ -29,7 +30,7 @@ public class NotificationWindow extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notifications_list_view);
+        setContentView(R.layout.notifications);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listView = (ListView) findViewById(R.id.notification_list_view);
@@ -49,17 +50,6 @@ public class NotificationWindow extends ActionBarActivity {
         for (int i = 0; i < size; i++) {
             newList.add(preferences.getString("i" + i, ""));
         }
-/*
-        int flag=preferences.getInt(NOTIFICATIONS_FLAG,0);
-        for(int i=flag;i<size;i++){
-            newList.add(preferences.getString("i"+flag,""));
-        }
-
-        flag=size;
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putInt(NOTIFICATIONS_FLAG,flag);
-        editor.commit();
-*/
         return newList;
     }
 
@@ -67,7 +57,8 @@ public class NotificationWindow extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.finish();
         onNavigateUp();
+        this.finish();
+
     }
 }

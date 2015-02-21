@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.service;
 
 import android.content.Context;
 import android.location.Location;
@@ -83,12 +83,24 @@ public final class GPSTracker implements LocationListener {
                 if (isGPSEnabled) {
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (isNetworkEnabled && location == null) {
+                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                            /**
+                             * Code jumps out of try block if location is null here
+                             * therefore network location is called right here.
+                             */
+                            if (location != null) {
+                                longitude = location.getLongitude();
+                                latitude = location.getLatitude();
+                            }
+                        }
                         if (location != null) {
                             longitude = location.getLongitude();
                             latitude = location.getLatitude();
                         }
                     }
-                } else if (isNetworkEnabled) {
+                }
+                if (isNetworkEnabled) {
                     if (location == null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {

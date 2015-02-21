@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.notificationService;
 
 import android.app.Activity;
 import android.content.ComponentName;

@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.windows;
 
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
@@ -10,15 +10,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import me.sahiljain.locationstat.R;
+
 /**
  * Created by sahil on 16/2/15.
  */
-public class AddFriendWindow extends ActionBarActivity {
+public class AddFriend extends ActionBarActivity {
     private final String LOCATION_STAT_SHARED_PREFERNCES = "locationStatSharedPreferences";
 
     private ProgressBar progressBar;
-
-    private final String NO_OF_INSTANCES_OF_MAIN_ACTIVITY = "no_of_instances_of_main_activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class AddFriendWindow extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.finish();
         onNavigateUp();
+        this.finish();
     }
 }

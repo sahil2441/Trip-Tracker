@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.notificationService;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -13,6 +13,9 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.util.ArrayList;
+
+import me.sahiljain.locationstat.R;
+import me.sahiljain.locationstat.windows.Notification;
 
 /**
  * Created by sahil on 8/2/15.
@@ -118,7 +121,7 @@ public class NotificationIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.
-                getActivity(this, 0, new Intent(this, NotificationWindow.class), 0);
+                getActivity(this, 0, new Intent(this, Notification.class), 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this).
                 setSmallIcon(R.drawable.homeiconsmall)

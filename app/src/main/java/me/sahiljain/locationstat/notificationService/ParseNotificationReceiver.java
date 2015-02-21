@@ -1,12 +1,13 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.notificationService;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
 import com.parse.ParsePushBroadcastReceiver;
+
+import me.sahiljain.locationstat.windows.Notification;
 
 /**
  * This class is created because we wanted to override the method
@@ -18,7 +19,7 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
 
     @Override
     protected Class<? extends Activity> getActivity(Context context, Intent intent) {
-        return NotificationWindow.class;
+        return Notification.class;
     }
 
     public ParseNotificationReceiver() {
@@ -56,7 +57,7 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
     }
 
     @Override
-    protected Notification getNotification(Context context, Intent intent) {
+    protected android.app.Notification getNotification(Context context, Intent intent) {
         return super.getNotification(context, intent);
     }
 }

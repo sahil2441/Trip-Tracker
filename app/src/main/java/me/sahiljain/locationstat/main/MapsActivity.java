@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.main;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -28,6 +28,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
+import me.sahiljain.locationstat.R;
+import me.sahiljain.locationstat.dialog.UseCurrentLocationDialog;
+import me.sahiljain.locationstat.notificationService.NotificationService;
+import me.sahiljain.locationstat.service.GPSTracker;
+import me.sahiljain.locationstat.windows.Notification;
+import me.sahiljain.locationstat.windows.Preferences;
+import me.sahiljain.locationstat.windows.StartJourney;
+import me.sahiljain.locationstat.windows.WelcomeSignUp;
+
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener,
         UseCurrentLocationDialog.UseCurrentLocationDialogListener {
 
@@ -50,8 +59,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
      * Tag used on log messages.
      */
     static final String TAG = "Location Stat";
-
-
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     public Location getLocation_home() {
@@ -81,7 +88,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         SharedPreferences preferences = getSharedPreferences(LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
 
         if (preferences.getBoolean(LOGIN_STATUS, false) == false) {
-            Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUpWindow.class);
+            Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUp.class);
             startActivity(welcomeSignUpWindowIntent);
 
         } else {
@@ -166,7 +173,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                 setContentView(R.layout.activity_maps);
                 setUpMapIfNeeded();
             } catch (Exception e) {
-                Log.d(TAG, "Exception caught OnResume() at setcontentView()");
+                Log.d(TAG, "Exception caught OnResume() at setContentView()");
 
             }
 /*
@@ -187,8 +194,8 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                 }
             });
 */
-            Intent intent = new Intent(getApplicationContext(), NotificationService.class);
-            getApplicationContext().startService(intent);
+            Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
+            getApplicationContext().startService(notificationServiceIntent);
         }
     }
 /*
@@ -324,30 +331,42 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * For two options in menu bar
+     * --preferences and notification icon
+     *
+     * @param item
+     * @return
+     */
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.set_up_home_loc) {
+        if (item.getItemId() == R.id.action_notifications) {
+            openNotificationsWindow();
+        } else if (item.getItemId() == R.id.start_a_journey) {
+            openStartJourney();
+        } else if (item.getItemId() == R.id.preferences) {
+            openPreferencesWindow();
+        } else if (item.getItemId() == R.id.set_up_home_loc) {
             openSetUpHomeLoc();
-            return true;
         } else if (item.getItemId() == R.id.set_up_work_loc) {
             openSetUpWorkLoc();
-            return true;
-        } else if (item.getItemId() == R.id.action_notifications) {
-            openNotificationsWindow();
-        } else if (item.getItemId() == R.id.add_friend) {
-            openAddFriendWindow();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void openAddFriendWindow() {
-        Intent addFriendIntent = new Intent(this, AddFriendWindow.class);
-        this.startActivity(addFriendIntent);
+    private void openStartJourney() {
+        Intent intent = new Intent(this, StartJourney.class);
+        this.startActivity(intent);
+    }
+
+    private void openPreferencesWindow() {
+        Intent preferencesIntent = new Intent(this, Preferences.class);
+        this.startActivity(preferencesIntent);
     }
 
     private void openNotificationsWindow() {
-        Intent notificationsIntent = new Intent(this, NotificationWindow.class);
+        Intent notificationsIntent = new Intent(this, Notification.class);
         this.startActivity(notificationsIntent);
     }
 
@@ -405,7 +424,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     protected void onUserLeaveHint() {
-        finish();
+//        finish();
     }
 
 }

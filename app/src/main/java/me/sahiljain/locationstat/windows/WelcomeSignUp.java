@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat;
+package me.sahiljain.locationstat.windows;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -19,10 +19,14 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import me.sahiljain.locationstat.main.MapsActivity;
+import me.sahiljain.locationstat.notificationService.NotificationService;
+import me.sahiljain.locationstat.R;
+
 /**
  * Created by sahil on 16/2/15.
  */
-public class WelcomeSignUpWindow extends Activity {
+public class WelcomeSignUp extends Activity {
 
     private final String PASSWORD = "mypass";
 

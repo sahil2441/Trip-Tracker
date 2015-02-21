@@ -39,7 +39,7 @@
 
 
     <application
-        android:name=".App"
+        android:name=".main.App"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -58,7 +58,7 @@
             android:value="id:694932255843" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".main.MapsActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat">
             <intent-filter>
@@ -73,60 +73,64 @@
             android:label="title_facebook_login"></activity>
 
         <service
-            android:name=".NotificationService"
+            android:name=".notificationService.NotificationService"
             android:icon="@drawable/iconsmall"
             android:label="@string/app_name"></service>
 
         <!-- A child of the main activity -->
         <activity
-            android:name=".NotificationWindow"
+            android:name=".windows.Notification"
             android:label="@string/action_notification"
-            android:parentActivityName=".MapsActivity">
+            android:parentActivityName=".main.MapsActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value=".main.MapsActivity" />
         </activity>
 
         <!-- Another child of the main activity -->
         <activity
-            android:name=".AddFriendWindow"
+            android:name=".windows.AddFriend"
             android:label="Add a Friend"
-            android:parentActivityName=".MapsActivity">
+            android:parentActivityName=".windows.Preferences">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value=".windows.Preferences" />
         </activity>
 
         <!-- Another child of the main activity -->
         <activity
-            android:name=".WelcomeSignUpWindow"
+            android:name=".windows.WelcomeSignUp"
             android:label="Welcome!"
-            android:parentActivityName=".MapsActivity">
+            android:parentActivityName=".main.MapsActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value=".main.MapsActivity" />
         </activity>
 
-        <!--
-          WakefulBroadcastReceiver that will receive intents from GCM
-          services and hand them to the custom IntentService.
+        <!-- Another child of the main activity -->
+        <activity
+            android:name=".windows.Preferences"
+            android:label="Preferences"
+            android:parentActivityName=".main.MapsActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.MapsActivity" />
+        </activity>
 
-          The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
-        -->
-        <!--       <receiver
-                   android:name=".NotificationReceiver"
-                   android:permission="com.google.android.c2dm.permission.SEND">
-                   <intent-filter>
-                       &lt;!&ndash; Receives the actual messages. &ndash;&gt;
-                       <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                       <category android:name="me.sahiljain.locationstat" />
-                   </intent-filter>
-               </receiver>
-       -->
+        <!-- Another child of the main activity -->
+        <activity
+            android:name=".windows.StartJourney"
+            android:label="Start Journey"
+            android:parentActivityName=".main.MapsActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.MapsActivity" />
+        </activity>
 
         <!--PARSE Code-->
         <service android:name="com.parse.PushService" />
@@ -142,7 +146,7 @@
         <!--The following receiver does the actual work of
         handling notifications and subscribing the user to a channel-->
         <receiver
-            android:name="me.sahiljain.locationstat.ParseNotificationReceiver"
+            android:name=".notificationService.ParseNotificationReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -168,7 +172,7 @@
          My own receiver to hanlde notifications
          -->
         <receiver
-            android:name=".NotificationReceiver"
+            android:name=".notificationService.NotificationReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <!-- Receives the actual messages. -->
@@ -176,6 +180,6 @@
                 <category android:name="me.sahiljain.locationstat" />
             </intent-filter>
         </receiver>
-        <service android:name="me.sahiljain.locationstat.NotificationIntentService" />
+        <service android:name=".notificationService.NotificationIntentService" />
     </application>
 </manifest>
