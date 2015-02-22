@@ -89,6 +89,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == false) {
             Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUp.class);
             startActivity(welcomeSignUpWindowIntent);
+            finish();
 
         } else {
             String userID = preferences.getString(Constants.USER_NAME, "");

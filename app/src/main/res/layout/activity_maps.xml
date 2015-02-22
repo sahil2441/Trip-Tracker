@@ -16,7 +16,9 @@
         android:id="@+id/search_panel_in_maps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5sp"
+        android:layout_marginTop="7sp"
+        android:layout_marginRight="12sp"
+        android:layout_marginLeft="12sp"
         android:padding="0sp">
 
         <EditText
@@ -30,7 +32,7 @@
             android:inputType="text"
             android:id="@+id/edit_text_maps"
             android:layout_width="wrap_content"
-            android:layout_height="50sp"
+            android:layout_height="55sp"
             android:textSize="18sp"
             android:clickable="true"
             android:layout_above="@+id/listView"

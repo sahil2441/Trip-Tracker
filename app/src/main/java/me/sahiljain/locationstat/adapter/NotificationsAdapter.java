@@ -47,8 +47,10 @@ public class NotificationsAdapter extends ArrayAdapter<String> {
         } else {
             s = "PM";
         }
-        textViewTimeStamp.setText(calendar.get(Calendar.HOUR) + ":" +
-                calendar.get(Calendar.MINUTE) + " " + s);
+
+        String curTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE))
+                + " " + s;
+        textViewTimeStamp.setText(curTime);
         return rowView;
     }
 }

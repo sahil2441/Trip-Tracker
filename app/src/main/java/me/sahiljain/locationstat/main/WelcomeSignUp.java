@@ -107,16 +107,19 @@ public class WelcomeSignUp extends Activity {
                             Log.d(Constants.TAG, "Verification Failed: " + " " + error + '\n');
                         }
                         Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
-                        final TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
-                        final Button createAccountButton = (Button) findViewById(R.id.create_Account_button);
-                        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.welcome_screen_progress_bar);
-
-                        progressBar.setVisibility(View.GONE);
-                        tv_mobile_no.setEnabled(true);
-                        createAccountButton.setEnabled(true);
-
+                        setDisabledFalse();
                     }
                 });
+    }
+
+    private void setDisabledFalse() {
+        TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
+        Button createAccountButton = (Button) findViewById(R.id.create_Account_button);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.welcome_screen_progress_bar);
+
+        progressBar.setVisibility(View.GONE);
+        tv_mobile_no.setEnabled(true);
+        createAccountButton.setEnabled(true);
     }
 
     private void startParseProcess() {
@@ -144,8 +147,9 @@ public class WelcomeSignUp extends Activity {
                                     Log.d(Constants.TAG, "User Subscribed Successfully");
                                     updateLoginDetails(userName);
                                 } else {
-                                    Log.d(Constants.TAG, "User didn't subscribe Successfully");
+                                    Log.d(Constants.TAG, "Error: " + e.toString() + "\n User didn't subscribe Successfully");
                                     Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
+                                    setDisabledFalse();
                                 }
                             }
                         });
@@ -182,12 +186,12 @@ public class WelcomeSignUp extends Activity {
         Intent intent = new Intent(getApplicationContext(), NotificationService.class);
         getApplicationContext().startService(intent);
 
+        //Finish this Activity
+        this.finish();
+
         //Start Main Activity
         Intent intentMainActivity = new Intent(this, MapsActivity.class);
         this.startActivity(intentMainActivity);
-
-        //Finish this Activity
-        this.finish();
     }
 
     @Override

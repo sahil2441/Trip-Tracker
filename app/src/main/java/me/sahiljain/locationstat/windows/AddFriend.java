@@ -23,9 +23,9 @@ public class AddFriend extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_friend);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setContentView(R.layout.add_friend);
         final TextView tv_country_code = (TextView) findViewById(R.id.add_friend_country_code_input);
         final TextView tv_mobile_no = (TextView) findViewById(R.id.add_friend_mobile_no_input);
         progressBar = (ProgressBar) findViewById(R.id.add_friend_progress_bar);
@@ -34,10 +34,8 @@ public class AddFriend extends ActionBarActivity {
         saveAddFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //set read mode
 
-                /**
-                 * Set Read Only Mode
-                 */
                 saveAddFriendButton.setEnabled(false);
                 tv_country_code.setEnabled(false);
                 tv_mobile_no.setEnabled(false);

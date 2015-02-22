@@ -42,10 +42,6 @@ public class Constants {
 
     public static final String NOTIFICATIONS_SIZE = "Notifications_Size";
 
-    public static final String SEARCH_RESULTS = "Notifications_Size";
-
-    public static final String WELCOME = "Welcome to Location Stat!";
-
     public static final String COGNALYS_ACCESS_TOKEN = "893553f6f7a6143537455f571b42577c7dd77a2b";
 
     public static final String COGNALYS_APP_ID = "0f0f7df76c5d4e0abdde753";
@@ -53,4 +49,10 @@ public class Constants {
     public static final String USER_NAME = "user_name";
 
     public static final String MOBILE_NO = "mobile_no";
+
+    public static final String FRIEND_NAME = "Friend_name";
+
+    public static final String NO_OF_FRIENDS = "no_of_friends";
+
+    public static final String FRIEND_PHONE_NUMBER = "Friend_phone_number";
 }
