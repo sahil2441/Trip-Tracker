@@ -12,37 +12,45 @@
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/search_panel_in_maps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10sp"
-        android:padding="5sp">
+        android:layout_margin="5sp"
+        android:padding="0sp">
 
         <EditText
-
+            android:layout_weight="1"
             android:background="#FFFFFF"
             android:textColor="#848484"
             android:textColorHint="#D8D8D8"
             android:cursorVisible="false"
             android:textCursorDrawable="@null"
-            android:layout_marginTop="6sp"
-            android:layout_toLeftOf="@+id/search_button_in_maps"
-            android:hint="Enter Location"
+            android:hint="Search"
             android:inputType="text"
             android:id="@+id/edit_text_maps"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:clickable="true"
-            android:paddingTop="12sp" />
-
-        <Button
-            android:text="Find"
-            android:id="@+id/search_button_in_maps"
             android:layout_width="wrap_content"
             android:layout_height="50sp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:textSize="18sp"
+            android:clickable="true"
+            android:layout_above="@+id/listView"
+            android:layout_alignLeft="@+id/search_panel_in_maps"
+            android:layout_alignStart="@+id/search_panel_in_maps"
+            android:paddingLeft="25sp" />
 
-    </RelativeLayout>
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:visibility="invisible"
+        android:layout_below="@+id/search_panel_in_maps"
+        android:layout_margin="5sp"
+        android:id="@+id/listView">
+
+    </ListView>
+
+
 </RelativeLayout>

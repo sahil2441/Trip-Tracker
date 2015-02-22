@@ -17,8 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,8 +39,6 @@ import me.sahiljain.locationstat.notificationService.NotificationService;
 import me.sahiljain.locationstat.service.GPSTracker;
 import me.sahiljain.locationstat.windows.Notification;
 import me.sahiljain.locationstat.windows.Preferences;
-import me.sahiljain.locationstat.windows.StartJourney;
-import me.sahiljain.locationstat.windows.WelcomeSignUp;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener,
         UseCurrentLocationDialog.UseCurrentLocationDialogListener {
@@ -72,6 +70,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
     }
@@ -79,6 +82,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Cognalys.enableAnalytics(getApplicationContext(), true, true);
         SharedPreferences preferences = getSharedPreferences
                 (Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
 
@@ -87,8 +91,12 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             startActivity(welcomeSignUpWindowIntent);
 
         } else {
-            String userID = preferences.getString("userID", "");
-            ParseUser.logInInBackground(userID, Constants.PASSWORD);
+            String userID = preferences.getString(Constants.USER_NAME, "");
+            try {
+                ParseUser.logInInBackground(userID, Constants.PASSWORD);
+            } catch (Exception e) {
+
+            }
         }
 
         Location locationHome = getHomeLocationFromSharedPreferences();
@@ -142,6 +150,10 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         return location;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -151,8 +163,15 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         // Check device for Play Services APK.
         checkPlayServices();
 
+        //Check if view already exists
+        boolean flag = false;
+        View view = findViewById(R.id.map);
+        if (view != null) {
+            flag = true;
+        }
+
         //Restore map state
-        if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == true) {
+        if (preferences.getBoolean(Constants.LOGIN_STATUS, false) && !flag) {
             try {
                 setContentView(R.layout.activity_maps);
                 setUpMapIfNeeded();
@@ -166,13 +185,17 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             GoogleMap map = mapFragment.getMap();
 
             final EditText editText = (EditText) findViewById(R.id.edit_text_maps);
-            editText.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    editText.setCursorVisible(true);
-                    return false;
-                }
-            });
+            if (editText != null) {
+                editText.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        editText.setCursorVisible(true);
+                        return false;
+                    }
+                });
+
+            }
+/*
             Button findButton = (Button) findViewById(R.id.search_button_in_maps);
             if (findButton != null) {
                 findButton.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +209,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                     }
                 });
             }
+*/
 
 
 /*
@@ -251,10 +275,34 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
+
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+                //Move the button to bottom
+                setButtonPosition();
             }
+        }
+    }
+
+    private void setButtonPosition() {
+        /**
+         * Move the button
+         */
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
+                findFragmentById(R.id.map);
+        View mapView = mapFragment.getView();
+        if (mapView != null &&
+                mapView.findViewById(1) != null) {
+            // Get the button view
+            View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+            // and next place it, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    locationButton.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(0, 0, 30, 30);
         }
     }
 
@@ -365,8 +413,10 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     private void openStartJourney() {
         //TODO Change this
+/*
         Intent intent = new Intent(this, StartJourney.class);
         this.startActivity(intent);
+*/
     }
 
     private void openPreferencesWindow() {
@@ -434,7 +484,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onUserLeaveHint() {
         //TODO: Bug here--on press home
-        finish();
+//        finish();
     }
 
 }

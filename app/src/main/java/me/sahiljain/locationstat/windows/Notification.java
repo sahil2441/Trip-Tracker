@@ -1,7 +1,6 @@
 package me.sahiljain.locationstat.windows;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import java.util.List;
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.NotificationsAdapter;
 import me.sahiljain.locationstat.main.Constants;
-import me.sahiljain.locationstat.main.MapsActivity;
 
 /**
  * This class represents the Notification window
@@ -27,7 +25,7 @@ public class Notification extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notifications);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ListView listView = (ListView) findViewById(R.id.notification_list_view);
 
@@ -55,9 +53,11 @@ public class Notification extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        onNavigateUp();
+        onNavigateUp();
+/*
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
+*/
 
         this.finish();
     }

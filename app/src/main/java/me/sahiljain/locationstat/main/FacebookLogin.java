@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat.windows;
+package me.sahiljain.locationstat.main;
 
 import android.content.Intent;
 import android.os.Bundle;

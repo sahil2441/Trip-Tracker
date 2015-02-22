@@ -19,7 +19,6 @@ import java.util.List;
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.PreferencesAdapter;
 import me.sahiljain.locationstat.main.Constants;
-import me.sahiljain.locationstat.main.MapsActivity;
 
 /**
  * Created by sahil on 21/2/15.
@@ -30,7 +29,7 @@ public class Preferences extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preferences);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         /**
          * Set up List View
          */
@@ -75,10 +74,11 @@ public class Preferences extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        onNavigateUp();
+        onNavigateUp();
+/*
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
+*/
         finish();
     }
-
 }

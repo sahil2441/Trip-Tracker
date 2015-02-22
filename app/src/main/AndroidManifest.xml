@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <permission
         android:protectionLevel="signature"
@@ -90,7 +91,7 @@
 
         <!-- Another child of the main activity -->
         <activity
-            android:name=".windows.WelcomeSignUp"
+            android:name=".main.WelcomeSignUp"
             android:label="Welcome!"
             android:parentActivityName=".main.MapsActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->

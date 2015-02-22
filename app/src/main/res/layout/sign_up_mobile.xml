@@ -23,34 +23,24 @@
         android:layout_gravity="center_horizontal"
         android:src="@drawable/homeiconsmall" />
 
-    <LinearLayout
+    <TextView
+        android:layout_marginTop="20sp"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="0.10">
+        android:text="Location Stat will give a missed to verify your number." />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/country_code"
-            android:text="Country Code" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/country_code_input"
-            android:layout_weight="1" />
-
-    </LinearLayout>
+    <TextView
+        android:layout_marginTop="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please enter your mobile number excluding the country code." />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="20sp"
+        android:layout_marginTop="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,8 +67,8 @@
         android:layout_weight="0.10" />
 
     <ProgressBar
-        android:layout_width="118dp"
-        android:layout_height="wrap_content"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
         android:id="@+id/welcome_screen_progress_bar"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.58"
