@@ -337,7 +337,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     public void centerMapOnMYLocation(Location location) {
-        float zoom = 10;
+        float zoom = 15;
         mMap.setMyLocationEnabled(true);
         LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom));
@@ -400,8 +400,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_notifications) {
             openNotificationsWindow();
-        } else if (item.getItemId() == R.id.start_a_journey) {
-            openStartJourney();
         } else if (item.getItemId() == R.id.preferences) {
             openPreferencesWindow();
         } else if (item.getItemId() == R.id.set_up_home_loc) {

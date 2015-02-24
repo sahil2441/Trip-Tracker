@@ -2,6 +2,8 @@ package me.sahiljain.locationstat.main;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -67,6 +69,7 @@ public class WelcomeSignUp extends Activity {
                 editor.apply();
 
                 verifyMobileNumber();
+                Toast.makeText(getBaseContext(), "Waiting for a missed call...Please wait...", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -102,14 +105,55 @@ public class WelcomeSignUp extends Activity {
                     @Override
                     public void onVerificationFailed(ArrayList<String> strings) {
                         Log.d(Constants.TAG, "Cognalys verification Failed");
-
-                        for (String error : strings) {
-                            Log.d(Constants.TAG, "Verification Failed: " + " " + error + '\n');
-                        }
-                        Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
+                        findErrorMessage(strings);
                         setDisabledFalse();
                     }
                 });
+    }
+
+    private void findErrorMessage(ArrayList<String> strings) {
+
+        for (String error : strings) {
+            if (error.equals("551")) {
+                Log.d(Constants.TAG, error);
+                showErrorDialog(Constants.ERROR_551);
+                break;
+            } else if (error.equals("601") || error.equals("600")) {
+                Log.d(Constants.TAG, error);
+                showErrorDialog(Constants.ERROR_601);
+                break;
+            } else if (error.equals("504")) {
+                Log.d(Constants.TAG, error);
+                showErrorDialog(Constants.ERROR_504);
+                break;
+            } else if (error.equals("500")) {
+                Log.d(Constants.TAG, error);
+                showErrorDialog(Constants.ERROR_500);
+                break;
+            }
+            Log.d(Constants.TAG, "Verification Failed: " + " " + error + '\n');
+        }
+    }
+
+    private void showErrorDialog(final String error) {
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(error)
+                .setPositiveButton(Constants.OKAY, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (error.equalsIgnoreCase(Constants.ERROR_551)) {
+                            Log.d(Constants.TAG, "Killing Viber now");
+                            //TODO: kill viber here
+                            killViber();
+                        }
+
+                    }
+                })
+                .show();
+    }
+
+    private void killViber() {
     }
 
     private void setDisabledFalse() {
@@ -140,28 +184,47 @@ public class WelcomeSignUp extends Activity {
                         //Congrats!
                         Log.d(Constants.TAG, "New user signed up");
 
-                        ParsePush.subscribeInBackground("c" + userName, new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d(Constants.TAG, "User Subscribed Successfully");
-                                    updateLoginDetails(userName);
-                                } else {
-                                    Log.d(Constants.TAG, "Error: " + e.toString() + "\n User didn't subscribe Successfully");
-                                    Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
-                                    setDisabledFalse();
-                                }
-                            }
-                        });
+                        startParseSubscription();
                     } else {
-                        //Shit!
-                        Log.d(Constants.TAG, "New user couldn't get signed up");
-                        Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
+                        /**
+                         * This is in cases when user uninstalls app
+                         * and re-installs it
+                         */
+                        String error = e.toString();
+                        if (error.contains("already taken")) {
+                            Log.d(Constants.TAG, "User already exists in Database; Starting subscription process");
+                            startParseSubscription();
+                        } else {
+                            //Shit!
+                            Log.d(Constants.TAG, "Error: " + e.toString() + " \nNew user couldn't get signed up");
+                            Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
+                            setDisabledFalse();
+                        }
                     }
                     ParseInstallation.getCurrentInstallation().saveInBackground();
                 }
             });
         }
+    }
+
+    private void startParseSubscription() {
+
+        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        final String userName = preferences.getString(Constants.USER_NAME, "");
+
+        ParsePush.subscribeInBackground("c" + userName, new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d(Constants.TAG, "User Subscribed Successfully");
+                    updateLoginDetails(userName);
+                } else {
+                    Log.d(Constants.TAG, "Error: " + e.toString() + "\n User didn't subscribe Successfully");
+                    Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
+                    setDisabledFalse();
+                }
+            }
+        });
     }
 
     /**

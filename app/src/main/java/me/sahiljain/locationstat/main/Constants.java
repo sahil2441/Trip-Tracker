@@ -54,5 +54,16 @@ public class Constants {
 
     public static final String NO_OF_FRIENDS = "no_of_friends";
 
-    public static final String FRIEND_PHONE_NUMBER = "Friend_phone_number";
+    /**
+     * Cognalys Error Messages
+     */
+    public static final String ERROR_551 = "No missed call detected. Make sure to Force Stop skype or viber";
+
+    public static final String ERROR_601 = "Mobile no invalid. Please enter a valid mobile number";
+
+    public static final String ERROR_504 = "Server busy. Please try again later";
+
+    public static final String ERROR_500 = "No internet connectivity. Make sure you have an active internet plan.";
+
+    public static final String OKAY = "Okay";
 }
