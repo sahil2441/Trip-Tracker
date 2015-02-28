@@ -2,14 +2,16 @@ package me.sahiljain.locationstat.windows;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -18,17 +20,36 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.PreferencesAdapter;
+import me.sahiljain.locationstat.db.DataBaseFriends;
 import me.sahiljain.locationstat.main.Constants;
+import me.sahiljain.locationstat.main.NameProfile;
 
 /**
  * Created by sahil on 21/2/15.
  */
 public class Preferences extends ActionBarActivity {
+    public boolean isMatchFound() {
+        return matchFound;
+    }
+
+    public void setMatchFound(boolean matchFound) {
+        this.matchFound = matchFound;
+    }
+
+    private boolean matchFound = false;
+
+    private DataBaseFriends dataBaseFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +63,7 @@ public class Preferences extends ActionBarActivity {
         list.add(Constants.ADD_A_FRIEND);
         list.add(Constants.PROFILE);
         list.add(Constants.NOTIFICATION_SETTINGS);
+        list.add(Constants.LIST_OF_FRIENDS);
 
         ListView listView = (ListView) findViewById(R.id.list_view_preferences);
         listView.setAdapter(new PreferencesAdapter(this, list));
@@ -51,6 +73,13 @@ public class Preferences extends ActionBarActivity {
 
         //intent for notification settings
         final Intent intentNotificationSettings = new Intent(this, NotificationSettings.class);
+
+        //intent for profile
+        final Intent intentProfile = new Intent(this, NameProfile.class);
+
+        //intent for profile
+        final Intent listOfFriends = new Intent(this, ListOfFriends.class);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,6 +91,10 @@ public class Preferences extends ActionBarActivity {
                     startActivityForResult(intentAddFriend, 1);
                 } else if (s.equals(Constants.NOTIFICATION_SETTINGS)) {
                     startActivity(intentNotificationSettings);
+                } else if (s.equals(Constants.PROFILE)) {
+                    startActivity(intentProfile);
+                } else if (s.equals(Constants.LIST_OF_FRIENDS)) {
+                    startActivity(listOfFriends);
                 }
             }
         });
@@ -98,18 +131,30 @@ public class Preferences extends ActionBarActivity {
                         (ContactsContract.Contacts.HAS_PHONE_NUMBER));
 
                 if (hasPhone.equals("1")) {
-                    displayAllPhoneNumbers(name, id);
+                    analysePhoneNumbers(name, id);
+                } else {
+                    showDialog(Constants.NO_PHONE_NUMBERS_FOUND);
                 }
             }
         }
     }
 
-    private void displayAllPhoneNumbers(String name, String id) {
+    private void showDialog(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("oops..")
+                .setMessage(message)
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES,
-                MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        int sizeInitial = preferences.getInt(Constants.NO_OF_FRIENDS, 0);
+                    }
+                })
+                .show();
+
+
+    }
+
+    private void analysePhoneNumbers(String name, String id) {
 
         // You know it has a number so now query it like this
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -122,13 +167,44 @@ public class Preferences extends ActionBarActivity {
                     (ContactsContract.CommonDataKinds.Phone.NUMBER));
             allPhoneNumbers.add(phoneNumber);
         }
-        if (allPhoneNumbers.size() > 1) {
-            //TODO: Save all phone numbers in a list and display in form of radio buttons to user
-
-        } else if (allPhoneNumbers.size() == 1) {
-            //TODO: Save in
+        if (allPhoneNumbers.size() > 0) {
+            for (int i = 0; i < allPhoneNumbers.size(); i++) {
+                if (!isMatchFound()) {
+                    String userName = allPhoneNumbers.get(i).replaceAll("[+\\s]", "");
+                    findAMatch(userName, name, (i == allPhoneNumbers.size() - 1) ? true : false);
+                }
+            }
         }
+    }
 
+    private void findAMatch(final String userName, final String name, final boolean last) {
+        ParseQuery query = ParseUser.getQuery();
+        query.whereEqualTo("username", userName);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if (e == null) {
+                    Log.d(Constants.TAG, "Received " + parseObjects.size() + " objects");
+                    if (parseObjects.size() > 0) {
+                        setMatchFound(true);
+                        updateFriendListWindow(userName, name);
+                    } else if (!isMatchFound() && last == true) {
+                        showDialog(Constants.FRIEND_APP_NOT_INSTALLED);
+                    }
+                } else {
+                    Log.d(Constants.TAG, "Error in Parse Query: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void updateFriendListWindow(String userName, String name) {
+
+        dataBaseFriends = new DataBaseFriends(this);
+        dataBaseFriends.insert(userName, name);
+
+        Intent intentListOfFriends = new Intent(this, ListOfFriends.class);
+        startActivity(intentListOfFriends);
     }
 
     @Override

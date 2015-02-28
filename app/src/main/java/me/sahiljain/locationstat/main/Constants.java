@@ -16,6 +16,8 @@ public class Constants {
 
     public static final String NOTIFICATION_SETTINGS = "Notification Settings";
 
+    public static final String LIST_OF_FRIENDS = "List of Friends";
+
     public static final String ADD_A_FRIEND = "Add a Friend";
 
     public static final String PROFILE = "Profile";
@@ -54,6 +56,8 @@ public class Constants {
 
     public static final String NO_OF_FRIENDS = "no_of_friends";
 
+    public static final String FRIEND_PHONE_NUMBER = "friend_phone_number";
+
     /**
      * Cognalys Error Messages
      */
@@ -66,4 +70,11 @@ public class Constants {
     public static final String ERROR_500 = "No internet connectivity. Make sure you have an active internet plan.";
 
     public static final String OKAY = "Okay";
+
+    public static final String FIRST_NAME = "first_name";
+
+    public static final String FRIEND_APP_NOT_INSTALLED = "No user found." +
+            "Please make sure that your friend has also installed Location Stat";
+
+    public static final String NO_PHONE_NUMBERS_FOUND = "No phone numbers found";
 }

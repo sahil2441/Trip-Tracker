@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -13,8 +12,12 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import me.sahiljain.locationstat.R;
+import me.sahiljain.locationstat.db.DataBaseNotifications;
 import me.sahiljain.locationstat.main.Constants;
 import me.sahiljain.locationstat.windows.Notification;
 
@@ -33,6 +36,8 @@ import me.sahiljain.locationstat.windows.Notification;
  */
 
 public class NotificationIntentService extends IntentService {
+
+    private DataBaseNotifications dataBaseNotifications;
 
     public NotificationIntentService() {
         super("NotificationIntentService");
@@ -70,25 +75,31 @@ public class NotificationIntentService extends IntentService {
                 arrayList.add(message);
 //                sendNotification(message);
                 Log.i(Constants.NOTIFICATION_SERVICE_TAG, "Received : " + extras.toString());
-                saveMessageToSharedPreferences(message);
-
-
+                String time = getTime();
+                saveMessageToDataBase(message, time);
             }
             // Release the wake lock provided by the WakefulBroadcastReceiver.
             NotificationReceiver.completeWakefulIntent(intent);
         }
-
     }
 
-    private void saveMessageToSharedPreferences(String message) {
-        SharedPreferences preferences = getSharedPreferences(Constants.NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
-        int size = preferences.getInt(Constants.NOTIFICATIONS_SIZE, 0);
+    private String getTime() {
+        Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
+        String s;
+        if (calendar.get(Calendar.AM_PM) == Calendar.AM) {
+            s = "AM";
+        } else {
+            s = "PM";
+        }
 
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("i" + size, message);
-        size++;
-        editor.putInt(Constants.NOTIFICATIONS_SIZE, size);
-        editor.commit();
+        String curTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE))
+                + " " + s;
+        return curTime;
+    }
+
+    private void saveMessageToDataBase(String message, String time) {
+        dataBaseNotifications = new DataBaseNotifications(this);
+        dataBaseNotifications.insert(message, time);
     }
 
     private String getMessageFromBundle(String string) {

@@ -41,6 +41,8 @@ public class PreferencesAdapter extends ArrayAdapter<String> {
             imageView.setImageResource(R.drawable.profile);
         } else if (list.get(position).equalsIgnoreCase(Constants.NOTIFICATION_SETTINGS)) {
             imageView.setImageResource(R.drawable.notification_bell);
+        } else if (list.get(position).equalsIgnoreCase(Constants.LIST_OF_FRIENDS)) {
+            imageView.setImageResource(R.drawable.list_of_friends);
         }
         return rowView;
     }

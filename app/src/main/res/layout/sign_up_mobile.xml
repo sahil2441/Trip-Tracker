@@ -7,33 +7,34 @@
     android:weightSum="1">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Welcome to Location Stat!"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.25"
-        android:gravity="center_vertical" />
-
-    <ImageView
-        android:layout_width="85dp"
-        android:layout_height="96dp"
-        android:id="@+id/imageView"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/homeiconsmall" />
-
-    <TextView
         android:layout_marginTop="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Location Stat will give a missed to verify your number." />
+        android:text="Select your country, enter your phone number and click continue" />
 
-    <TextView
-        android:layout_marginTop="20sp"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:text="Please enter your mobile number excluding the country code." />
+        android:layout_margin="20sp"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/country_code"
+            android:text="Country Code" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:ems="10"
+            android:id="@+id/country_code_input"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,8 +62,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Account"
-        android:id="@+id/create_Account_button"
+        android:text="Continue"
+        android:id="@+id/continue_button"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.10" />
 

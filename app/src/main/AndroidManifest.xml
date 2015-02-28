@@ -149,7 +149,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".windows.Preferences" />
         </activity>
+        <!-- Another child of the prefernce  activity -->
+        <activity
+            android:name=".windows.ListOfFriends"
+            android:label="List of Friends"
+            android:parentActivityName=".windows.Preferences">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".windows.Preferences" />
+        </activity>
 
+        <activity
+            android:name=".main.NameProfile"
+            android:label="Profile Settings" />
 
         <!--PARSE Code-->
         <service android:name="com.parse.PushService" />

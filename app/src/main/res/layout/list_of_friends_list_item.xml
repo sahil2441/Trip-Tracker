@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:orientation="horizontal"
+    android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/logo_list_of_friends_list_item"
+        android:layout_gravity="center"
+        android:layout_width="50px"
+        android:layout_height="50px"
+        android:layout_marginLeft="5px"
+        android:layout_marginRight="20px"
+        android:layout_marginTop="5px" />
+
+    <TextView
+        android:id="@+id/text_view_list_of_friends_list_item"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        android:typeface="serif"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+
+</LinearLayout>

@@ -91,11 +91,16 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             startActivity(welcomeSignUpWindowIntent);
             finish();
 
+        } else if (preferences.getString(Constants.FIRST_NAME, "").equalsIgnoreCase("")) {
+            Intent nameSignUp = new Intent(this, NameProfile.class);
+            startActivity(nameSignUp);
+            finish();
         } else {
             String userID = preferences.getString(Constants.USER_NAME, "");
             try {
                 ParseUser.logInInBackground(userID, Constants.PASSWORD);
             } catch (Exception e) {
+                e.printStackTrace();
 
             }
         }
@@ -177,7 +182,8 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                 setContentView(R.layout.activity_maps);
                 setUpMapIfNeeded();
             } catch (Exception e) {
-                Log.d(Constants.TAG, "Exception caught OnResume() at setContentView()");
+                Log.d(Constants.TAG, "Error: " + e.toString() +
+                        "Exception caught OnResume() at setContentView()");
 
             }
 

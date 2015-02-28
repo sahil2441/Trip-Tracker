@@ -71,8 +71,8 @@ public class NotificationService extends Service {
 
         pushQuery.whereEqualTo("channels", "c" + username);
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.NOTIFICATIONS_SHARED_PREFERENCES, MODE_PRIVATE);
-        int n = sharedPreferences.getInt(Constants.NOTIFICATIONS_SIZE, 0);
-        String message = "Hi!" + n;
+        String name = preferences.getString(Constants.FIRST_NAME, "");
+        String message = name + " has reached.";
 
         ParsePush push = new ParsePush();
         push.setQuery(pushQuery);

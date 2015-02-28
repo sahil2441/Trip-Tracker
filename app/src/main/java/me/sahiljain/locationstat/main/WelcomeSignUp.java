@@ -37,48 +37,83 @@ public class WelcomeSignUp extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = preferences.edit();
-
-        Cognalys.enableAnalytics(getApplicationContext(), true, true);
-        final String countryCode = getCountryCode();
-        setContentView(R.layout.sign_up_mobile);
-        final TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
-        final Button createAccountButton = (Button) findViewById(R.id.create_Account_button);
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.welcome_screen_progress_bar);
-
-        createAccountButton.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.welcome_to_location_stat);
+        Button button = (Button) findViewById(R.id.continue_button);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openVerifyScreen();
+            }
+        });
+    }
 
-                //Disable UI Components
-                findViewById(R.id.create_Account_button).setEnabled(false);
-                tv_mobile_no.setEnabled(false);
-                progressBar.setVisibility(View.VISIBLE);
+    private void openVerifyScreen() {
+
+        Cognalys.enableAnalytics(getApplicationContext(), true, true);
+        //TODO: Remove this and create a drop down for country code-- that automatically populates
+//        final String countryCode = getCountryCode();
+        setContentView(R.layout.sign_up_mobile);
+        final Button continueButton = (Button) findViewById(R.id.continue_button);
+
+        continueButton.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                final TextView tv_country_code = (TextView) findViewById(R.id.country_code_input);
+                final TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
+
+                String mobileNumber = tv_mobile_no.getText().toString();
+                String countryCode = tv_country_code.getText().toString();
 
                 String userName = countryCode + tv_mobile_no.getText().toString();
 
-                //Save user name in shared preferences
-                editor.putString(Constants.USER_NAME, userName);
-                editor.apply();
-
-                String mobileNumber = tv_mobile_no.getText().toString();
-                //Save mobile no in shared preferences
-                editor.putString(Constants.MOBILE_NO, mobileNumber);
-                editor.apply();
-
-                verifyMobileNumber();
-                Toast.makeText(getBaseContext(), "Waiting for a missed call...Please wait...", Toast.LENGTH_LONG).show();
+                if (mobileNumber == null || mobileNumber == "") {
+                    showErrorDialog("Please enter a valid mobile number");
+                } else {
+                    showConfirmationDialog(userName, mobileNumber);
+                }
             }
         });
+    }
+
+    public void showConfirmationDialog(final String userName, final String mobileNumber) {
+        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = preferences.edit();
+
+        new AlertDialog.Builder(this)
+                .setMessage("Is " + userName + " your correct number ?" +
+                        "\n Location Stat will send a missed call to verify your phone number.")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        disableUIComponents();
+
+                        //Save user name in shared preferences
+                        editor.putString(Constants.USER_NAME, userName);
+                        editor.apply();
+
+                        //Save mobile no in shared preferences
+                        editor.putString(Constants.MOBILE_NO, mobileNumber);
+                        editor.apply();
+
+                        verifyMobileNumber();
+                    }
+                })
+                .setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
     }
 
     private String getCountryCode() {
         String countryCode = Cognalys.getCountryCode(this);
         countryCode = countryCode.replaceAll("[+]", "");
         return countryCode;
-
     }
 
     private void verifyMobileNumber() {
@@ -106,7 +141,7 @@ public class WelcomeSignUp extends Activity {
                     public void onVerificationFailed(ArrayList<String> strings) {
                         Log.d(Constants.TAG, "Cognalys verification Failed");
                         findErrorMessage(strings);
-                        setDisabledFalse();
+                        enableUIComponents();
                     }
                 });
     }
@@ -137,7 +172,7 @@ public class WelcomeSignUp extends Activity {
 
     private void showErrorDialog(final String error) {
         new AlertDialog.Builder(this)
-                .setTitle("Error")
+                .setTitle("oops...")
                 .setMessage(error)
                 .setPositiveButton(Constants.OKAY, new DialogInterface.OnClickListener() {
                     @Override
@@ -156,9 +191,21 @@ public class WelcomeSignUp extends Activity {
     private void killViber() {
     }
 
-    private void setDisabledFalse() {
+    private void disableUIComponents() {
+        TextView tv_countryCode = (TextView) findViewById(R.id.country_code_input);
         TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
-        Button createAccountButton = (Button) findViewById(R.id.create_Account_button);
+        Button continueButton = (Button) findViewById(R.id.continue_button);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.welcome_screen_progress_bar);
+
+        progressBar.setVisibility(View.VISIBLE);
+        tv_mobile_no.setEnabled(false);
+        tv_countryCode.setEnabled(false);
+        continueButton.setEnabled(false);
+    }
+
+    private void enableUIComponents() {
+        TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
+        Button createAccountButton = (Button) findViewById(R.id.continue_button);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.welcome_screen_progress_bar);
 
         progressBar.setVisibility(View.GONE);
@@ -198,7 +245,7 @@ public class WelcomeSignUp extends Activity {
                             //Shit!
                             Log.d(Constants.TAG, "Error: " + e.toString() + " \nNew user couldn't get signed up");
                             Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
-                            setDisabledFalse();
+                            enableUIComponents();
                         }
                     }
                     ParseInstallation.getCurrentInstallation().saveInBackground();
@@ -221,7 +268,7 @@ public class WelcomeSignUp extends Activity {
                 } else {
                     Log.d(Constants.TAG, "Error: " + e.toString() + "\n User didn't subscribe Successfully");
                     Toast.makeText(getBaseContext(), "Verification Failed, Please try later.", Toast.LENGTH_LONG).show();
-                    setDisabledFalse();
+                    enableUIComponents();
                 }
             }
         });
@@ -236,10 +283,9 @@ public class WelcomeSignUp extends Activity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void updateLoginDetails(String userName) {
 
-        Toast.makeText(getBaseContext(), "Successfully Verified! Please Wait...", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getBaseContext(), "Successfully Verified! Please Wait...", Toast.LENGTH_LONG).show();
 
         SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Constants.LOGIN_STATUS, true);
         editor.putString(Constants.USER_NAME, userName);
@@ -249,12 +295,13 @@ public class WelcomeSignUp extends Activity {
         Intent intent = new Intent(getApplicationContext(), NotificationService.class);
         getApplicationContext().startService(intent);
 
+        //Start Main Activity
+        Intent intentMainActivity = new Intent(this, NameProfile.class);
+        this.startActivity(intentMainActivity);
+
         //Finish this Activity
         this.finish();
 
-        //Start Main Activity
-        Intent intentMainActivity = new Intent(this, MapsActivity.class);
-        this.startActivity(intentMainActivity);
     }
 
     @Override
