@@ -33,7 +33,6 @@ import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.PreferencesAdapter;
 import me.sahiljain.locationstat.db.DataBaseFriends;
 import me.sahiljain.locationstat.main.Constants;
-import me.sahiljain.locationstat.main.NameProfile;
 
 /**
  * Created by sahil on 21/2/15.
@@ -75,7 +74,7 @@ public class Preferences extends ActionBarActivity {
         final Intent intentNotificationSettings = new Intent(this, NotificationSettings.class);
 
         //intent for profile
-        final Intent intentProfile = new Intent(this, NameProfile.class);
+        final Intent intentProfile = new Intent(this, Profile.class);
 
         //intent for profile
         final Intent listOfFriends = new Intent(this, ListOfFriends.class);
@@ -201,7 +200,8 @@ public class Preferences extends ActionBarActivity {
     private void updateFriendListWindow(String userName, String name) {
 
         dataBaseFriends = new DataBaseFriends(this);
-        dataBaseFriends.insert(userName, name);
+        //we save the channel name as it is required to be--preceded by a 'c'
+        dataBaseFriends.insert("c" + userName, name);
 
         Intent intentListOfFriends = new Intent(this, ListOfFriends.class);
         startActivity(intentListOfFriends);

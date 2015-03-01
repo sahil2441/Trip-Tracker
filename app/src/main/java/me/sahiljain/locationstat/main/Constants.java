@@ -38,11 +38,7 @@ public class Constants {
 
     public static final String NOTIFICATION_SERVICE_TAG = "Notification IS";
 
-    public static final String NOTIFICATIONS_SHARED_PREFERENCES = "Notifications_SP";
-
     public static final int NOTIFICATION_ID = 1;
-
-    public static final String NOTIFICATIONS_SIZE = "Notifications_Size";
 
     public static final String COGNALYS_ACCESS_TOKEN = "893553f6f7a6143537455f571b42577c7dd77a2b";
 
@@ -51,12 +47,6 @@ public class Constants {
     public static final String USER_NAME = "user_name";
 
     public static final String MOBILE_NO = "mobile_no";
-
-    public static final String FRIEND_NAME = "Friend_name";
-
-    public static final String NO_OF_FRIENDS = "no_of_friends";
-
-    public static final String FRIEND_PHONE_NUMBER = "friend_phone_number";
 
     /**
      * Cognalys Error Messages
@@ -73,8 +63,29 @@ public class Constants {
 
     public static final String FIRST_NAME = "first_name";
 
+    public static final String FIRST_NAME_FLAG = "FIRST_NAME_FLAG";
+
     public static final String FRIEND_APP_NOT_INSTALLED = "No user found." +
             "Please make sure that your friend has also installed Location Stat";
 
     public static final String NO_PHONE_NUMBERS_FOUND = "No phone numbers found";
+
+    public static final String FIRST_LOGIN = "FIRST_LOGIN";
+
+    /**
+     * Home and Work Coordinates
+     */
+    public static final String HOME_LATITUDE = "HOME_LATITUDE";
+    public static final String HOME_LONGITUDE = "HOME_LONGITUDE";
+    public static final String WORK_LATITUDE = "WORK_LATITUDE";
+    public static final String WORK_LONGITUDE = "WORK_LONGITUDE";
+
+    /**
+     * Home and Work Location Status
+     */
+    public static final String AT_HOME = "AT_HOME";
+    public static final String AT_WORK = "AT_WORK";
+    public static final String FLAG_HOME = "FLAG_HOME";
+    public static final String FLAG_WORK = "FLAG_WORK";
+
 }

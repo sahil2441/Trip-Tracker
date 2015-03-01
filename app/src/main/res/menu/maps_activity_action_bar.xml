@@ -7,26 +7,12 @@
         android:icon="@drawable/iconsmall"
         android:title="@string/action_notification"
         location:showAsAction="ifRoom" />
-    <!--
-        <item
-            android:id="@+id/start_a_journey"
-            android:icon="@drawable/car_icon2"
-            android:title="@string/action_notification"
-            location:showAsAction="ifRoom" />
-
-    -->
-
     <item
         android:id="@+id/set_up_home_loc"
         android:title="@string/setUpHomeLoc" />
     <item
         android:id="@+id/set_up_work_loc"
         android:title="@string/setUpWorkLoc" />
-    <!--
-        <item
-            android:id="@+id/add_friend"
-            android:title="Add Friend" />
-    -->
     <item
         android:id="@+id/preferences"
         android:title="Preferences" />

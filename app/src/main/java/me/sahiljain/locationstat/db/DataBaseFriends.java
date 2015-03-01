@@ -62,6 +62,21 @@ public class DataBaseFriends extends SQLiteOpenHelper {
         return list;
     }
 
+    public List<String> fetchChannels() {
+        List<String> list = new ArrayList<String>();
+        String query = "Select " + USER_NAME + " from " + TABLE_LIST_OF_FRIENDS;
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(cursor.getString(cursor.getColumnIndex(USER_NAME)));
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        return list;
+    }
+
     public boolean deleteData() {
         return true;
     }

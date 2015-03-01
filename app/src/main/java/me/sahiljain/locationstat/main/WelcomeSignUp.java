@@ -10,8 +10,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,10 @@ import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.notificationService.NotificationService;
@@ -34,9 +40,13 @@ import me.sahiljain.locationstat.notificationService.NotificationService;
  */
 public class WelcomeSignUp extends Activity {
 
+    private CountryCodeMap countryCodeMap;
+    private static HashMap<String, String> country2phone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.welcome_to_location_stat);
         Button button = (Button) findViewById(R.id.continue_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -51,8 +61,25 @@ public class WelcomeSignUp extends Activity {
 
         Cognalys.enableAnalytics(getApplicationContext(), true, true);
         //TODO: Remove this and create a drop down for country code-- that automatically populates
-//        final String countryCode = getCountryCode();
         setContentView(R.layout.sign_up_mobile);
+        Spinner spinner = (Spinner) findViewById(R.id.country_code_input);
+
+        List<String> countryList = new ArrayList<String>();
+        countryList = getItemsInSpinner();
+        Collections.sort(countryList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.support_simple_spinner_dropdown_item, countryList);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        String cc = Cognalys.getCountryCode(this);
+        for (int i = 0; i < countryList.size(); i++) {
+            if (countryList.get(i).contains(cc)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+
         final Button continueButton = (Button) findViewById(R.id.continue_button);
 
         continueButton.setOnClickListener(new View.OnClickListener() {
@@ -60,30 +87,51 @@ public class WelcomeSignUp extends Activity {
 
             @Override
             public void onClick(View v) {
-                final TextView tv_country_code = (TextView) findViewById(R.id.country_code_input);
+                final Spinner tv_country_code = (Spinner) findViewById(R.id.country_code_input);
                 final TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
 
                 String mobileNumber = tv_mobile_no.getText().toString();
-                String countryCode = tv_country_code.getText().toString();
+                String countryCode = tv_country_code.getSelectedItem().toString();
+                countryCode = countryCode.replaceAll("[-+.^:,]", "");
+                countryCode = countryCode.replaceAll("[^\\d.]", "");
 
                 String userName = countryCode + tv_mobile_no.getText().toString();
 
                 if (mobileNumber == null || mobileNumber == "") {
                     showErrorDialog("Please enter a valid mobile number");
                 } else {
-                    showConfirmationDialog(userName, mobileNumber);
+                    showConfirmationDialog(userName, mobileNumber, countryCode);
                 }
             }
         });
     }
 
-    public void showConfirmationDialog(final String userName, final String mobileNumber) {
+    private void setDefaultSpinnerItem() {
+
+    }
+
+    private List<String> getItemsInSpinner() {
+        List<String> countryList = new ArrayList<String>();
+        String[] locales = Locale.getISOCountries();
+        countryCodeMap = new CountryCodeMap();
+        country2phone = countryCodeMap.getCountry2phone();
+
+        for (String countryCode : locales) {
+            Locale obj = new Locale("", countryCode);
+            String key = obj.getCountry();
+            String code = country2phone.get(key);
+            countryList.add(obj.getDisplayCountry() + "(" + code + ")");
+        }
+        return countryList;
+    }
+
+    public void showConfirmationDialog(final String userName, final String mobileNumber, String countryCode) {
         final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         final SharedPreferences.Editor editor = preferences.edit();
 
         new AlertDialog.Builder(this)
-                .setMessage("Is " + userName + " your correct number ?" +
-                        "\n Location Stat will send a missed call to verify your phone number.")
+                .setMessage("Is this your correct number?\n" + countryCode + "-" + mobileNumber +
+                        "\nA missed call will be send to verify this number.")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -192,7 +240,7 @@ public class WelcomeSignUp extends Activity {
     }
 
     private void disableUIComponents() {
-        TextView tv_countryCode = (TextView) findViewById(R.id.country_code_input);
+        Spinner tv_countryCode = (Spinner) findViewById(R.id.country_code_input);
         TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
         Button continueButton = (Button) findViewById(R.id.continue_button);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.welcome_screen_progress_bar);
@@ -296,7 +344,7 @@ public class WelcomeSignUp extends Activity {
         getApplicationContext().startService(intent);
 
         //Start Main Activity
-        Intent intentMainActivity = new Intent(this, NameProfile.class);
+        Intent intentMainActivity = new Intent(this, MapsActivity.class);
         this.startActivity(intentMainActivity);
 
         //Finish this Activity

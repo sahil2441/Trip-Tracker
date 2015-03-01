@@ -37,7 +37,7 @@ public class NotificationSettingsAdapter extends ArrayAdapter<String> {
         textView.setText(list.get(position));
         SharedPreferences preferences = context.getSharedPreferences
                 (Constants.LOCATION_STAT_SHARED_PREFERNCES, Context.MODE_PRIVATE);
-        checkBox.setChecked(preferences.getBoolean(Constants.NOTIFICATION_SETTINGS_CHECK_BOX + position, false));
+        checkBox.setChecked(preferences.getBoolean(Constants.NOTIFICATION_SETTINGS_CHECK_BOX + position, true));
 
         final SharedPreferences.Editor editor = preferences.edit();
 

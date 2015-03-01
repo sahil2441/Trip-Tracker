@@ -1,14 +1,18 @@
 package me.sahiljain.locationstat.main;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -47,37 +51,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     boolean set_up_work_location = false;
 
-    private Location location_home;
-
-    public Location getLocation_work() {
-        return location_work;
-    }
-
-    public void setLocation_work(Location location_work) {
-        this.location_work = location_work;
-    }
-
-    private Location location_work;
-
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
-    public Location getLocation_home() {
-        return location_home;
-    }
-
-    public void setLocation_home(Location location_home) {
-        this.location_home = location_home;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +65,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             startActivity(welcomeSignUpWindowIntent);
             finish();
 
-        } else if (preferences.getString(Constants.FIRST_NAME, "").equalsIgnoreCase("")) {
-            Intent nameSignUp = new Intent(this, NameProfile.class);
-            startActivity(nameSignUp);
-            finish();
         } else {
             String userID = preferences.getString(Constants.USER_NAME, "");
             try {
@@ -104,12 +74,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
             }
         }
-
-        Location locationHome = getHomeLocationFromSharedPreferences();
-        setLocation_home(locationHome);
-
-        Location locationWork = getWorkLocationFromSharedPreferences();
-        setLocation_work(locationWork);
     }
 
     /**
@@ -132,40 +96,34 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         return true;
     }
 
-    private Location getHomeLocationFromSharedPreferences() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        double latitude = (double) sharedPreferences.getFloat("location_home_latitude", 0);
-        double longitude = (double) sharedPreferences.getFloat("location_home_longitude", 0);
-
-        Location location = new Location("dummy");
-        location.setLatitude(latitude);
-        location.setLongitude(longitude);
-        return location;
-    }
-
-    private Location getWorkLocationFromSharedPreferences() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        double latitude = (double) sharedPreferences.getFloat("location_work_latitude", 0);
-        double longitude = (double) sharedPreferences.getFloat("location_work_longitude", 0);
-
-        Location location = new Location("dummy");
-        location.setLatitude(latitude);
-        location.setLongitude(longitude);
-        return location;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onResume() {
         super.onResume();
         SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        boolean status = preferences.getBoolean(Constants.FIRST_LOGIN, false);
+        if (!status) {
+            showVerificationSuccessfulDialog();
+            status = true;
+            editor.putBoolean(Constants.FIRST_LOGIN, status);
+            editor.apply();
+        }
+
+        /**
+         * Get first name of user
+         */
+        if (!preferences.getBoolean(Constants.FIRST_NAME_FLAG, false)) {
+            String name = getFirstName();
+            if (name != null && name != "") {
+                editor.putString(Constants.FIRST_NAME, name);
+                editor.putBoolean(Constants.FIRST_NAME_FLAG, true);
+            } else {
+                editor.putBoolean(Constants.FIRST_NAME_FLAG, false);
+            }
+            editor.apply();
+        }
+
         // Check device for Play Services APK.
         checkPlayServices();
 
@@ -200,7 +158,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                         return false;
                     }
                 });
-
             }
 /*
             Button findButton = (Button) findViewById(R.id.search_button_in_maps);
@@ -234,6 +191,39 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
             getApplicationContext().startService(notificationServiceIntent);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private String getFirstName() {
+        Cursor c = getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null,
+                null, null, null);
+        int count = c.getCount();
+        String[] columnNames = c.getColumnNames();
+        boolean b = c.moveToFirst();
+        int position = c.getPosition();
+        if (count == 1 && position == 0) {
+            for (int i = 0; i < columnNames.length; i++) {
+                String colName = columnNames[i];
+                if (colName.equalsIgnoreCase("display_name")) {
+                    return c.getString(c.getColumnIndex(colName));
+                }
+            }
+        }
+        c.close();
+        return "";
+    }
+
+    private void showVerificationSuccessfulDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Success!")
+                .setMessage("Your Mobile number has been Successfully Verified.")
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
     }
 
     private class GeoCoderTask extends AsyncTask<String, Void, List<Address>> {
@@ -313,23 +303,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        SharedPreferences location_home = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = location_home.edit();
-        editor.putFloat("location_home_latitude", (float) getLocation_home().getLatitude());
-        editor.putFloat("location_home_longitude", (float) getLocation_home().getLongitude());
-        editor.commit();
-
-        SharedPreferences location_work = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor1 = location_work.edit();
-        editor1.putFloat("location_work_latitude", (float) getLocation_work().getLatitude());
-        editor1.putFloat("location_work_longitude", (float) getLocation_work().getLongitude());
-        editor1.commit();
-    }
-
     private void setUpMap() {
         Location location = null;
         GPSTracker gpsTracker = new GPSTracker(this);
@@ -338,7 +311,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         }
         if (location != null) {
             centerMapOnMYLocation(location);
-
         }
     }
 
@@ -351,41 +323,36 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     public void onMapClick(LatLng latLng) {
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
 
         if (set_up_home_location == true) {
             mMap.addMarker(new MarkerOptions().position(latLng).title("Home").
                     icon(BitmapDescriptorFactory.fromResource(R.drawable.homeiconsmall)));
             double latitude = latLng.latitude;
             double longitude = latLng.longitude;
-            Location location = new Location("dummyProvider");
-            location.setLatitude(latitude);
-            location.setLongitude(longitude);
-
-            this.setLocation_home(location);
+            editor.putFloat(Constants.HOME_LATITUDE, (float) latitude);
+            editor.putFloat(Constants.HOME_LONGITUDE, (float) longitude);
             set_up_home_location = false;
 
             //Show Toast
             Toast toast = Toast.makeText(this, "Home Location Saved", Toast.LENGTH_SHORT);
             toast.show();
-
         }
         if (set_up_work_location == true) {
             mMap.addMarker(new MarkerOptions().position(latLng).title("Work").
                     icon(BitmapDescriptorFactory.fromResource(R.drawable.workiconsmall)));
             double latitude = latLng.latitude;
             double longitude = latLng.longitude;
-            Location location = new Location("dummyProvider");
-            location.setLatitude(latitude);
-            location.setLongitude(longitude);
-
-
-            this.setLocation_work(location);
+            editor.putFloat(Constants.WORK_LATITUDE, (float) latitude);
+            editor.putFloat(Constants.WORK_LONGITUDE, (float) longitude);
             set_up_work_location = false;
 
             //Show Toast
             Toast toast = Toast.makeText(this, "Work Location Saved", Toast.LENGTH_SHORT);
             toast.show();
         }
+        editor.apply();
     }
 
     @Override
@@ -396,7 +363,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     /**
-     * Total 5 options in the action Bar
+     * Total 4 options in the action Bar
      *
      * @param item
      * @return
@@ -414,14 +381,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             openSetUpWorkLoc();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void openStartJourney() {
-        //TODO Change this
-/*
-        Intent intent = new Intent(this, StartJourney.class);
-        this.startActivity(intent);
-*/
     }
 
     private void openPreferencesWindow() {
@@ -463,20 +422,26 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
         Location location = null;
         GPSTracker gpsTracker = new GPSTracker(this);
         if (gpsTracker.canGetLocation() == true) {
             location = gpsTracker.getLocation();
         }
         if ((this.set_up_home_location) && (location != null)) {
-            this.setLocation_home(location);
+            editor.putFloat(Constants.HOME_LATITUDE, (float) location.getLatitude());
+            editor.putFloat(Constants.HOME_LONGITUDE, (float) location.getLongitude());
             Toast toast = Toast.makeText(this, "Current Location Saved as Home Location", Toast.LENGTH_SHORT);
             toast.show();
         } else if ((this.set_up_work_location) && (location != null)) {
-            this.setLocation_work(location);
+            editor.putFloat(Constants.WORK_LATITUDE, (float) location.getLatitude());
+            editor.putFloat(Constants.WORK_LONGITUDE, (float) location.getLongitude());
             Toast toast = Toast.makeText(this, "Current Location Saved as Work Location", Toast.LENGTH_SHORT);
             toast.show();
         }
+        editor.commit();
     }
 
     @Override
@@ -485,11 +450,4 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         toast.show();
         mMap.setOnMapClickListener(this);
     }
-
-    @Override
-    protected void onUserLeaveHint() {
-        //TODO: Bug here--on press home
-//        finish();
-    }
-
 }
