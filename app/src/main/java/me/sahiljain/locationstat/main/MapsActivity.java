@@ -1,15 +1,10 @@
 package me.sahiljain.locationstat.main;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -35,21 +30,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
-import java.util.List;
-
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.dialog.UseCurrentLocationDialog;
 import me.sahiljain.locationstat.notificationService.NotificationService;
 import me.sahiljain.locationstat.service.GPSTracker;
 import me.sahiljain.locationstat.windows.Notification;
 import me.sahiljain.locationstat.windows.Preferences;
+import me.sahiljain.locationstat.windows.SearchResults;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener,
         UseCurrentLocationDialog.UseCurrentLocationDialogListener {
 
     boolean set_up_home_location = false;
-
     boolean set_up_work_location = false;
+    private Location searchLocation;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
@@ -73,6 +67,19 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                 e.printStackTrace();
 
             }
+        }
+        this.searchLocation = null;
+        /**
+         * Get Location from Search bar--if applicable
+         * this will replace the above location
+         */
+        Intent intent = getIntent();
+        if (intent != null &&
+                intent.getStringExtra(Constants.SEARCH_LAT) != null &&
+                intent.getStringExtra(Constants.SEARCH_LONG) != null) {
+            this.searchLocation = new Location("dummy");
+            this.searchLocation.setLatitude(Double.parseDouble(intent.getStringExtra(Constants.SEARCH_LAT)));
+            this.searchLocation.setLongitude(Double.parseDouble(intent.getStringExtra(Constants.SEARCH_LONG)));
         }
     }
 
@@ -102,13 +109,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         super.onResume();
         SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        boolean status = preferences.getBoolean(Constants.FIRST_LOGIN, false);
-        if (!status) {
-            showVerificationSuccessfulDialog();
-            status = true;
-            editor.putBoolean(Constants.FIRST_LOGIN, status);
-            editor.apply();
-        }
 
         /**
          * Get first name of user
@@ -128,14 +128,14 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         checkPlayServices();
 
         //Check if view already exists
-        boolean flag = false;
+        boolean flag = true;
         View view = findViewById(R.id.map);
         if (view != null) {
-            flag = true;
+            flag = false;
         }
 
         //Restore map state
-        if (preferences.getBoolean(Constants.LOGIN_STATUS, false) && !flag) {
+        if (preferences.getBoolean(Constants.LOGIN_STATUS, false) && flag) {
             try {
                 setContentView(R.layout.activity_maps);
                 setUpMapIfNeeded();
@@ -145,48 +145,18 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
             }
 
-            //Getting a reference to the map
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            GoogleMap map = mapFragment.getMap();
-
             final EditText editText = (EditText) findViewById(R.id.edit_text_maps);
+            final Intent intent = new Intent(this, SearchResults.class);
             if (editText != null) {
                 editText.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         editText.setCursorVisible(true);
-                        return false;
+                        startActivity(intent);
+                        return true;
                     }
                 });
             }
-/*
-            Button findButton = (Button) findViewById(R.id.search_button_in_maps);
-            if (findButton != null) {
-                findButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EditText editText = (EditText) findViewById(R.id.edit_text_maps);
-                        String searchLocation = editText.getText().toString();
-                        if (searchLocation != null && !searchLocation.equals("")) {
-                            new GeoCoderTask().execute(searchLocation);
-                        }
-                    }
-                });
-            }
-*/
-
-
-/*
-            editText.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    setContentView(R.layout.search_results);
-                    ListView listView = (ListView) findViewById(R.id.list_view_search_results);
-                    Button findButton = (Button) findViewById(R.id.search_button_in_maps);
-                    return false;
-                }
-            });
-*/
             //Start Service
             Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
             getApplicationContext().startService(notificationServiceIntent);
@@ -211,59 +181,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         }
         c.close();
         return "";
-    }
-
-    private void showVerificationSuccessfulDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Success!")
-                .setMessage("Your Mobile number has been Successfully Verified.")
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .show();
-    }
-
-    private class GeoCoderTask extends AsyncTask<String, Void, List<Address>> {
-        @Override
-        protected List<Address> doInBackground(String... searchLocation) {
-            //Create an instance of Geocoder class
-            Geocoder geocoder = new Geocoder(getBaseContext());
-            List<Address> addresses = null;
-            try {
-                //Try to get a max of 6 results for the search
-                addresses = geocoder.getFromLocationName(searchLocation[0], 6);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //TODO: Launch new activity form here--that has map in background and 6 rsults in list view.
-            //on click of those results we launch main activity with intent
-
-            return addresses;
-        }
-
-        @Override
-        protected void onPostExecute(List<Address> addresses) {
-            if (addresses == null || addresses.size() == 0) {
-                Toast.makeText(getBaseContext(), "No LocationFound", Toast.LENGTH_SHORT).show();
-            } else {
-/*
-                Address address = addresses.get(0);
-                Location location = new Location("dummyProvider");
-                location.setLongitude(address.getLongitude());
-                location.setLatitude(address.getLatitude());
-                centerMapOnMYLocation(location);
-*/
-                SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                for (int i = 0; i < 5; i++) {
-//                    editor.putFloat(Constants.SEARCH_RESULTS+i,addresses[i].getla)
-
-                }
-            }
-        }
     }
 
     private void setUpMapIfNeeded() {
@@ -304,18 +221,26 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     private void setUpMap() {
-        Location location = null;
+        Location location = new Location("dummy");
         GPSTracker gpsTracker = new GPSTracker(this);
         if (gpsTracker.canGetLocation() == true) {
             location = gpsTracker.getLocation();
         }
+        /**
+         * Check to see if search was triggered from Search Results class or not
+         * if yes then search location wont be null
+         */
+        if (this.searchLocation != null) {
+            location = searchLocation;
+        }
+
         if (location != null) {
             centerMapOnMYLocation(location);
         }
     }
 
     public void centerMapOnMYLocation(Location location) {
-        float zoom = 15;
+        float zoom = 20;
         mMap.setMyLocationEnabled(true);
         LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom));

@@ -88,4 +88,11 @@ public class Constants {
     public static final String FLAG_HOME = "FLAG_HOME";
     public static final String FLAG_WORK = "FLAG_WORK";
 
+    /**
+     * Search Location coord
+     */
+    public static final String SEARCH_LAT = "SEARCH_LAT";
+    public static final String SEARCH_LONG = "SEARCH_LONG";
+
+
 }

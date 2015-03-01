@@ -7,22 +7,34 @@
     android:padding="15dp">
 
     <ImageView
-        android:id="@+id/logo_list_of_friends_list_item"
+        android:id="@+id/logo_search_results_list_item"
         android:layout_gravity="center"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
         android:layout_marginLeft="5sp"
         android:layout_marginRight="20sp"
         android:layout_marginTop="5sp" />
 
     <TextView
-        android:id="@+id/text_view_list_of_friends_list_item"
+        android:id="@+id/text_view_search_results_list_item"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textStyle="normal"
         android:typeface="serif"
         xmlns:android="http://schemas.android.com/apk/res/android" />
+
+    <TextView
+        android:id="@+id/lat_search_results__list_item"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/long_search_results__list_item"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:visibility="invisible" />
 
 </LinearLayout>

@@ -1,4 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity_maps"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,7 +15,7 @@
 
 
     <LinearLayout
-        android:id="@+id/search_panel_in_maps"
+        android:id="@+id/search_panel_in_maps_LL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="7sp"
@@ -42,17 +44,5 @@
 
 
     </LinearLayout>
-
-    <ListView
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:visibility="invisible"
-        android:layout_below="@+id/search_panel_in_maps"
-        android:layout_margin="5sp"
-        android:id="@+id/listView">
-
-    </ListView>
-
 
 </RelativeLayout>

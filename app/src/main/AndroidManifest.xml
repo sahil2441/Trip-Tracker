@@ -118,6 +118,18 @@
                 android:value=".main.MapsActivity" />
         </activity>
 
+        <!-- Another child of the main activity -->
+        <activity
+            android:name=".windows.SearchResults"
+            android:label="Search Results"
+            android:parentActivityName=".main.MapsActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.MapsActivity" />
+        </activity>
+
+
         <!-- Another child of the prefernce  activity -->
         <activity
             android:name=".windows.Profile"

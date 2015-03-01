@@ -343,13 +343,30 @@ public class WelcomeSignUp extends Activity {
         Intent intent = new Intent(getApplicationContext(), NotificationService.class);
         getApplicationContext().startService(intent);
 
+        boolean status = preferences.getBoolean(Constants.FIRST_LOGIN, true);
+        if (status) {
+            showVerificationSuccessfulDialog();
+            status = false;
+            editor.putBoolean(Constants.FIRST_LOGIN, status);
+            editor.apply();
+        }
+    }
+
+    private void showVerificationSuccessfulDialog() {
         //Start Main Activity
-        Intent intentMainActivity = new Intent(this, MapsActivity.class);
-        this.startActivity(intentMainActivity);
+        final Intent intentMainActivity = new Intent(this, MapsActivity.class);
 
-        //Finish this Activity
-        this.finish();
-
+        new AlertDialog.Builder(this)
+                .setTitle("Success!")
+                .setMessage("Your Mobile number has been Successfully Verified.")
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(intentMainActivity);
+                        finish();
+                    }
+                })
+                .show();
     }
 
     @Override

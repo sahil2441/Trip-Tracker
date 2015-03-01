@@ -21,7 +21,7 @@ public class NotificationsAdapter extends ArrayAdapter<String> {
     private List<String> listTimeStamp;
 
     public NotificationsAdapter(Context context, List<String> resource, List<String> timeResource) {
-        super(context, R.layout.notification_list_item, resource);
+        super(context, R.layout.notifications_list_item, resource);
         this.context = context;
         this.list = resource;
         this.listTimeStamp = timeResource;
@@ -30,7 +30,7 @@ public class NotificationsAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.notification_list_item, parent, false);
+        View rowView = inflater.inflate(R.layout.notifications_list_item, parent, false);
 
         TextView textViewMessage = (TextView) rowView.findViewById(R.id.text_view_notifications_list_item);
         textViewMessage.setText(list.get(position));
