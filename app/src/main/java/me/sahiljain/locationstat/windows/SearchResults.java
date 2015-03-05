@@ -1,10 +1,12 @@
 package me.sahiljain.locationstat.windows;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +21,6 @@ import java.util.List;
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.SearchResultsAdapter;
 import me.sahiljain.locationstat.main.Constants;
-import me.sahiljain.locationstat.main.MapsActivity;
 
 /**
  * Created by sahil on 1/3/15.
@@ -28,6 +29,10 @@ public class SearchResults extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = preferences.edit();
+
         setContentView(R.layout.search_results);
         EditText editText = (EditText) findViewById(R.id.edit_text_search_results);
         editText.setCursorVisible(true);
@@ -53,19 +58,18 @@ public class SearchResults extends Activity {
         });
         ListView listView = (ListView) findViewById(R.id.list_view_search_results);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String latitude = ((TextView) view.findViewById(R.id.lat_search_results__list_item))
                         .getText().toString();
                 String longitude = ((TextView) view.findViewById(R.id.long_search_results__list_item))
                         .getText().toString();
-                //Start Maps Activity and finish this one
 
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putExtra(Constants.SEARCH_LAT, latitude);
-                intent.putExtra(Constants.SEARCH_LONG, longitude);
-                startActivity(intent);
-                finish();
+                editor.putString(Constants.SEARCH_LAT, latitude);
+                editor.putString(Constants.SEARCH_LONG, longitude);
+                editor.apply();
+                onNavigateUp();
             }
         });
     }

@@ -68,19 +68,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
             }
         }
-        this.searchLocation = null;
-        /**
-         * Get Location from Search bar--if applicable
-         * this will replace the above location
-         */
-        Intent intent = getIntent();
-        if (intent != null &&
-                intent.getStringExtra(Constants.SEARCH_LAT) != null &&
-                intent.getStringExtra(Constants.SEARCH_LONG) != null) {
-            this.searchLocation = new Location("dummy");
-            this.searchLocation.setLatitude(Double.parseDouble(intent.getStringExtra(Constants.SEARCH_LAT)));
-            this.searchLocation.setLongitude(Double.parseDouble(intent.getStringExtra(Constants.SEARCH_LONG)));
-        }
     }
 
     /**
@@ -124,6 +111,17 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             editor.apply();
         }
 
+        this.searchLocation = null;
+        /**
+         * Get Location from Search bar--if applicable
+         * this will replace the above location
+         */
+        if (!preferences.getString(Constants.SEARCH_LAT, "").equalsIgnoreCase("") &&
+                !preferences.getString(Constants.SEARCH_LONG, "").equalsIgnoreCase("")) {
+            this.searchLocation = new Location("dummy");
+            this.searchLocation.setLatitude(Double.parseDouble(preferences.getString(Constants.SEARCH_LAT, "")));
+            this.searchLocation.setLongitude(Double.parseDouble(preferences.getString(Constants.SEARCH_LONG, "")));
+        }
         // Check device for Play Services APK.
         checkPlayServices();
 
@@ -221,6 +219,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     private void setUpMap() {
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
         Location location = new Location("dummy");
         GPSTracker gpsTracker = new GPSTracker(this);
         if (gpsTracker.canGetLocation() == true) {
@@ -232,6 +233,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
          */
         if (this.searchLocation != null) {
             location = searchLocation;
+            editor.putString(Constants.SEARCH_LAT, "");
+            editor.putString(Constants.SEARCH_LONG, "");
+            editor.apply();
+
+            //TODO: Put a balloon on map in this case
         }
 
         if (location != null) {
@@ -240,7 +246,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     public void centerMapOnMYLocation(Location location) {
-        float zoom = 20;
+        float zoom = 16;
         mMap.setMyLocationEnabled(true);
         LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom));

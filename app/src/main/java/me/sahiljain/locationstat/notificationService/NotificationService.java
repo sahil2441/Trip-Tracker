@@ -98,22 +98,26 @@ public class NotificationService extends Service {
                             preferences.getBoolean(Constants.NOTIFY_ON_REACH_HOME, true)) {
                         //reached home
                         sendNotification(firstName + " has reached home.");
-                    } else {
-                        //left home
-                        if (preferences.getBoolean(Constants.NOTIFY_ON_LEAVING_HOME, true))
-                            sendNotification(firstName + " has left home.");
+                    } //left home
+                    else if (!preferences.getBoolean(Constants.AT_HOME, false) &&
+                            preferences.getBoolean(Constants.NOTIFY_ON_LEAVING_HOME, true)) {
+
+                        sendNotification(firstName + " has left home.");
                     }
 
                 }
                 if (preferences.getBoolean(Constants.FLAG_WORK, false)) {
                     if (preferences.getBoolean(Constants.AT_WORK, false) &&
                             preferences.getBoolean(Constants.NOTIFY_ON_REACH_WORKPLACE, true)) {
+
                         //reached workplace
                         sendNotification(firstName + " has reached workplace.");
-                    } else {
-                        //left workplace
-                        if (preferences.getBoolean(Constants.NOTIFY_ON_LEAVING_WORKPLACE, true))
-                            sendNotification(firstName + " has left workplace.");
+                    }
+                    //left workplace
+                    else if (preferences.getBoolean(Constants.AT_WORK, false) &&
+                            preferences.getBoolean(Constants.NOTIFY_ON_LEAVING_WORKPLACE, true)) {
+
+                        sendNotification(firstName + " has left workplace.");
                     }
                 }
             }
