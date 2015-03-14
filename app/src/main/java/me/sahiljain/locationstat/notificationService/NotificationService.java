@@ -151,7 +151,7 @@ public class NotificationService extends Service {
 
             }
         };
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30000, 100, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 0, locationListener);
 
         return Service.START_STICKY;
     }

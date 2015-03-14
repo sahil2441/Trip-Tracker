@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/text_view_notifications_list_item"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10sp"
         android:textSize="14sp"
@@ -28,11 +28,12 @@
         android:gravity="start"
         android:layout_toEndOf="@+id/logo_notifications_list_item"
         android:layout_toRightOf="@+id/logo_notifications_list_item"
-        xmlns:android="http://schemas.android.com/apk/res/android" />
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:text="Sahil has reached home" />
 
     <TextView
         android:id="@+id/time_stamp_notifications_list_item"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10sp"
         android:paddingBottom="0sp"
@@ -41,6 +42,8 @@
         android:textStyle="normal"
         android:typeface="serif"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:gravity="end" />
+        android:layout_toRightOf="@+id/text_view_notifications_list_item"
+        android:layout_toEndOf="@+id/text_view_notifications_list_item"
+        android:text="8:39 pm" />
 
 </RelativeLayout>

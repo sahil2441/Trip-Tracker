@@ -329,19 +329,32 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         set_up_home_location = false;
         mMap.clear();
 
+        //edit
+        Toast toast = Toast.makeText(this, Constants.TAP_ANYWHERE_NOTIFICATION, Toast.LENGTH_LONG);
+        toast.show();
+        mMap.setOnMapClickListener(this);
+/*
         // Create an instance of the dialog and show it
         DialogFragment dialog = new UseCurrentLocationDialog();
         dialog.show(getSupportFragmentManager(), String.valueOf(UseCurrentLocationDialog.class));
+*/
     }
 
     private void openSetUpHomeLoc() {
         set_up_home_location = true;
         set_up_work_location = false;
         mMap.clear();
+        //edit
+        Toast toast = Toast.makeText(this, Constants.TAP_ANYWHERE_NOTIFICATION, Toast.LENGTH_LONG);
+        toast.show();
+        mMap.setOnMapClickListener(this);
 
+
+/*
         // Create an instance of the dialog and show it
         DialogFragment dialog = new UseCurrentLocationDialog();
         dialog.show(getSupportFragmentManager(), String.valueOf(UseCurrentLocationDialog.class));
+*/
     }
 
     /**
