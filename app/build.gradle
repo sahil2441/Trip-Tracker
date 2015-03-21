@@ -29,4 +29,5 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.0'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile files('libs/cognalys.jar')
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 }

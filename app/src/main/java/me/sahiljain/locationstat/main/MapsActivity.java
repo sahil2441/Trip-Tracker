@@ -303,18 +303,19 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+/*
         if (item.getItemId() == R.id.action_notifications) {
             openNotificationsWindow();
         } else if (item.getItemId() == R.id.preferences) {
             openPreferencesWindow();
         } else if (item.getItemId() == R.id.start_a_journey) {
-            //TODO: Do something
             openStartJourneyWindow();
         } else if (item.getItemId() == R.id.set_up_home_loc) {
             openSetUpHomeLoc();
         } else if (item.getItemId() == R.id.set_up_work_loc) {
             openSetUpWorkLoc();
         }
+*/
         return super.onOptionsItemSelected(item);
     }
 

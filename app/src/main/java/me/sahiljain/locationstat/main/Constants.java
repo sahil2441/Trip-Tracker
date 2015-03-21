@@ -93,6 +93,7 @@ public class Constants {
      */
     public static final String SEARCH_LAT = "SEARCH_LAT";
     public static final String SEARCH_LONG = "SEARCH_LONG";
+    public static final String CURRENT_COLOR = "CURRENT_COLOR";
 
 
 }
