@@ -37,6 +37,7 @@ import me.sahiljain.locationstat.service.GPSTracker;
 import me.sahiljain.locationstat.windows.Notification;
 import me.sahiljain.locationstat.windows.Preferences;
 import me.sahiljain.locationstat.windows.SearchResults;
+import me.sahiljain.locationstat.windows.StartJourney;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener,
         UseCurrentLocationDialog.UseCurrentLocationDialogListener {
@@ -306,12 +307,20 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
             openNotificationsWindow();
         } else if (item.getItemId() == R.id.preferences) {
             openPreferencesWindow();
+        } else if (item.getItemId() == R.id.start_a_journey) {
+            //TODO: Do something
+            openStartJourneyWindow();
         } else if (item.getItemId() == R.id.set_up_home_loc) {
             openSetUpHomeLoc();
         } else if (item.getItemId() == R.id.set_up_work_loc) {
             openSetUpWorkLoc();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openStartJourneyWindow() {
+        Intent startJourneyIntent = new Intent(this, StartJourney.class);
+        this.startActivity(startJourneyIntent);
     }
 
     private void openPreferencesWindow() {

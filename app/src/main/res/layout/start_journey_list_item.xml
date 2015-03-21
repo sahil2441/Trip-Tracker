@@ -7,7 +7,7 @@
     android:padding="15sp">
 
     <ImageView
-        android:id="@+id/logo_preferences_list_item"
+        android:id="@+id/logo_start_journey_list_item"
         android:layout_gravity="center"
         android:layout_width="50sp"
         android:layout_height="50sp"
@@ -16,7 +16,7 @@
         android:layout_marginTop="5sp" />
 
     <TextView
-        android:id="@+id/text_view_preferences_list_item"
+        android:id="@+id/text_view_start_journey_list_item"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="10sp"
