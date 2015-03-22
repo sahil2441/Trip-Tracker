@@ -37,7 +37,7 @@
             android:layout_height="55sp"
             android:textSize="18sp"
             android:clickable="true"
-            android:layout_above="@+id/listView"
+            android:layout_above="@+id/listView_friends_add_a_trip_fourth"
             android:layout_alignLeft="@+id/search_panel_in_maps"
             android:layout_alignStart="@+id/search_panel_in_maps"
             android:paddingLeft="25sp" />

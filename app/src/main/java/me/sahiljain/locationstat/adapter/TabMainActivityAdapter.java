@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import me.sahiljain.locationstat.mainTab.NotificationFragment;
-import me.sahiljain.locationstat.mainTab.TripFragment;
+import me.sahiljain.locationstat.fragments.NotificationFragment;
+import me.sahiljain.locationstat.fragments.TripFragment;
 
 /**
  * Created by sahil on 21/3/15.
@@ -23,9 +23,9 @@ public class TabMainActivityAdapter extends FragmentPagerAdapter {
 
         switch (index) {
             case 0:
-                return TripFragment.newInstance(index);
+                return TripFragment.newInstance();
             case 1:
-                return NotificationFragment.newInstance(index);
+                return NotificationFragment.newInstance();
         }
 
         return null;

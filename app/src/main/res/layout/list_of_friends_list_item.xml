@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:padding="15dp">
+    android:padding="15sp">
 
     <ImageView
         android:id="@+id/logo_list_of_friends_list_item"
@@ -12,8 +12,11 @@
         android:layout_width="50sp"
         android:layout_height="50sp"
         android:layout_marginLeft="5sp"
+        android:layout_marginStart="5sp"
         android:layout_marginRight="20sp"
-        android:layout_marginTop="5sp" />
+        android:layout_marginEnd="20sp"
+        android:layout_marginTop="5sp"
+        android:src="@drawable/buddy" />
 
     <TextView
         android:id="@+id/text_view_list_of_friends_list_item"
@@ -23,6 +26,19 @@
         android:textSize="20sp"
         android:textStyle="normal"
         android:typeface="serif"
-        xmlns:android="http://schemas.android.com/apk/res/android" />
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:text="Sahil Jain"
+        android:layout_alignTop="@+id/logo_list_of_friends_list_item"
+        android:layout_toRightOf="@+id/logo_list_of_friends_list_item"
+        android:layout_toEndOf="@+id/logo_list_of_friends_list_item" />
 
-</LinearLayout>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox2"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>

@@ -71,17 +71,66 @@
             </intent-filter>
         </activity>
 
+        <!-- Another child of the main tab activity -->
+        <activity
+            android:name=".windows.Preferences"
+            android:label="Preferences"
+            android:parentActivityName=".mainTab.TabMainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mainTab.TabMainActivity" />
+        </activity>
+
+        <!-- Another child of the main tab activity -->
+        <activity
+            android:name=".addTrip.AddATripFirstWindow"
+            android:label="Add a Trip"
+            android:parentActivityName=".mainTab.TabMainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mainTab.TabMainActivity" />
+        </activity>
+
+        <!-- Child of the Add Trip First window-->
+        <activity
+            android:name=".addTrip.AddATripSecondWindow"
+            android:label="Add a Trip"
+            android:parentActivityName=".addTrip.AddATripFirstWindow">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".addTrip.AddATripFirstWindow" />
+        </activity>
+
+        <!-- Child of the Add Trip Second window-->
+        <activity
+            android:name=".addTrip.AddATripThirdWindow"
+            android:label="Add a Trip"
+            android:parentActivityName=".addTrip.AddATripSecondWindow">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".addTrip.AddATripSecondWindow" />
+        </activity>
+
+        <!-- Child of the Add Trip Second window-->
+        <activity
+            android:name=".addTrip.AddATripFourthWindow"
+            android:label="Add a Trip"
+            android:parentActivityName=".addTrip.AddATripThirdWindow">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".addTrip.AddATripThirdWindow" />
+        </activity>
+
         <!-- This was main activity earlier -->
         <activity
             android:name=".main.MapsActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat">
-            <!--
-                        <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
-                            <category android:name="android.intent.category.LAUNCHER" />
-                        </intent-filter>
-            -->
         </activity>
 
         <activity
@@ -111,17 +160,6 @@
 
         <!-- Another child of the main activity -->
         <activity
-            android:name=".windows.Preferences"
-            android:label="Preferences"
-            android:parentActivityName=".mainTab.TabMainActivity">
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainTab.TabMainActivity" />
-        </activity>
-
-        <!-- Another child of the main activity -->
-        <activity
             android:name=".windows.StartJourney"
             android:label="Start Journey"
             android:parentActivityName=".main.MapsActivity">
@@ -134,13 +172,17 @@
         <!-- Another child of the main activity -->
         <activity
             android:name=".windows.SearchResults"
-            android:label="Search Results"
-            android:parentActivityName=".main.MapsActivity">
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.MapsActivity" />
-        </activity>
+            android:label="Search Results" />
+
+        <!--
+                    android:parentActivityName=".main.MapsActivity">
+                    &lt;!&ndash; Parent activity meta-data to support 4.0 and lower &ndash;&gt;
+                    <meta-data
+                        android:name="android.support.PARENT_ACTIVITY"
+                        android:value=".main.MapsActivity" />
+
+                </activity>
+        -->
 
 
         <!-- Another child of the prefernce  activity -->

@@ -51,9 +51,8 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Cognalys.enableAnalytics(getApplicationContext(), true, true);
         SharedPreferences preferences = getSharedPreferences
-                (Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+                (Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
 
         if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == false) {
             Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUp.class);
@@ -95,7 +94,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         /**
@@ -220,7 +219,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
     }
 
     private void setUpMap() {
-        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         Location location = new Location("dummy");
@@ -255,7 +254,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     public void onMapClick(LatLng latLng) {
-        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         if (set_up_home_location == true) {
@@ -376,7 +375,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
-        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         Location location = null;

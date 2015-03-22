@@ -24,7 +24,7 @@ public class Profile extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences preferences = getSharedPreferences
-                (Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+                (Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
 
         final SharedPreferences.Editor editor = preferences.edit();
 

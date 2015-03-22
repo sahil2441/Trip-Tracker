@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 import me.sahiljain.locationstat.R;
+import me.sahiljain.locationstat.mainTab.TabMainActivity;
 import me.sahiljain.locationstat.notificationService.NotificationService;
 
 /**
@@ -106,10 +107,6 @@ public class WelcomeSignUp extends Activity {
         });
     }
 
-    private void setDefaultSpinnerItem() {
-
-    }
-
     private List<String> getItemsInSpinner() {
         List<String> countryList = new ArrayList<String>();
         String[] locales = Locale.getISOCountries();
@@ -126,7 +123,7 @@ public class WelcomeSignUp extends Activity {
     }
 
     public void showConfirmationDialog(final String userName, final String mobileNumber, String countryCode) {
-        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         final SharedPreferences.Editor editor = preferences.edit();
 
         new AlertDialog.Builder(this)
@@ -165,7 +162,7 @@ public class WelcomeSignUp extends Activity {
     }
 
     private void verifyMobileNumber() {
-        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         final String mobileNumber = preferences.getString(Constants.MOBILE_NO, "");
 
         /**
@@ -262,7 +259,7 @@ public class WelcomeSignUp extends Activity {
     }
 
     private void startParseProcess() {
-        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         final String userName = preferences.getString(Constants.USER_NAME, "");
 
         if (userName != null && !userName.equalsIgnoreCase("")) {
@@ -304,7 +301,7 @@ public class WelcomeSignUp extends Activity {
 
     private void startParseSubscription() {
 
-        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        final SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         final String userName = preferences.getString(Constants.USER_NAME, "");
 
         ParsePush.subscribeInBackground("c" + userName, new SaveCallback() {
@@ -333,7 +330,7 @@ public class WelcomeSignUp extends Activity {
 
 //        Toast.makeText(getBaseContext(), "Successfully Verified! Please Wait...", Toast.LENGTH_LONG).show();
 
-        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Constants.LOGIN_STATUS, true);
         editor.putString(Constants.USER_NAME, userName);
@@ -354,7 +351,7 @@ public class WelcomeSignUp extends Activity {
 
     private void showVerificationSuccessfulDialog() {
         //Start Main Activity
-        final Intent intentMainActivity = new Intent(this, MapsActivity.class);
+        final Intent intentMainActivity = new Intent(this, TabMainActivity.class);
 
         new AlertDialog.Builder(this)
                 .setTitle("Success!")

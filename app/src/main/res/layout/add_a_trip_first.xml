@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/trip_name_add_a_trip_first"
+        android:layout_marginTop="43dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To &amp; fro"
+        android:id="@+id/to_fro_check_box"
+        android:layout_below="@+id/trip_name_add_a_trip_first"
+        android:layout_alignLeft="@+id/trip_name_add_a_trip_first"
+        android:layout_alignStart="@+id/trip_name_add_a_trip_first"
+        android:layout_marginTop="46dp"
+        android:checked="true" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5sp"
+        android:layout_marginTop="38dp"
+        android:layout_below="@+id/recurring_trip_radio_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/relative_layout_week_checkbox">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monday"
+            android:id="@+id/Monday"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="39dp"
+            android:layout_marginStart="39dp"
+            android:checked="true" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tuesday"
+            android:id="@+id/Tuesday"
+            android:layout_below="@+id/Monday"
+            android:layout_alignLeft="@+id/Monday"
+            android:layout_alignStart="@+id/Monday"
+            android:checked="true" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wednesday"
+            android:id="@+id/Wednesday"
+            android:layout_below="@+id/Tuesday"
+            android:layout_alignLeft="@+id/Tuesday"
+            android:layout_alignStart="@+id/Tuesday"
+            android:checked="true" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friday"
+            android:id="@+id/Friday"
+            android:checked="true"
+            android:layout_above="@+id/Tuesday"
+            android:layout_toRightOf="@+id/Wednesday"
+            android:layout_toEndOf="@+id/Wednesday"
+            android:layout_marginLeft="58dp"
+            android:layout_marginStart="58dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saturday"
+            android:id="@+id/Saturday"
+            android:layout_below="@+id/Friday"
+            android:layout_alignLeft="@+id/Friday"
+            android:layout_alignStart="@+id/Friday" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sunday"
+            android:id="@+id/Sunday"
+            android:layout_below="@+id/Saturday"
+            android:layout_alignLeft="@+id/Saturday"
+            android:layout_alignStart="@+id/Saturday" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thursday"
+            android:id="@+id/Thursday"
+            android:layout_below="@+id/Wednesday"
+            android:layout_alignLeft="@+id/Wednesday"
+            android:layout_alignStart="@+id/Wednesday"
+            android:checked="true" />
+
+    </RelativeLayout>
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recurring Trip"
+        android:id="@+id/recurring_trip_radio_button"
+        android:layout_alignTop="@+id/one_time_trip_radio_button"
+        android:layout_toRightOf="@+id/one_time_trip_radio_button"
+        android:layout_toEndOf="@+id/one_time_trip_radio_button"
+        android:layout_marginLeft="37dp"
+        android:layout_marginStart="37dp"
+        android:checked="true" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="One Time Trip"
+        android:id="@+id/one_time_trip_radio_button"
+        android:layout_below="@+id/to_fro_check_box"
+        android:layout_alignLeft="@+id/to_fro_check_box"
+        android:layout_alignStart="@+id/to_fro_check_box"
+        android:layout_marginTop="40dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:id="@+id/next_button_add_a_trip_first"
+        android:layout_marginBottom="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/trip_name_add_a_trip_first"
+        android:layout_toEndOf="@+id/trip_name_add_a_trip_first" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/one_time_trip_radio_button"
+        android:layout_alignStart="@+id/one_time_trip_radio_button"
+        android:layout_alignRight="@+id/recurring_trip_radio_button"
+        android:layout_alignEnd="@+id/recurring_trip_radio_button" />
+
+</RelativeLayout>

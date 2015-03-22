@@ -17,10 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.parse.ParseUser;
+import com.shamanland.fab.FloatingActionButton;
 
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.TabMainActivityAdapter;
+import me.sahiljain.locationstat.addTrip.AddATripFirstWindow;
 import me.sahiljain.locationstat.main.Constants;
+import me.sahiljain.locationstat.main.WelcomeSignUp;
+import me.sahiljain.locationstat.notificationService.NotificationService;
 import me.sahiljain.locationstat.windows.Preferences;
 
 /**
@@ -32,15 +37,46 @@ public class TabMainActivity extends ActionBarActivity {
     private PagerSlidingTabStrip tabs;
     private int currentColor;
     private Drawable oldBackground = null;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences preferences;
+    private FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        sharedPreferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        currentColor = sharedPreferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
-
         super.onCreate(savedInstanceState);
+        preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+
+        if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == false) {
+            Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUp.class);
+            startActivity(welcomeSignUpWindowIntent);
+            finish();
+
+        } else {
+            String userID = preferences.getString(Constants.USER_NAME, "");
+            try {
+                ParseUser.logInInBackground(userID, Constants.PASSWORD);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Start Service
+        Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
+        getApplicationContext().startService(notificationServiceIntent);
+
+        //Initialize screen
+        initializeMainScreen();
+    }
+
+
+    private void initializeMainScreen() {
+
+        currentColor = preferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
+
         setContentView(R.layout.tab_main_activity);
 
         // Initialize the ViewPager and set an adapter
@@ -55,7 +91,6 @@ public class TabMainActivity extends ActionBarActivity {
         tabs.setShouldExpand(true);
         tabs.setViewPager(viewPager);
         tabs.setIndicatorColor(currentColor);
-        changeColor(currentColor);
 
         tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -66,6 +101,18 @@ public class TabMainActivity extends ActionBarActivity {
             @Override
             public void onPageSelected(int position) {
 
+                //Disable the visibility of floating button of Notification tab is selected
+                if (position != 0) {
+                    floatingActionButton.setVisibility(View.INVISIBLE);
+                } else {
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                }
+
+                //Reload the list view through Adapter
+/*
+                viewPager.setAdapter(new TabMainActivityAdapter(getSupportFragmentManager()));
+                tabs.setViewPager(viewPager);
+*/
             }
 
             @Override
@@ -73,10 +120,29 @@ public class TabMainActivity extends ActionBarActivity {
 
             }
         });
+
+        //Intent to be launched on click of fab button
+        final Intent intent = new Intent(this, AddATripFirstWindow.class);
+
+
+        //Fab Button
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton.setColor(currentColor);
+        floatingActionButton.setSize(FloatingActionButton.SIZE_NORMAL);
+        floatingActionButton.initBackground();
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
+
+        changeColor(currentColor);
     }
 
     private void changeColor(int newColor) {
         tabs.setIndicatorColor(newColor);
+        floatingActionButton.setColor(newColor);
 
         // change ActionBar color just if an ActionBar is available
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -116,8 +182,8 @@ public class TabMainActivity extends ActionBarActivity {
          * save current color in shared preferences
          */
 
-        sharedPreferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERNCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Constants.CURRENT_COLOR, currentColor);
         editor.apply();
     }

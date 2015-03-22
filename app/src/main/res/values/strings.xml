@@ -11,5 +11,6 @@
     <string name="use_current_location_dialog">Use Current Location?</string>
     <string name="start_journey">Start Journey</string>
     <string name="ADD_A_FRIEND ">Add a Friend</string>
+    <string name="search">Search</string>
 
 </resources>

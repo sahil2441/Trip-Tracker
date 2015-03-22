@@ -29,7 +29,6 @@ public class Trip {
      */
     Location destination;
 
-
     /**
      * List of friends for this trip who must be informed
      * through push notifications
@@ -46,6 +45,14 @@ public class Trip {
      * Determines whether the notification should be sent on that particular day
      */
     Week weekDetails;
+
+    /**
+     * If true, it means that the trip is just a one time trip and not a recurring one.
+     *
+     * @return
+     */
+
+    Boolean oneTimeTrip;
 
     public String getTripName() {
         return tripName;
@@ -95,15 +102,13 @@ public class Trip {
         this.weekDetails = weekDetails;
     }
 
-    @Override
-    public String toString() {
-        return "Trip{" +
-                "tripName='" + tripName + '\'' +
-                ", source=" + source +
-                ", destination=" + destination +
-                ", friendList=" + friendList +
-                ", toAndFro=" + toAndFro +
-                ", weekDetails=" + weekDetails +
-                '}';
+    public Boolean getOneTimeTrip() {
+        return oneTimeTrip;
     }
+
+    public void setOneTimeTrip(Boolean oneTimeTrip) {
+        this.oneTimeTrip = oneTimeTrip;
+    }
+
+
 }

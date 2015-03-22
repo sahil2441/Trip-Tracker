@@ -17,6 +17,18 @@
         android:layout_below="@+id/tabs"
         tools:context=".MainActivity" />
 
+    <com.shamanland.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_edit_light"
+        android:elevation="5sp"
+        app:floatingActionButtonImplicitElevation="false"
+        android:layout_above="@+id/colors"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20sp" />
+
     <LinearLayout
         android:id="@+id/colors"
         android:layout_width="match_parent"

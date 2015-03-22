@@ -1,26 +1,27 @@
 package me.sahiljain.locationstat.notificationService;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
 import com.parse.ParsePushBroadcastReceiver;
 
-import me.sahiljain.locationstat.windows.Notification;
-
 /**
  * This class is created because we wanted to override the method
  * getActivity()--so that we could open NotificationWindow class on
  * click of Notification
  * Created by sahil on 19/2/15.
+ * <p/>
+ * Commented the first method i.e the class now serves no purpose
  */
 public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
 
+/*
     @Override
     protected Class<? extends Activity> getActivity(Context context, Intent intent) {
         return Notification.class;
     }
+*/
 
     public ParseNotificationReceiver() {
         super();
