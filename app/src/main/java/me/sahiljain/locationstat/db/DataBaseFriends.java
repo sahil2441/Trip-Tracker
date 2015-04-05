@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.sahiljain.tripTracker.entity.UserTrip;
+
 /**
  * Created by sahil on 28/2/15.
  */
@@ -36,26 +38,29 @@ public class DataBaseFriends extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insert(String userName, String name) {
+    public boolean insert(UserTrip userTrip) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(FRIEND_NAME, name);
-        contentValues.put(USER_NAME, userName);
+        contentValues.put(FRIEND_NAME, userTrip.getName());
+        contentValues.put(USER_NAME, userTrip.getUserID());
         db.insert(TABLE_LIST_OF_FRIENDS, null, contentValues);
         db.close();
 
         return true;
     }
 
-    public List<String> fetchData() {
-        List<String> list = new ArrayList<String>();
-        String query = "Select " + FRIEND_NAME + " from " + TABLE_LIST_OF_FRIENDS;
+    public List<UserTrip> fetchData() {
+        List<UserTrip> list = new ArrayList<UserTrip>();
+        String query = "Select *" + " from " + TABLE_LIST_OF_FRIENDS;
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
             do {
-                list.add(cursor.getString(cursor.getColumnIndex(FRIEND_NAME)));
+                UserTrip userTrip = new UserTrip();
+                userTrip.setName(cursor.getString(cursor.getColumnIndex(FRIEND_NAME)));
+                userTrip.setUserID(cursor.getString(cursor.getColumnIndex(USER_NAME)));
+                list.add(userTrip);
             } while (cursor.moveToNext());
         }
         database.close();
@@ -77,7 +82,9 @@ public class DataBaseFriends extends SQLiteOpenHelper {
         return list;
     }
 
-    public boolean deleteData() {
+    public boolean delete() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_LIST_OF_FRIENDS + ";");
         return true;
     }
 }

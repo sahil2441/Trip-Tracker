@@ -18,7 +18,7 @@ import java.util.TimeZone;
 
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.db.DataBaseNotifications;
-import me.sahiljain.locationstat.main.Constants;
+import me.sahiljain.tripTracker.main.Constants;
 import me.sahiljain.locationstat.windows.Notification;
 
 /**
@@ -128,7 +128,7 @@ public class NotificationIntentService extends IntentService {
                 getActivity(this, 0, new Intent(this, Notification.class), 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this).
-                setSmallIcon(R.drawable.homeiconsmall)
+                setSmallIcon(R.drawable.source_icon_small)
                 .setContentTitle("Location Stat")
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(message))

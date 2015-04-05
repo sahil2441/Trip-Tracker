@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.sahiljain.locationstat.R;
-import me.sahiljain.locationstat.main.Constants;
+import me.sahiljain.tripTracker.main.Constants;
 
 /**
  * Created by sahil on 21/2/15.

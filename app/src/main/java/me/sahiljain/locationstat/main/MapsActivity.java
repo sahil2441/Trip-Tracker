@@ -33,11 +33,13 @@ import com.parse.ParseUser;
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.dialog.UseCurrentLocationDialog;
 import me.sahiljain.locationstat.notificationService.NotificationService;
-import me.sahiljain.locationstat.service.GPSTracker;
+import me.sahiljain.tripTracker.service.GPSTracker;
 import me.sahiljain.locationstat.windows.Notification;
 import me.sahiljain.locationstat.windows.Preferences;
 import me.sahiljain.locationstat.windows.SearchResults;
 import me.sahiljain.locationstat.windows.StartJourney;
+import me.sahiljain.tripTracker.main.Constants;
+import me.sahiljain.tripTracker.main.WelcomeSignUp;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener,
         UseCurrentLocationDialog.UseCurrentLocationDialogListener {
@@ -259,7 +261,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
 
         if (set_up_home_location == true) {
             mMap.addMarker(new MarkerOptions().position(latLng).title("Home").
-                    icon(BitmapDescriptorFactory.fromResource(R.drawable.homeiconsmall)));
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.source_icon_small)));
             double latitude = latLng.latitude;
             double longitude = latLng.longitude;
             editor.putFloat(Constants.HOME_LATITUDE, (float) latitude);
@@ -272,7 +274,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         }
         if (set_up_work_location == true) {
             mMap.addMarker(new MarkerOptions().position(latLng).title("Work").
-                    icon(BitmapDescriptorFactory.fromResource(R.drawable.workiconsmall)));
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_icon_small)));
             double latitude = latLng.latitude;
             double longitude = latLng.longitude;
             editor.putFloat(Constants.WORK_LATITUDE, (float) latitude);

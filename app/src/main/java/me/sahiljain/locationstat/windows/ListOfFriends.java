@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.sahiljain.locationstat.R;
-import me.sahiljain.locationstat.adapter.ListOfFriendsAdapter;
 import me.sahiljain.locationstat.db.DataBaseFriends;
 
 /**
@@ -29,11 +28,13 @@ public class ListOfFriends extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.list_view_list_of_friends);
 
         List<String> listOfFriends = new ArrayList<String>();
+/*
         dataBaseFriends = new DataBaseFriends(this);
         listOfFriends = dataBaseFriends.fetchData();
         ListOfFriendsAdapter adapter = new ListOfFriendsAdapter(this, listOfFriends);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
+*/
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

@@ -13,7 +13,7 @@ import java.util.List;
 
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.NotificationSettingsAdapter;
-import me.sahiljain.locationstat.main.Constants;
+import me.sahiljain.tripTracker.main.Constants;
 
 /**
  * Created by sahil on 21/2/15.
@@ -48,7 +48,7 @@ public class NotificationSettings extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.notification_settings_action_bar, menu);
         getSupportActionBar().setTitle("Notification Settings");
-        getSupportActionBar().setIcon(R.drawable.homeiconsmall);
+        getSupportActionBar().setIcon(R.drawable.source_icon_small);
         return super.onCreateOptionsMenu(menu);
     }
 }

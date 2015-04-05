@@ -32,7 +32,7 @@ import java.util.List;
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.PreferencesAdapter;
 import me.sahiljain.locationstat.db.DataBaseFriends;
-import me.sahiljain.locationstat.main.Constants;
+import me.sahiljain.tripTracker.main.Constants;
 
 /**
  * Created by sahil on 21/2/15.
@@ -201,7 +201,7 @@ public class Preferences extends ActionBarActivity {
 
         dataBaseFriends = new DataBaseFriends(this);
         //we save the channel name as it is required to be--preceded by a 'c'
-        dataBaseFriends.insert("c" + userName, name);
+//        dataBaseFriends.insert("c" + userName, name);
 
         Intent intentListOfFriends = new Intent(this, ListOfFriends.class);
         startActivity(intentListOfFriends);
@@ -212,7 +212,7 @@ public class Preferences extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.preferences_action_bar, menu);
         getSupportActionBar().setTitle("Preferences");
-        getSupportActionBar().setIcon(R.drawable.homeiconsmall);
+        getSupportActionBar().setIcon(R.drawable.source_icon_small);
         return super.onCreateOptionsMenu(menu);
     }
 

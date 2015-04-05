@@ -9,7 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/map"
+        android:id="@+id/map_add_a_trip_third"
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
@@ -32,7 +32,7 @@
             android:textCursorDrawable="@null"
             android:hint="@string/search"
             android:inputType="text"
-            android:id="@+id/edit_text_maps_add_a_trip_second"
+            android:id="@+id/edit_text_maps_add_a_trip_third"
             android:layout_width="match_parent"
             android:layout_height="55sp"
             android:textSize="18sp"
@@ -40,7 +40,7 @@
             android:paddingLeft="25sp" />
 
         <ListView
-            android:layout_below="@+id/edit_text_maps_add_a_trip_second"
+            android:layout_below="@+id/edit_text_maps_add_a_trip_third"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="invisible"
@@ -51,17 +51,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Set Destination Location"
-            android:id="@+id/set_source_location_button"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/previous_button_add_a_trip_second"
-            android:layout_toEndOf="@+id/previous_button_add_a_trip_second" />
+            android:id="@+id/set_destination_location_button"
+            android:layout_above="@+id/previous_button_add_a_trip_third"
+            android:layout_centerHorizontal="true" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Previous"
-            android:id="@+id/previous_button_add_a_trip_second"
-            android:layout_alignParentBottom="true"
+            android:id="@+id/previous_button_add_a_trip_third"
+            android:layout_above="@+id/progress_bar_add_a_trip_third"
             android:layout_alignLeft="@+id/list_view_search_results"
             android:layout_alignStart="@+id/list_view_search_results" />
 
@@ -69,18 +68,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next"
-            android:id="@+id/next_button_add_a_trip_second"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/set_source_location_button"
-            android:layout_toEndOf="@+id/set_source_location_button" />
+            android:id="@+id/next_button_add_a_trip_third"
+            android:layout_below="@+id/set_destination_location_button"
+            android:layout_alignRight="@+id/list_view_search_results"
+            android:layout_alignEnd="@+id/list_view_search_results" />
 
         <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25sp"
             android:id="@+id/progress_bar_add_a_trip_third"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:progress="50" />
 
 
     </RelativeLayout>

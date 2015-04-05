@@ -26,7 +26,7 @@ public class StartJourney extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.start_journey_action_bar, menu);
         getSupportActionBar().setTitle("Start a Journey");
-        getSupportActionBar().setIcon(R.drawable.homeiconsmall);
+        getSupportActionBar().setIcon(R.drawable.source_icon_small);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:location="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/add_a_friend_add_a_trip_fourth"
+        android:icon="@drawable/add_friend"
+        android:title="@string/ADD_A_FRIEND " />
+
+
+</menu>

@@ -42,7 +42,7 @@
 
 
     <application
-        android:name=".main.App"
+        android:name="me.sahiljain.tripTracker.main.App"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -59,10 +59,12 @@
         <meta-data
             android:name="com.parse.push.gcm_sender_id"
             android:value="id:694932255843" />
+        <!--Acctivity used to interact with DB-->
+        <activity android:name="me.sahiljain.tripTracker.db.Persistence" />
 
         <!-- Making Tab Activity the main activity now -->
         <activity
-            android:name=".mainTab.TabMainActivity"
+            android:name="me.sahiljain.tripTracker.main.TabMainActivity"
             android:label="Trip Tracker"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
             <intent-filter>
@@ -75,63 +77,62 @@
         <activity
             android:name=".windows.Preferences"
             android:label="Preferences"
-            android:parentActivityName=".mainTab.TabMainActivity">
+            android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainTab.TabMainActivity" />
+                android:value="me.sahiljain.tripTracker.main.TabMainActivity" />
         </activity>
 
         <!-- Another child of the main tab activity -->
         <activity
-            android:name=".addTrip.AddATripFirstWindow"
+            android:name="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow"
             android:label="Add a Trip"
-            android:parentActivityName=".mainTab.TabMainActivity">
+            android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mainTab.TabMainActivity" />
+                android:value="me.sahiljain.tripTracker.main.TabMainActivity" />
         </activity>
 
         <!-- Child of the Add Trip First window-->
         <activity
-            android:name=".addTrip.AddATripSecondWindow"
+            android:name="me.sahiljain.tripTracker.addTrip.AddATripSecondWindow"
             android:label="Add a Trip"
-            android:parentActivityName=".addTrip.AddATripFirstWindow">
+            android:parentActivityName="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".addTrip.AddATripFirstWindow" />
+                android:value="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow" />
         </activity>
 
         <!-- Child of the Add Trip Second window-->
         <activity
-            android:name=".addTrip.AddATripThirdWindow"
+            android:name="me.sahiljain.tripTracker.addTrip.AddATripThirdWindow"
             android:label="Add a Trip"
-            android:parentActivityName=".addTrip.AddATripSecondWindow">
+            android:parentActivityName="me.sahiljain.tripTracker.addTrip.AddATripSecondWindow">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".addTrip.AddATripSecondWindow" />
+                android:value="me.sahiljain.tripTracker.addTrip.AddATripSecondWindow" />
         </activity>
 
         <!-- Child of the Add Trip Second window-->
         <activity
-            android:name=".addTrip.AddATripFourthWindow"
+            android:name="me.sahiljain.tripTracker.addTrip.AddATripFourthWindow"
             android:label="Add a Trip"
-            android:parentActivityName=".addTrip.AddATripThirdWindow">
+            android:parentActivityName="me.sahiljain.tripTracker.addTrip.AddATripThirdWindow">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".addTrip.AddATripThirdWindow" />
+                android:value="me.sahiljain.tripTracker.addTrip.AddATripThirdWindow" />
         </activity>
 
         <!-- This was main activity earlier -->
         <activity
             android:name=".main.MapsActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat">
-        </activity>
+            android:theme="@style/Theme.AppCompat"></activity>
 
         <activity
             android:name="com.facebook.LoginActivity"
@@ -155,7 +156,7 @@
 
         <!-- Another child of the main activity -->
         <activity
-            android:name=".main.WelcomeSignUp"
+            android:name="me.sahiljain.tripTracker.main.WelcomeSignUp"
             android:label="Welcome!" />
 
         <!-- Another child of the main activity -->
@@ -220,7 +221,7 @@
         <!--PARSE Code-->
         <service android:name="com.parse.PushService" />
 
-        <!--The following reciever is for the devices in which GCM is not enabled-->
+        <!--The following receiver is for the devices in which GCM is not enabled-->
         <receiver android:name="com.parse.ParseBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -266,5 +267,6 @@
             </intent-filter>
         </receiver>
         <service android:name=".notificationService.NotificationIntentService" />
+
     </application>
 </manifest>

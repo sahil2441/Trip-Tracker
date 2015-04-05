@@ -20,7 +20,7 @@ import java.util.List;
 
 import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.adapter.SearchResultsAdapter;
-import me.sahiljain.locationstat.main.Constants;
+import me.sahiljain.tripTracker.main.Constants;
 
 /**
  * Created by sahil on 1/3/15.

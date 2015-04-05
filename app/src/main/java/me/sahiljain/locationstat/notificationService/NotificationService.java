@@ -15,7 +15,7 @@ import com.parse.ParsePush;
 import java.util.List;
 
 import me.sahiljain.locationstat.db.DataBaseFriends;
-import me.sahiljain.locationstat.main.Constants;
+import me.sahiljain.tripTracker.main.Constants;
 
 /**
  * Created by sahil on 14/2/15.
