@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:id="@+id/map_add_a_trip_second"
         tools:context=".MapsActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        tools:layout="@layout/add_a_trip_second" />
 
 
     <RelativeLayout

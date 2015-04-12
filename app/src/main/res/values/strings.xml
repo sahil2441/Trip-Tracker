@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Location Stat</string>
+    <string name="app_name">Trip Tracker</string>
     <string name="title_activity_maps">Map</string>
     <string name="settings">settings</string>
     <string name="setUpHomeLoc">Set up Home Location</string>
@@ -12,5 +12,6 @@
     <string name="start_journey">Start Journey</string>
     <string name="ADD_A_FRIEND ">Add a Friend</string>
     <string name="search">Search</string>
+    <string name="google_map_api_key">AIzaSyDlN2ZO5jrCofudbFbrJpFuf7U2mGjvXX4</string>
 
 </resources>

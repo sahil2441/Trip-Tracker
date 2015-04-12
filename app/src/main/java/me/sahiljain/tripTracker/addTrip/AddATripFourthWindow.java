@@ -11,21 +11,18 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.sahiljain.locationstat.R;
-import me.sahiljain.locationstat.adapter.UserDefaultAdapter;
 import me.sahiljain.locationstat.db.DataBaseFriends;
 import me.sahiljain.tripTracker.db.Persistence;
-import me.sahiljain.tripTracker.entity.IUser;
 import me.sahiljain.tripTracker.entity.Trip;
-import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.entity.UserTrip;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
@@ -52,7 +49,10 @@ public class AddATripFourthWindow extends ActionBarActivity {
     //UI elements
     private Button previousButton;
     private Button saveButton;
+    private Button addFriend;
     private ListView listView;
+    private EditText name, countryCode, phoneNumber;
+
 
     private Persistence persistence;
 
@@ -85,9 +85,10 @@ public class AddATripFourthWindow extends ActionBarActivity {
         //Instance of Trip from the application class
         trip = ((App) getApplication()).getTrip();
 
-        populateListView();
     }
 
+
+/*
     public void populateListView() {
 
         persistence = new Persistence();
@@ -102,6 +103,7 @@ public class AddATripFourthWindow extends ActionBarActivity {
             listView.setAdapter(adapter);
         }
     }
+*/
 
 
     @Override
@@ -126,7 +128,7 @@ public class AddATripFourthWindow extends ActionBarActivity {
         }
 
         //TODO: Persist in DB
-        persistence.saveTripInDataBase(trip);
+        persistence.saveTripInDataBase(this, trip);
 
         //show dialogue for successful operation
         final Intent intent = new Intent(this, TabMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -145,18 +147,26 @@ public class AddATripFourthWindow extends ActionBarActivity {
         if (trip == null) {
             trip = ((App) getApplication()).getTrip();
         }
-        SparseBooleanArray sparseBooleanArray = listView.getCheckedItemPositions();
         List<UserTrip> userTrips = new ArrayList<>();
 
-        //Iterate listView and get elements at this position
-        for (int i = 0; i < sparseBooleanArray.size(); i++) {
-            if (sparseBooleanArray.get(i)) {
-                IUser userTrip = new UserTrip();
-                //Add this user to the list TODO
-                userTrip = (IUser) listView.getItemAtPosition(i);
-                userTrips.add((UserTrip) userTrip);
-            }
+        //Add first user details
+        name = (EditText) findViewById(R.id.name1);
+        countryCode = (EditText) findViewById(R.id.country_code1);
+        phoneNumber = (EditText) findViewById(R.id.phoneNumber1);
+        if (!(countryCode.getText().toString() + phoneNumber.getText().toString()).equalsIgnoreCase("")) {
+            userTrips.add(new UserTrip(name.getText().toString(),
+                    countryCode.getText().toString() + phoneNumber.getText().toString()));
         }
+
+        //Add second user details
+        name = (EditText) findViewById(R.id.name2);
+        countryCode = (EditText) findViewById(R.id.country_code2);
+        phoneNumber = (EditText) findViewById(R.id.phoneNumber2);
+        if (!(countryCode.getText().toString() + phoneNumber.getText().toString()).equalsIgnoreCase("")) {
+            userTrips.add(new UserTrip(name.getText().toString(),
+                    countryCode.getText().toString() + phoneNumber.getText().toString()));
+        }
+
         trip.setFriendList(userTrips);
         return trip;
     }

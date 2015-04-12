@@ -49,7 +49,26 @@ public class Persistence extends Activity {
         return null;
     }
 
-    public void saveTripInDataBase(Trip trip) {
+    public void saveTripInDataBase(Context context, Trip trip) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                dataBaseHelper.getTripRuntimeExceptionDao();
 
+        //persist into DB
+        tripRuntimeExceptionDao.create(trip);
+        Log.d(Constants.TAG, trip.toString());
+
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
+    }
+
+    public List<Trip> fetchTrips(Context context) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        if (dataBaseHelper != null) {
+            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                    dataBaseHelper.getTripRuntimeExceptionDao();
+            return tripRuntimeExceptionDao.queryForAll();
+        }
+        return null;
     }
 }

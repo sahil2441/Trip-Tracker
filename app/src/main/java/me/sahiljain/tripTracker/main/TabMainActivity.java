@@ -87,7 +87,7 @@ public class TabMainActivity extends ActionBarActivity {
         initializeMainScreen();
 
         //Create list of default users
-        prepareListViewUserDefault();
+//        prepareListViewUserDefault();
     }
 
     /**

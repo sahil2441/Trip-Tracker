@@ -16,7 +16,7 @@ import me.sahiljain.tripTracker.entity.Trip;
 /**
  * Created by sahil on 22/3/15.
  */
-public class TripsAdapter extends ArrayAdapter<String> {
+public class TripsAdapter extends ArrayAdapter<Trip> {
 
     private Context context;
 
