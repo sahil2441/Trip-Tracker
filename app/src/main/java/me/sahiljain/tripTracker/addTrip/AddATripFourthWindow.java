@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +33,7 @@ import me.sahiljain.tripTracker.main.TabMainActivity;
 public class AddATripFourthWindow extends ActionBarActivity {
 
     private DataBaseFriends dataBaseFriends;
-
     private SharedPreferences preferences;
-
-    private SharedPreferences.Editor editor;
-
-    private boolean matchFound = false;
-
     private int currentColor;
 
     //Instance of Trip from the application class
@@ -49,9 +42,7 @@ public class AddATripFourthWindow extends ActionBarActivity {
     //UI elements
     private Button previousButton;
     private Button saveButton;
-    private Button addFriend;
-    private ListView listView;
-    private EditText name, countryCode, phoneNumber;
+    private EditText countryCode, phoneNumber;
 
 
     private Persistence persistence;
@@ -80,31 +71,10 @@ public class AddATripFourthWindow extends ActionBarActivity {
             }
         });
 
-        listView = (ListView) findViewById(R.id.listView_friends_add_a_trip_fourth);
-
         //Instance of Trip from the application class
         trip = ((App) getApplication()).getTrip();
 
     }
-
-
-/*
-    public void populateListView() {
-
-        persistence = new Persistence();
-        List<UserDefault> userDefaults = persistence.fetchUserDefault(this);
-
-        if (userDefaults != null && userDefaults.size() > 0) {
-            if (listView == null) {
-                listView = (ListView) findViewById(R.id.listView_friends_add_a_trip_fourth);
-            }
-            UserDefaultAdapter adapter = new UserDefaultAdapter(this, userDefaults);
-            adapter.notifyDataSetChanged();
-            listView.setAdapter(adapter);
-        }
-    }
-*/
-
 
     @Override
     protected void onResume() {
@@ -127,7 +97,6 @@ public class AddATripFourthWindow extends ActionBarActivity {
             persistence = new Persistence();
         }
 
-        //TODO: Persist in DB
         persistence.saveTripInDataBase(this, trip);
 
         //show dialogue for successful operation
@@ -150,20 +119,18 @@ public class AddATripFourthWindow extends ActionBarActivity {
         List<UserTrip> userTrips = new ArrayList<>();
 
         //Add first user details
-        name = (EditText) findViewById(R.id.name1);
         countryCode = (EditText) findViewById(R.id.country_code1);
         phoneNumber = (EditText) findViewById(R.id.phoneNumber1);
         if (!(countryCode.getText().toString() + phoneNumber.getText().toString()).equalsIgnoreCase("")) {
-            userTrips.add(new UserTrip(name.getText().toString(),
+            userTrips.add(new UserTrip(null,
                     countryCode.getText().toString() + phoneNumber.getText().toString()));
         }
 
         //Add second user details
-        name = (EditText) findViewById(R.id.name2);
         countryCode = (EditText) findViewById(R.id.country_code2);
         phoneNumber = (EditText) findViewById(R.id.phoneNumber2);
         if (!(countryCode.getText().toString() + phoneNumber.getText().toString()).equalsIgnoreCase("")) {
-            userTrips.add(new UserTrip(name.getText().toString(),
+            userTrips.add(new UserTrip(null,
                     countryCode.getText().toString() + phoneNumber.getText().toString()));
         }
 
@@ -188,30 +155,5 @@ public class AddATripFourthWindow extends ActionBarActivity {
                 })
                 .show();
     }
-
-
-    private void updateFriendListWindow(String userName, String name) {
-
-        /**
-         * Store all the friends into a temporary DB. And later receive the list--and
-         * also execute a delete query
-         */
-        dataBaseFriends = new DataBaseFriends(this);
-        //we save the channel name as it is required to be--preceded by a 'c'
-        userName = "c" + userName;
-        UserTrip userTrip = new UserTrip(name, userName);
-        dataBaseFriends.insert(userTrip);
-
-        //Set users into the list view on this window
-
-/*
-        ListView listView = (ListView) findViewById(R.id.listView_friends_add_a_trip_fourth);
-        List<UserTrip> userTrips = dataBaseFriends.fetchData();
-        UserDefaultAdapter adapter = new UserDefaultAdapter(this, userTrips);
-        adapter.notifyDataSetChanged();
-        listView.setAdapter(adapter);
-*/
-    }
-
 }
 

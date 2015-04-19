@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 import me.sahiljain.locationstat.R;
-import me.sahiljain.locationstat.notificationService.NotificationService;
+import me.sahiljain.tripTracker.notificationService.NotificationService;
 
 /**
  * Created by sahil on 16/2/15.

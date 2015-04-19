@@ -48,14 +48,10 @@ tableName=tt_notifications_all
 # --table-fields-start--
 # --field-start--
 fieldName=notificationId
-canBeNull=false
 generatedId=true
 # --field-end--
 # --field-start--
 fieldName=message
-# --field-end--
-# --field-start--
-fieldName=date
 # --field-end--
 # --field-start--
 fieldName=time

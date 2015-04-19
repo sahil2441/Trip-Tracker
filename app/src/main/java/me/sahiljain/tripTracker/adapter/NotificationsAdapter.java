@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat.adapter;
+package me.sahiljain.tripTracker.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,20 +11,19 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.entity.Notification;
 
 /**
  * Created by sahil on 21/2/15.
  */
-public class NotificationsAdapter extends ArrayAdapter<String> {
+public class NotificationsAdapter extends ArrayAdapter<Notification> {
     private Context context;
-    private List<String> list;
-    private List<String> listTimeStamp;
+    private List<Notification> list;
 
-    public NotificationsAdapter(Context context, List<String> resource, List<String> timeResource) {
+    public NotificationsAdapter(Context context, List<Notification> resource) {
         super(context, R.layout.notifications_list_item, resource);
         this.context = context;
         this.list = resource;
-        this.listTimeStamp = timeResource;
     }
 
     @Override
@@ -33,13 +32,13 @@ public class NotificationsAdapter extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.notifications_list_item, parent, false);
 
         TextView textViewMessage = (TextView) rowView.findViewById(R.id.text_view_notifications_list_item);
-        textViewMessage.setText(list.get(position));
+        textViewMessage.setText(list.get(position).getMessage());
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.logo_notifications_list_item);
         imageView.setImageResource(R.drawable.iconsmall);
 
         TextView textViewTimeStamp = (TextView) rowView.findViewById(R.id.time_stamp_notifications_list_item);
-        textViewTimeStamp.setText(listTimeStamp.get(position));
+        textViewTimeStamp.setText(list.get(position).getTime());
 
         return rowView;
     }

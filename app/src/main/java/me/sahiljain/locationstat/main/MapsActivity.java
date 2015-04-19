@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -31,18 +30,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
 import me.sahiljain.locationstat.R;
-import me.sahiljain.locationstat.dialog.UseCurrentLocationDialog;
-import me.sahiljain.locationstat.notificationService.NotificationService;
-import me.sahiljain.tripTracker.service.GPSTracker;
-import me.sahiljain.locationstat.windows.Notification;
 import me.sahiljain.locationstat.windows.Preferences;
 import me.sahiljain.locationstat.windows.SearchResults;
 import me.sahiljain.locationstat.windows.StartJourney;
 import me.sahiljain.tripTracker.main.Constants;
 import me.sahiljain.tripTracker.main.WelcomeSignUp;
+import me.sahiljain.tripTracker.notificationService.NotificationService;
+import me.sahiljain.tripTracker.service.GPSTracker;
 
-public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener,
-        UseCurrentLocationDialog.UseCurrentLocationDialogListener {
+public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
 
     boolean set_up_home_location = false;
     boolean set_up_work_location = false;
@@ -330,10 +326,12 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         this.startActivity(preferencesIntent);
     }
 
+/*
     private void openNotificationsWindow() {
         Intent notificationsIntent = new Intent(this, Notification.class);
         this.startActivity(notificationsIntent);
     }
+*/
 
     private void openSetUpWorkLoc() {
         set_up_work_location = true;
@@ -375,6 +373,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
      * @param dialogFragment
      */
 
+/*
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
         SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
@@ -405,4 +404,5 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
         toast.show();
         mMap.setOnMapClickListener(this);
     }
+*/
 }

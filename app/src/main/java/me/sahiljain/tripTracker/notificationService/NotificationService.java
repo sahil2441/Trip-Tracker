@@ -1,4 +1,4 @@
-package me.sahiljain.locationstat.notificationService;
+package me.sahiljain.tripTracker.notificationService;
 
 import android.app.Service;
 import android.content.Context;

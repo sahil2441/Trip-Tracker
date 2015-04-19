@@ -23,29 +23,31 @@
         android:layout_marginLeft="12sp"
         android:padding="0sp">
 
-        <EditText
-            android:layout_alignParentTop="true"
-            android:background="#FFFFFF"
-            android:textColor="#848484"
-            android:textColorHint="#D8D8D8"
-            android:cursorVisible="false"
-            android:textCursorDrawable="@null"
-            android:hint="@string/search"
-            android:inputType="text"
-            android:id="@+id/edit_text_maps_add_a_trip_third"
-            android:layout_width="match_parent"
-            android:layout_height="55sp"
-            android:textSize="18sp"
-            android:clickable="true"
-            android:paddingLeft="25sp" />
+        <!--
+                <EditText
+                    android:layout_alignParentTop="true"
+                    android:background="#FFFFFF"
+                    android:textColor="#848484"
+                    android:textColorHint="#D8D8D8"
+                    android:cursorVisible="false"
+                    android:textCursorDrawable="@null"
+                    android:hint="@string/search"
+                    android:inputType="text"
+                    android:id="@+id/edit_text_maps_add_a_trip_third"
+                    android:layout_width="match_parent"
+                    android:layout_height="55sp"
+                    android:textSize="18sp"
+                    android:clickable="true"
+                    android:paddingLeft="25sp" />
 
-        <ListView
-            android:layout_below="@+id/edit_text_maps_add_a_trip_third"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:layout_margin="5sp"
-            android:id="@+id/list_view_search_results"></ListView>
+                <ListView
+                    android:layout_below="@+id/edit_text_maps_add_a_trip_third"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:layout_margin="5sp"
+                    android:id="@+id/list_view_search_results"></ListView>
+        -->
 
         <Button
             android:layout_width="wrap_content"
@@ -70,8 +72,8 @@
             android:text="Next"
             android:id="@+id/next_button_add_a_trip_third"
             android:layout_below="@+id/set_destination_location_button"
-            android:layout_alignRight="@+id/list_view_search_results"
-            android:layout_alignEnd="@+id/list_view_search_results" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"

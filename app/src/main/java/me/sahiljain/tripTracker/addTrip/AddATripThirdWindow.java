@@ -13,10 +13,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -28,7 +26,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import me.sahiljain.locationstat.R;
-import me.sahiljain.locationstat.windows.SearchResults;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
@@ -120,9 +117,9 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
         }
         /**
          * Code for Dynamic Search in edit text
-         * TODO
          */
 
+/*
         final EditText editText = (EditText) findViewById(R.id.edit_text_maps_add_a_trip_third);
         final Intent intent = new Intent(this, SearchResults.class);
         if (editText != null) {
@@ -130,20 +127,12 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     editText.setCursorVisible(true);
-                    /**
-                     *Flag for SearchResults.java to distinguish whether the request came from
-                     * Second Window or third
-                     */
-/*
-                        editor.putBoolean(Constants.ADD_A_TRIP_SECOND_WINDOW,true);
-                        editor.putBoolean(Constants.ADD_A_TRIP_THIRD_WINDOW,false);
-                        editor.apply();
-*/
                     startActivity(intent);
                     return true;
                 }
             });
         }
+*/
 
         final Button previousButton = (Button) findViewById(R.id.previous_button_add_a_trip_third);
         previousButton.setOnClickListener(new View.OnClickListener() {
@@ -206,7 +195,7 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
             if (mMap != null) {
                 setUpMap();
                 //Move the button to bottom
-                setButtonPosition();
+//                setButtonPosition();
             }
         }
     }
@@ -249,7 +238,7 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
          */
         //TODO: Button not visible
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
-                findFragmentById(R.id.map_add_a_trip_second);
+                findFragmentById(R.id.map_add_a_trip_third);
         View mapView = mapFragment.getView();
         if (mapView != null &&
                 mapView.findViewById(1) != null) {

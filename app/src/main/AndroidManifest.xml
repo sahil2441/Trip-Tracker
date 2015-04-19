@@ -139,7 +139,7 @@
             android:label="title_facebook_login" />
 
         <service
-            android:name=".notificationService.NotificationService"
+            android:name="me.sahiljain.tripTracker.notificationService.NotificationService"
             android:icon="@drawable/iconsmall"
             android:label="@string/app_name" />
 
@@ -232,7 +232,7 @@
         <!--The following receiver does the actual work of
         handling notifications and subscribing the user to a channel-->
         <receiver
-            android:name=".notificationService.ParseNotificationReceiver"
+            android:name="me.sahiljain.tripTracker.notificationService.ParseNotificationReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -258,7 +258,7 @@
          My own receiver to hanlde notifications
          -->
         <receiver
-            android:name=".notificationService.NotificationReceiver"
+            android:name="me.sahiljain.tripTracker.notificationService.NotificationReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <!-- Receives the actual messages. -->
@@ -266,7 +266,7 @@
                 <category android:name="me.sahiljain.locationstat" />
             </intent-filter>
         </receiver>
-        <service android:name=".notificationService.NotificationIntentService" />
+        <service android:name="me.sahiljain.tripTracker.notificationService.NotificationIntentService" />
 
     </application>
 </manifest>

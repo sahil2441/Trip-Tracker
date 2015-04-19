@@ -27686,3 +27686,76 @@ D/LocationFilter(11534): Forcing stable location. Original location:Location[fus
 D/WifiService( 1042): releaseWifiLockLocked: WifiLock{NlpWifiLock type=2 binder=android.os.BinderProxy@424b0d40}
 I/GCoreUlr(11534): Successfully inserted location
 I/GCoreUlr(11534): Not calling LocationReporter, hasMoved: false, elapsed millis: 760792, request: Stationary(3600000)
+V/AlarmManager( 1042): sending alarm Alarm{4210dcc8 type 2 com.google.android.gms}
+D/WifiService( 1042): acquireWifiLockLocked: WifiLock{NlpWifiLock type=2 binder=android.os.BinderProxy@424b0d40}
+D/WifiStateMachine( 1042): handleMessage: E msg.what=131143
+D/WifiStateMachine( 1042): processMsg: ConnectedState
+D/WifiStateMachine( 1042): processMsg: L2ConnectedState
+I/wpa_supplicant(10830): wlan0: CTRL-EVENT-SCAN-STARTED 
+D/MDMCTBK (  364): reply_len: 40 reply is = IFNAME=wlan0 <3>CTRL-EVENT-SCAN-STARTED 
+D/MDMCTBK (  364): Event received = CTRL-EVENT-SCAN-STARTED 
+D/WifiStateMachine( 1042): handleMessage: X
+D/MDMCTBK (  364): reply_len: 40 reply is = IFNAME=wlan0 <3>CTRL-EVENT-SCAN-RESULTS 
+D/MDMCTBK (  364): Event received = CTRL-EVENT-SCAN-RESULTS 
+D/WifiStateMachine( 1042): handleMessage: E msg.what=147461
+D/WifiStateMachine( 1042): processMsg: ConnectedState
+D/WifiStateMachine( 1042): processMsg: L2ConnectedState
+D/WifiStateMachine( 1042): processMsg: ConnectModeState
+D/WifiStateMachine( 1042): processMsg: DriverStartedState
+D/WifiStateMachine( 1042): processMsg: SupplicantStartedState
+D/TCMD    (  602): NL - Read 56 bytes from update socket.
+D/TCMD    (  602): NL - message type is RTM_NEWLINK
+D/TCMD    (  602): Listening for incoming client connection request
+D/WifiStateMachine( 1042): handleMessage: X
+D/LocationFilter(11534): Forcing stable location. Original location:Location[fused 19.134834,72.868453 acc=38 et=+6d5h43m41s961ms] because connected WiFi network is the same, bssid=ec:22:80:55:dc:d8
+V/AlarmManager( 1042): sending alarm Alarm{4261e498 type 2 com.google.android.gms}
+D/WifiService( 1042): releaseWifiLockLocked: WifiLock{NlpWifiLock type=2 binder=android.os.BinderProxy@424b0d40}
+D/GCM     (11425): Message class com.google.f.a.a.i
+D/ConnectivityService( 1042): handleInetConditionHoldEnd: net=1, condition=100, published condition=100
+I/ModemStatsDSDetect( 1280): onReceive() -Intent { act=android.net.conn.INET_CONDITION_ACTION flg=0x4000010 (has extras) }
+I/SBar.MSimNetwCntrl( 1120): onReceive[0]: ConnectivityManager.INET_CONDITION_ACTION Received on subscription :0
+I/SBar.MSimNetwCntrl( 1120): updateConnectivity[0]: NetworkInfo: NetworkInfo: type: WIFI[], state: CONNECTED/CONNECTED, reason: (unspecified), extra: "SAHILJAIN-PC_Network", roaming: false, failover: false, isAvailable: true, isConnectedToProvisioningNetwork: false, inetCondition= 1
+I/ModemStatsDSDetect( 1280): INET_CONDITION=100 ,activeNet=NetworkInfo: type: WIFI[], state: CONNECTED/CONNECTED, reason: (unspecified), extra: "SAHILJAIN-PC_Network", roaming: false, failover: false, isAvailable: true, isConnectedToProvisioningNetwork: false
+I/ModemStatsDSDetect( 1280): onReceive() - done, currentInetCondition=100
+D/SBar.MSimNetwCntrl( 1120): updateTelephonySignalStrength[0]: iconList[iconLevel]=7f020299/zz_moto_stat_sys_signal_4_fully_wide iconLevel=4 mMSimMobileInetCondition=1 mMSimMobileInetConditionSB=1
+D/SBar.MSimNetwCntrl( 1120): updateDataIcon[0]: subscription=0
+D/SBar.MSimNetwCntrl( 1120): updateDataIcon[0]: dataSub=0
+D/SBar.MSimNetwCntrl( 1120): updateDataIcon[0]: SimState=READY
+I/SBar.MSimNetwCntrl( 1120): notifySignalsChangedCallbacks[0]: isEmergencyOnly(0)=false enabled=true sim=(none)="(empty)" signal=zz_moto_stat_sys_signal_4_fully_wide="Phone signal full." roaming=(none)="Not roaming."
+I/SBar.MSimNetwCntrl( 1120):  type=(none)="3.5G" activity=(none)="(empty)"
+I/SBar.MSimNetwCntrl( 1120):  slot=1="1" network="Vodafone IN"
+D/SBar.MSimNetwCntrl( 1120): updateTelephonySignalStrength[0]: iconList[iconLevel]=7f020299/zz_moto_stat_sys_signal_4_fully_wide iconLevel=4 mMSimMobileInetCondition=1 mMSimMobileInetConditionSB=1
+D/SBar.MSimNetwCntrl( 1120): updateDataIcon[0]: subscription=0
+D/SBar.MSimNetwCntrl( 1120): updateDataIcon[0]: dataSub=0
+D/SBar.MSimNetwCntrl( 1120): updateDataIcon[0]: SimState=READY
+I/SBar.MSimNetwCntrl( 1120): notifySignalsChangedCallbacks[0]: isEmergencyOnly(0)=false enabled=true sim=(none)="(empty)" signal=zz_moto_stat_sys_signal_4_fully_wide="Phone signal full." roaming=(none)="Not roaming."
+I/SBar.MSimNetwCntrl( 1120):  type=(none)="3.5G" activity=(none)="(empty)"
+I/SBar.MSimNetwCntrl( 1120):  slot=1="1" network="Vodafone IN"
+V/AlarmManager( 1042): sending alarm Alarm{421238d0 type 2 com.whatsapp}
+V/AlarmManager( 1042): sending alarm Alarm{42040da8 type 2 com.google.android.gms}
+D/WifiService( 1042): acquireWifiLockLocked: WifiLock{NlpWifiLock type=2 binder=android.os.BinderProxy@424b0d40}
+D/WifiStateMachine( 1042): handleMessage: E msg.what=131143
+D/WifiStateMachine( 1042): processMsg: ConnectedState
+D/WifiStateMachine( 1042): processMsg: L2ConnectedState
+I/wpa_supplicant(10830): wlan0: CTRL-EVENT-SCAN-STARTED 
+D/MDMCTBK (  364): reply_len: 40 reply is = IFNAME=wlan0 <3>CTRL-EVENT-SCAN-STARTED 
+D/MDMCTBK (  364): Event received = CTRL-EVENT-SCAN-STARTED 
+D/WifiStateMachine( 1042): handleMessage: X
+D/MDMCTBK (  364): reply_len: 40 reply is = IFNAME=wlan0 <3>CTRL-EVENT-BSS-ADDED 232
+D/MDMCTBK (  364): Event received = CTRL-EVENT-BSS-ADDED 232
+D/MDMCTBK (  364): reply_len: 40 reply is = IFNAME=wlan0 <3>CTRL-EVENT-SCAN-RESULTS 
+D/MDMCTBK (  364): Event received = CTRL-EVENT-SCAN-RESULTS 
+D/WifiStateMachine( 1042): handleMessage: E msg.what=147461
+D/WifiStateMachine( 1042): processMsg: ConnectedState
+D/WifiStateMachine( 1042): processMsg: L2ConnectedState
+D/WifiStateMachine( 1042): processMsg: ConnectModeState
+D/WifiStateMachine( 1042): processMsg: DriverStartedState
+D/WifiStateMachine( 1042): processMsg: SupplicantStartedState
+D/TCMD    (  602): NL - Read 56 bytes from update socket.
+D/TCMD    (  602): NL - message type is RTM_NEWLINK
+D/TCMD    (  602): Listening for incoming client connection request
+D/WifiStateMachine( 1042): handleMessage: X
+D/LocationFilter(11534): Forcing stable location. Original location:Location[fused 19.134834,72.868453 acc=38 et=+6d5h44m2s15ms] because connected WiFi network is the same, bssid=ec:22:80:55:dc:d8
+D/WifiService( 1042): releaseWifiLockLocked: WifiLock{NlpWifiLock type=2 binder=android.os.BinderProxy@424b0d40}
+V/AlarmManager( 1042): sending alarm Alarm{4245a780 type 3 android}
+D/dalvikvm(16636): Debugger has detached; object registry had 4181 entries

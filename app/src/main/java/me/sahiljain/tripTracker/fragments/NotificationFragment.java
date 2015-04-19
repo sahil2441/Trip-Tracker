@@ -10,16 +10,16 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import me.sahiljain.locationstat.adapter.NotificationsAdapter;
-import me.sahiljain.locationstat.db.DataBaseNotifications;
+import me.sahiljain.tripTracker.adapter.NotificationsAdapter;
+import me.sahiljain.tripTracker.db.Persistence;
+import me.sahiljain.tripTracker.entity.Notification;
 
 /**
  * Created by sahil on 21/3/15.
  */
 public class NotificationFragment extends Fragment {
 
-    private DataBaseNotifications dataBaseNotifications;
-
+    private Persistence persistence;
 
     public static NotificationFragment newInstance() {
         NotificationFragment notificationFragment = new NotificationFragment();
@@ -30,13 +30,11 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         ListView listView = new ListView(getActivity());
-        dataBaseNotifications = new DataBaseNotifications(getActivity());
+        persistence = new Persistence();
 
-        List<String> list = dataBaseNotifications.fetchListNotifications();
+        List<Notification> list = persistence.fetchNotifications(getActivity());
 
-        List<String> listTimeStamp = dataBaseNotifications.fetchListTime();
-
-        NotificationsAdapter adapter = new NotificationsAdapter(getActivity(), list, listTimeStamp);
+        NotificationsAdapter adapter = new NotificationsAdapter(getActivity(), list);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         return listView;

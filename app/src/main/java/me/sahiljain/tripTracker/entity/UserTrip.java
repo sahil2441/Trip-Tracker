@@ -12,7 +12,7 @@ public class UserTrip implements IUser {
     public UserTrip() {
     }
 
-    public UserTrip(String userID, String name) {
+    public UserTrip(String name, String userID) {
         this.userID = userID;
         this.name = name;
     }

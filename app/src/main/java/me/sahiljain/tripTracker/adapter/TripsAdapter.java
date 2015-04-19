@@ -23,7 +23,7 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
     private List<Trip> trips;
 
     public TripsAdapter(Context context, List<Trip> resource) {
-        super(context, R.layout.trips_list_item);
+        super(context, R.layout.trips_list_item, resource);
         this.trips = resource;
         this.context = context;
     }

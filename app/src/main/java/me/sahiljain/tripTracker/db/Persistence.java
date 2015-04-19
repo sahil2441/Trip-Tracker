@@ -9,6 +9,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.util.List;
 
+import me.sahiljain.tripTracker.entity.Notification;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.main.Constants;
@@ -17,7 +18,6 @@ import me.sahiljain.tripTracker.main.Constants;
  * Created by sahil on 3/4/15.
  * This class takes care of persisting data into DB
  */
-//TODO
 public class Persistence extends Activity {
 
     private DataBaseHelper dataBaseHelper;
@@ -68,6 +68,29 @@ public class Persistence extends Activity {
             RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
                     dataBaseHelper.getTripRuntimeExceptionDao();
             return tripRuntimeExceptionDao.queryForAll();
+        }
+        return null;
+    }
+
+    public void saveNotificationInDatabase(Context context, Notification notification) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        RuntimeExceptionDao<Notification, Integer> notificationRuntimeExceptionDao =
+                dataBaseHelper.getNotificationRuntimeExceptionDao();
+
+        //persist into DB
+        notificationRuntimeExceptionDao.create(notification);
+        Log.d(Constants.TAG, notification.toString());
+
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
+    }
+
+    public List<Notification> fetchNotifications(Context context) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        if (dataBaseHelper != null) {
+            RuntimeExceptionDao<Notification, Integer> notificationRuntimeExceptionDao =
+                    dataBaseHelper.getNotificationRuntimeExceptionDao();
+            return notificationRuntimeExceptionDao.queryForAll();
         }
         return null;
     }

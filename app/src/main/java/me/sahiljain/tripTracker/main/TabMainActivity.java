@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.sahiljain.locationstat.R;
-import me.sahiljain.locationstat.notificationService.NotificationService;
+import me.sahiljain.tripTracker.notificationService.NotificationService;
 import me.sahiljain.locationstat.windows.Preferences;
 import me.sahiljain.tripTracker.adapter.TabMainActivityAdapter;
 import me.sahiljain.tripTracker.addTrip.AddATripFirstWindow;
