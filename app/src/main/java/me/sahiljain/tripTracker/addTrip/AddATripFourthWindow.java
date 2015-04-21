@@ -79,7 +79,7 @@ public class AddATripFourthWindow extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
 
         //Set up color for Action bar
         currentColor = preferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
@@ -135,6 +135,7 @@ public class AddATripFourthWindow extends ActionBarActivity {
         }
 
         trip.setFriendList(userTrips);
+        trip.setActive(false);
         return trip;
     }
 

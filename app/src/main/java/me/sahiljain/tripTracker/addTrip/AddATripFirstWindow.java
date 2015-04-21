@@ -59,7 +59,7 @@ public class AddATripFirstWindow extends ActionBarActivity {
         trip = ((App) getApplication()).getTrip();
 
         //Set color of Action Bar --to have a uniformity
-        sharedPreferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         editor = sharedPreferences.edit();
         currentColor = sharedPreferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

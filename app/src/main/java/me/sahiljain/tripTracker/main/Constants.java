@@ -4,7 +4,7 @@ package me.sahiljain.tripTracker.main;
  * Created by sahil on 21/2/15.
  */
 public class Constants {
-    public static final String LOCATION_STAT_SHARED_PREFERENCES = "locationStatSharedPreferences";
+    public static final String TRIP_TRACKER_SHARED_PREFERENCES = "locationStatSharedPreferences";
 
     public static final String NOTIFY_ON_REACH_HOME = "Notify my friends when I reach home";
 
@@ -95,40 +95,6 @@ public class Constants {
     public static final String SEARCH_LONG = "SEARCH_LONG";
     public static final String CURRENT_COLOR = "CURRENT_COLOR";
 
-    /**
-     * Details captured during Add a trip Train are stored in shared preferences and later
-     * converted into the trip entity and persisted in DB
-     */
-    //Page 1
-    public static final String TRIP_NAME = "TRIP_NAME";
-    public static final String TO_FRO = "TO_FRO";
-    public static final String ONE_TIME_TRIP = "ONE_TIME_TRIP";
-    public static final String RECURRING_TRIP = "RECURRING_TRIP";
-    public static final String MONDAY_FLAG = "MONDAY_FLAG";
-    public static final String TUESDAY_FLAG = "TUESDAY_FLAG";
-    public static final String WEDNESDAY_FLAG = "WEDNESDAY_FLAG";
-    public static final String THURSDAY_FLAG = "THURSDAY_FLAG";
-    public static final String FRIDAY_FLAG = "FRIDAY_FLAG";
-    public static final String SATURDAY_FLAG = "SATURDAY_FLAG";
-    public static final String SUNDAY_FLAG = "SUNDAY_FLAG";
-
-    //Page 2
-    public static final String LAT_SOURCE_TRIP = "LAT_SOURCE_TRIP";
-    public static final String LONG_SOURCE_TRIP = "LONG_SOURCE_TRIP";
-
-    //Page 3
-    public static final String LAT_DESTINATION_TRIP = "LAT_DESTINATION_TRIP";
-    public static final String LONG_DESTINATION_TRIP = "LONG_DESTINATION_TRIP";
-
-    //Page 4 need not be saved --it can be picked up from the screen itself
-
-    /**
-     * Flag for SearchResults.java to distinguish whether the request came from
-     * Second Window or third
-     */
-    public static final String ADD_A_TRIP_SECOND_WINDOW = "ADD_A_TRIP_SECOND_WINDOW";
-    public static final String ADD_A_TRIP_THIRD_WINDOW = "ADD_A_TRIP_THIRD_WINDOW";
-
     public static final String SET_DESTINATION_LOCATION = "Set Destination Location";
     public static final String SET_SOURCE_LOCATION = "Set Source Location";
 
@@ -139,4 +105,10 @@ public class Constants {
     public static final String DESTINATION_LOCATION_SAVED = "Destination Location Saved";
 
     public static final String FIND_A_MATCH_FLAG = "FIND_A_MATCH_FLAG";
+
+    public static final String LIGHT_BLUE = "#82FA58";
+    public static final String WHITE = "#FFFFFF";
+
+    public static final String ACTIVE_TRIP = "ACTIVE_TRIP";
+    public static final String ACTIVE_TRIP_POSITION = "ACTIVE_TRIP_POSITION";
 }

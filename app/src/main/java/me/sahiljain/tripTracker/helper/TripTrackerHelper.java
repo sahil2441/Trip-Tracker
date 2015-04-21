@@ -105,7 +105,7 @@ public class TripTrackerHelper {
 
     private boolean findAMatch(final String userName) {
 
-//        preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+//        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         editor = preferences.edit();
         editor.putBoolean(Constants.FIND_A_MATCH_FLAG, false);
         editor.apply();

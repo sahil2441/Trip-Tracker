@@ -48,7 +48,7 @@ public class AddATripSecondWindow extends ActionBarActivity implements GoogleMap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         editor = preferences.edit();
         trip = ((App) getApplication()).getTrip();
     }

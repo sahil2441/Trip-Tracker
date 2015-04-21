@@ -168,4 +168,12 @@ public class Trip {
     public void setFriendList(Collection<UserTrip> friendList) {
         this.friendList = friendList;
     }
+
+    public Integer getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(Integer tripId) {
+        this.tripId = tripId;
+    }
 }

@@ -11,7 +11,6 @@ import me.sahiljain.tripTracker.fragments.TripFragment;
  * Created by sahil on 21/3/15.
  */
 public class TabMainActivityAdapter extends FragmentPagerAdapter {
-
     private final String[] TITLES = {"List of Trips", "Notifications"};
 
     public TabMainActivityAdapter(FragmentManager fm) {
@@ -39,4 +38,5 @@ public class TabMainActivityAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return TITLES.length;
     }
+
 }

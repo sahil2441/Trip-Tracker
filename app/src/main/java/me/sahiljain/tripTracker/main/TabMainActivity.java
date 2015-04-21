@@ -58,7 +58,7 @@ public class TabMainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
 
         if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == false) {
             Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUp.class);
@@ -176,7 +176,7 @@ public class TabMainActivity extends ActionBarActivity {
 
     private boolean findAMatch(final String userName) {
 
-        preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         editor = preferences.edit();
         editor.putBoolean(Constants.FIND_A_MATCH_FLAG, false);
         editor.apply();
@@ -308,7 +308,7 @@ public class TabMainActivity extends ActionBarActivity {
          * save current color in shared preferences
          */
 
-        preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Constants.CURRENT_COLOR, currentColor);
         editor.apply();
@@ -373,6 +373,4 @@ public class TabMainActivity extends ActionBarActivity {
         Intent preferencesIntent = new Intent(this, Preferences.class);
         this.startActivity(preferencesIntent);
     }
-
-
 }

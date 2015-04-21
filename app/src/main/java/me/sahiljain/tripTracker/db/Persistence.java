@@ -94,4 +94,41 @@ public class Persistence extends Activity {
         }
         return null;
     }
+
+    /**
+     * Deactivate all the trips--set isActive flag ==false on all tips except one trip .
+     * and activate the trip that has the same trip ID as provided to this method as argument
+     *
+     * @param context
+     * @param tripId
+     */
+    public void activateTrip(Context context, Integer tripId) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        if (dataBaseHelper != null) {
+            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                    dataBaseHelper.getTripRuntimeExceptionDao();
+            List<Trip> trips = fetchTrips(context);
+            for (Trip trip : trips) {
+                trip.setActive(false);
+                if (tripId.equals(trip.getTripId())) {
+                    trip.setActive(true);
+                }
+                tripRuntimeExceptionDao.update(trip);
+            }
+        }
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
+
+    }
+
+    public void deleteTrip(Context context, Integer tripId) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        if (dataBaseHelper != null) {
+            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                    dataBaseHelper.getTripRuntimeExceptionDao();
+            tripRuntimeExceptionDao.deleteById(tripId);
+        }
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
+    }
 }

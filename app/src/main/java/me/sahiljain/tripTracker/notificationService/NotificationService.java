@@ -27,7 +27,7 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        SharedPreferences preferences = getSharedPreferences(Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         final Location homeLoc = new Location("dummy");
         homeLoc.setLatitude(preferences.getFloat(Constants.HOME_LATITUDE, 0));
@@ -48,7 +48,7 @@ public class NotificationService extends Service {
         // Define a listener that responds to location updates
         LocationListener locationListener = new LocationListener() {
             SharedPreferences preferences = getSharedPreferences
-                    (Constants.LOCATION_STAT_SHARED_PREFERENCES, MODE_PRIVATE);
+                    (Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
 
             @Override
