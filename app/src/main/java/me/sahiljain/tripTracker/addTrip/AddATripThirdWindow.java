@@ -12,9 +12,11 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -143,13 +145,11 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
             }
         });
 
-        final Intent intentAddATripFourthWindow = new Intent(this, AddATripFourthWindow.class);
         Button nextButton = (Button) findViewById(R.id.next_button_add_a_trip_third);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intentAddATripFourthWindow);
-
+                showAlertDialogueOnClickOfNext();
             }
         });
 
@@ -161,6 +161,25 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
             }
         });
     }
+
+    private void showAlertDialogueOnClickOfNext() {
+        final EditText input = new EditText(this);
+        final Intent intentAddATripFourthWindow = new Intent(this, AddATripFourthWindow.class);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        new AlertDialog.Builder(this).setTitle(Constants.ENTER_DESTINATION_NAME)
+                .setView(input)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((App) getApplicationContext()).getTrip().setDestinationName(input.getText().
+                                toString());
+                        startActivity(intentAddATripFourthWindow);
+
+                    }
+                })
+                .show();
+    }
+
 
     private void showAlertDialog() {
         new AlertDialog.Builder(this).setTitle(Constants.SET_DESTINATION_LOCATION)

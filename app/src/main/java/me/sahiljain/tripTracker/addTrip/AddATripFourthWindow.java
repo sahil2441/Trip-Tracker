@@ -136,6 +136,9 @@ public class AddATripFourthWindow extends ActionBarActivity {
 
         trip.setFriendList(userTrips);
         trip.setActive(false);
+
+        //Set Trip name as combination of Source name+to+DestinationName
+        trip.setTripName(trip.getSourceName() + " to " + trip.getDestinationName());
         return trip;
     }
 

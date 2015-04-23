@@ -12,9 +12,11 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -119,7 +121,7 @@ public class AddATripSecondWindow extends ActionBarActivity implements GoogleMap
 
         }
 
-        //TODO: Search Functionality
+        //TODO: Search Functionality 2.4.1 :D
 /*
         final EditText editText = (EditText) findViewById(R.id.edit_text_maps_add_a_trip_second);
         final Intent intent = new Intent(this, SearchResults.class);
@@ -145,13 +147,11 @@ public class AddATripSecondWindow extends ActionBarActivity implements GoogleMap
             }
         });
 
-        final Intent intentAddATripThirdWindow = new Intent(this, AddATripThirdWindow.class);
         Button nextButton = (Button) findViewById(R.id.next_button_add_a_trip_second);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intentAddATripThirdWindow);
-
+                showAlertDialogueOnClickOfNext();
             }
         });
 
@@ -162,6 +162,25 @@ public class AddATripSecondWindow extends ActionBarActivity implements GoogleMap
                 showAlertDialog();
             }
         });
+    }
+
+    private void showAlertDialogueOnClickOfNext() {
+        final EditText input = new EditText(this);
+        final Intent intentAddATripThirdWindow = new Intent(this, AddATripThirdWindow.class);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        new AlertDialog.Builder(this).setTitle(Constants.ENTER_SOURCE_NAME)
+                .setView(input)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((App) getApplicationContext()).getTrip().setSourceName(input.getText().
+                                toString());
+                        startActivity(intentAddATripThirdWindow);
+
+                    }
+                })
+                .show();
+
     }
 
     private void showAlertDialog() {

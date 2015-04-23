@@ -111,4 +111,9 @@ public class Constants {
 
     public static final String ACTIVE_TRIP = "ACTIVE_TRIP";
     public static final String ACTIVE_TRIP_POSITION = "ACTIVE_TRIP_POSITION";
+
+    public static final String ENTER_SOURCE_NAME = "Enter Source Name";
+    public static final String ENTER_DESTINATION_NAME = "Enter Destination Name";
+
+
 }

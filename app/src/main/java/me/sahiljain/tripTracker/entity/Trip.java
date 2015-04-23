@@ -18,7 +18,6 @@ public class Trip {
     /**
      * Unique Id of every Trip
      * Primary Key
-     *
      * @PK
      */
     @DatabaseField(canBeNull = false, generatedId = true)
@@ -29,6 +28,18 @@ public class Trip {
      */
     @DatabaseField
     private String tripName;
+
+    /**
+     * Name of source
+     */
+    @DatabaseField
+    private String sourceName;
+
+    /**
+     * Name of destination
+     */
+    @DatabaseField
+    private String destinationName;
 
     /**
      * Latitude of the source
@@ -175,5 +186,21 @@ public class Trip {
 
     public void setTripId(Integer tripId) {
         this.tripId = tripId;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getDestinationName() {
+        return destinationName;
+    }
+
+    public void setDestinationName(String destinationName) {
+        this.destinationName = destinationName;
     }
 }
