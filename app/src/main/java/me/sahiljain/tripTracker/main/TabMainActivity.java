@@ -32,12 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.sahiljain.locationstat.R;
-import me.sahiljain.tripTracker.notificationService.NotificationService;
 import me.sahiljain.locationstat.windows.Preferences;
 import me.sahiljain.tripTracker.adapter.TabMainActivityAdapter;
-import me.sahiljain.tripTracker.addTrip.AddATripFirstWindow;
+import me.sahiljain.tripTracker.addTrip.AddATripSecondWindow;
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.UserDefault;
+import me.sahiljain.tripTracker.notificationService.NotificationService;
 
 /**
  * Created by sahil on 21/3/15.
@@ -61,7 +61,7 @@ public class TabMainActivity extends ActionBarActivity {
         preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
 
         if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == false) {
-            Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUp.class);
+            Intent welcomeSignUpWindowIntent = new Intent(this, IntroActivity.class);
             startActivity(welcomeSignUpWindowIntent);
             finish();
 
@@ -249,7 +249,7 @@ public class TabMainActivity extends ActionBarActivity {
         });
 
         //Intent to be launched on click of fab button
-        final Intent intent = new Intent(this, AddATripFirstWindow.class);
+        final Intent intent = new Intent(this, AddATripSecondWindow.class);
 
         //Fab Button
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);

@@ -131,4 +131,23 @@ public class Persistence extends Activity {
         //Release helper after using
         OpenHelperManager.releaseHelper();
     }
+
+    /**
+     * This method return the active trip
+     * there can be only one active trip against which location will be tracked in
+     * me.sahiljain.tripTracker.notificationService.NotificationService
+     * and notification will be send subsequently
+     */
+    public List<Trip> fetchActiveTrip(Context context) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        if (dataBaseHelper != null) {
+            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                    dataBaseHelper.getTripRuntimeExceptionDao();
+            return tripRuntimeExceptionDao.queryForEq("active", true);
+        }
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
+        return null;
+
+    }
 }

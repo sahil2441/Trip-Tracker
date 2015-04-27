@@ -66,7 +66,9 @@
         <activity
             android:name="me.sahiljain.tripTracker.main.TabMainActivity"
             android:label="Trip Tracker"
-            android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
+            android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -78,13 +80,14 @@
             android:name=".windows.Preferences"
             android:label="Preferences"
             android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.sahiljain.tripTracker.main.TabMainActivity" />
         </activity>
 
-        <!-- Another child of the main tab activity -->
+        <!-- Another child of the main tab activity -Not using it in first release-Will be used in 2.4.1 :D-->
         <activity
             android:name="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow"
             android:label="Add a Trip"
@@ -99,7 +102,7 @@
         <activity
             android:name="me.sahiljain.tripTracker.addTrip.AddATripSecondWindow"
             android:label="Add a Trip"
-            android:parentActivityName="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow">
+            android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -110,7 +113,7 @@
         <activity
             android:name="me.sahiljain.tripTracker.addTrip.AddATripThirdWindow"
             android:label="Add a Trip"
-            android:parentActivityName="me.sahiljain.tripTracker.addTrip.AddATripSecondWindow">
+            android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity   ">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -156,7 +159,7 @@
 
         <!-- Another child of the main activity -->
         <activity
-            android:name="me.sahiljain.tripTracker.main.WelcomeSignUp"
+            android:name="me.sahiljain.tripTracker.main.IntroActivity"
             android:label="Welcome!" />
 
         <!-- Another child of the main activity -->

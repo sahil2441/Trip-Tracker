@@ -14,4 +14,16 @@
     <string name="search">Search</string>
     <string name="google_map_api_key">AIzaSyDlN2ZO5jrCofudbFbrJpFuf7U2mGjvXX4</string>
 
+    <!--Intro view-->
+    <string name="Page1Title">Trip Tracker</string>
+    <string name="Page2Title">Fast</string>
+    <string name="Page3Title">Free</string>
+    <string name="Page5Title">Powerful</string>
+    <string name="Page1Message">The world\'s fastest tracking app.</string>
+    <string name="Page2Message">Track your friends and family.</string>
+    <string name="Page3Message">Trip Tracker is free forever. No subscription fees.</string>
+    <string name="Page5Message">Create as many trips as you wish.</string>
+    <string name="StartTracking">START TRACKING</string>
+
+
 </resources>

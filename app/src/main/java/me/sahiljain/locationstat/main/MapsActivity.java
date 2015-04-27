@@ -34,7 +34,7 @@ import me.sahiljain.locationstat.windows.Preferences;
 import me.sahiljain.locationstat.windows.SearchResults;
 import me.sahiljain.locationstat.windows.StartJourney;
 import me.sahiljain.tripTracker.main.Constants;
-import me.sahiljain.tripTracker.main.WelcomeSignUp;
+import me.sahiljain.tripTracker.main.IntroActivity;
 import me.sahiljain.tripTracker.notificationService.NotificationService;
 import me.sahiljain.tripTracker.service.GPSTracker;
 
@@ -53,7 +53,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                 (Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
 
         if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == false) {
-            Intent welcomeSignUpWindowIntent = new Intent(this, WelcomeSignUp.class);
+            Intent welcomeSignUpWindowIntent = new Intent(this, IntroActivity.class);
             startActivity(welcomeSignUpWindowIntent);
             finish();
 

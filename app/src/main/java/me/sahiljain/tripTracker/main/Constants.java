@@ -25,6 +25,11 @@ public class Constants {
     public static final String NOTIFICATION_SETTINGS_CHECK_BOX = "Notification_Settings";
 
     public static final String PASSWORD = "mypass";
+
+    public static final String PARSE_APPLICATION_ID = "g6RAVxcxermOczF7n8WEuN7nBTe7vTzADJTqMh6F";
+
+    public static final String PARSE_CLIENT_KEY = "v5zBzf0ZxefhdnLnRulZ8dSkUjsOn1sYuQAEb89Z";
+
     /**
      * Tag used on log messages.
      */
@@ -114,6 +119,5 @@ public class Constants {
 
     public static final String ENTER_SOURCE_NAME = "Enter Source Name";
     public static final String ENTER_DESTINATION_NAME = "Enter Destination Name";
-
-
+    public static final String EMPTY_STRING = "";
 }

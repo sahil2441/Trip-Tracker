@@ -3,7 +3,6 @@ package me.sahiljain.tripTracker.notificationService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,9 +11,12 @@ import android.os.IBinder;
 
 import com.parse.ParsePush;
 
-import java.util.List;
+import java.util.Collection;
 
-import me.sahiljain.locationstat.db.DataBaseFriends;
+import me.sahiljain.tripTracker.db.Persistence;
+import me.sahiljain.tripTracker.entity.Trip;
+import me.sahiljain.tripTracker.entity.UserTrip;
+import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
 
 /**
@@ -23,117 +25,34 @@ import me.sahiljain.tripTracker.main.Constants;
  */
 public class NotificationService extends Service {
 
-    private DataBaseFriends dataBaseFriends;
+    private Trip activeTrip;
+
+    private Persistence persistence;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        SharedPreferences preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        final Location homeLoc = new Location("dummy");
-        homeLoc.setLatitude(preferences.getFloat(Constants.HOME_LATITUDE, 0));
-        homeLoc.setLongitude(preferences.getFloat(Constants.HOME_LONGITUDE, 0));
 
-        final Location workLoc = new Location("dummy");
-        workLoc.setLatitude(preferences.getFloat(Constants.WORK_LATITUDE, 0));
-        workLoc.setLongitude(preferences.getFloat(Constants.WORK_LONGITUDE, 0));
-
-        final String firstName = preferences.getString(Constants.FIRST_NAME, "");
-
-        // Acquire a reference to the system Location Manager
+        /**
+         * Acquire a reference to the system Location Manager
+         */
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         /**
-         * Inner Class
+         * Inner Class--Define a listener that responds to location updates
          */
-        // Define a listener that responds to location updates
         LocationListener locationListener = new LocationListener() {
-            SharedPreferences preferences = getSharedPreferences
-                    (Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
+
+            /**
+             * Called when a new location is found by the network location provider.
+             * @param location
+             */
 
             @Override
             public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-
-                /**
-                 * Based on Current location and location stored (i.e. previous location)
-                 * in shared preferences
-                 * we determine the change in 'status' of location and denote it using a flag
-                 */
-
-                if (isAtHome(location) != preferences.getBoolean(Constants.AT_HOME, false)) {
-                    editor.putBoolean(Constants.FLAG_HOME, true);
-                } else {
-                    editor.putBoolean(Constants.FLAG_HOME, false);
+                activeTrip = getActiveTripFromDB();
+                if (activeTrip != null) {
+                    analyzeLocation(activeTrip, location);
                 }
-                if (isAtWork(location) != preferences.getBoolean(Constants.AT_WORK, false)) {
-                    editor.putBoolean(Constants.FLAG_WORK, true);
-                } else {
-                    editor.putBoolean(Constants.FLAG_WORK, false);
-                }
-
-                /**
-                 * Now we check the current location and update in the shared preferences
-                 */
-
-                if (isAtHome(location)) {
-                    editor.putBoolean(Constants.AT_HOME, true);
-                } else {
-                    editor.putBoolean(Constants.AT_HOME, false);
-                }
-                if (isAtWork(location)) {
-                    editor.putBoolean(Constants.AT_WORK, true);
-                } else {
-                    editor.putBoolean(Constants.AT_WORK, false);
-                }
-                //commit the changes
-                editor.apply();
-
-                /**
-                 * Send Notification based on flags
-                 * Only one of them should be true
-                 */
-                if (preferences.getBoolean(Constants.FLAG_HOME, false)) {
-                    if (preferences.getBoolean(Constants.AT_HOME, false) &&
-                            preferences.getBoolean(Constants.NOTIFY_ON_REACH_HOME, true)) {
-                        //reached home
-                        sendNotification(firstName + " has reached home.");
-                    } //left home
-                    else if (!preferences.getBoolean(Constants.AT_HOME, false) &&
-                            preferences.getBoolean(Constants.NOTIFY_ON_LEAVING_HOME, true)) {
-
-                        sendNotification(firstName + " has left home.");
-                    }
-
-                }
-                if (preferences.getBoolean(Constants.FLAG_WORK, false)) {
-                    if (preferences.getBoolean(Constants.AT_WORK, false) &&
-                            preferences.getBoolean(Constants.NOTIFY_ON_REACH_WORKPLACE, true)) {
-
-                        //reached workplace
-                        sendNotification(firstName + " has reached workplace.");
-                    }
-                    //left workplace
-                    else if (preferences.getBoolean(Constants.AT_WORK, false) &&
-                            preferences.getBoolean(Constants.NOTIFY_ON_LEAVING_WORKPLACE, true)) {
-
-                        sendNotification(firstName + " has left workplace.");
-                    }
-                }
-            }
-
-            private boolean isAtWork(Location location) {
-                if (location.distanceTo(workLoc) < 400) {
-                    return true;
-                }
-                return false;
-            }
-
-            private boolean isAtHome(Location location) {
-                if (location.distanceTo(homeLoc) < 400) {
-                    return true;
-                }
-                return false;
             }
 
             @Override
@@ -151,9 +70,68 @@ public class NotificationService extends Service {
 
             }
         };
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 1, locationListener);
 
         return Service.START_STICKY;
+    }
+
+    private void analyzeLocation(Trip activeTrip, Location location) {
+        if (activeTrip.getTripId() != ((App) getApplicationContext()).getActiveTripId()) {
+            /**
+             * Reset source and destination flags if a new active trip is set by the user
+             */
+            ((App) getApplicationContext()).setAtSource(true);
+            ((App) getApplicationContext()).setAtDestination(false);
+            ((App) getApplicationContext()).setActiveTripId(activeTrip.getTripId());
+        }
+
+        if (((App) getApplicationContext()).isAtSource() &&
+                location.distanceTo(getLocation(activeTrip.getLatSource(),
+                        activeTrip.getLongSource())) > 500) {
+            sendNotification(((App) getApplicationContext()).getUserName() + " has left " +
+                    activeTrip.getSourceName()); //Left Source
+            ((App) getApplicationContext()).setAtSource(false);
+
+        } else if (((App) getApplicationContext()).isAtDestination() &&
+                location.distanceTo(getLocation(activeTrip.getLatDestination(),
+                        activeTrip.getLongDestination())) > 500) {
+            sendNotification(((App) getApplicationContext()).getUserName() + " has left " +
+                    activeTrip.getDestinationName()); //Left Destination
+            ((App) getApplicationContext()).setAtDestination(false);
+
+        } else if (!((App) getApplicationContext()).isAtDestination() ||
+                !((App) getApplicationContext()).isAtSource()) {
+
+            if (location.distanceTo(getLocation(activeTrip.getLatSource(),
+                    activeTrip.getLongSource())) < 500) {
+                sendNotification(((App) getApplicationContext()).getUserName() + " has reached " +
+                        activeTrip.getSourceName()); //Reached  Source
+                ((App) getApplicationContext()).setAtSource(true);
+
+            } else if (location.distanceTo(getLocation(activeTrip.getLatDestination(),
+                    activeTrip.getLongDestination())) < 500) {
+                sendNotification(((App) getApplicationContext()).getUserName() + " has reached " +
+                        activeTrip.getDestinationName()); //Reached  destination
+                ((App) getApplicationContext()).setAtDestination(true);
+            }
+        }
+
+    }
+
+    private Location getLocation(Float latCoordinate, Float longCoordinate) {
+        Location location = new Location(Constants.EMPTY_STRING);
+        location.setLatitude(Double.parseDouble(latCoordinate.toString()));
+        location.setLongitude(Double.parseDouble(longCoordinate.toString()));
+        return location;
+    }
+
+    private Trip getActiveTripFromDB() {
+
+        persistence = new Persistence();
+        if (persistence.fetchActiveTrip(this) != null && persistence.fetchActiveTrip(this).size() > 0) {
+            activeTrip = persistence.fetchActiveTrip(this).get(0); //This should ideally return a list of one size=1
+        }
+        return activeTrip;
     }
 
     @Override
@@ -163,17 +141,35 @@ public class NotificationService extends Service {
 
     private void sendNotification(String message) {
 
-        dataBaseFriends = new DataBaseFriends(this);
+        Collection<UserTrip> userTrips = this.getActiveTrip().getFriendList();
+        ParsePush push;
 
         /**
          * Send Push Message
          */
-        List<String> listOfChannels = dataBaseFriends.fetchChannels();
-
-        ParsePush push = new ParsePush();
-        push.setChannels(listOfChannels);
-        push.setMessage(message);
-        push.sendInBackground();
+        if (userTrips != null && userTrips.size() > 0) {
+            for (UserTrip userTrip : userTrips) {
+                push = new ParsePush();
+                push.setChannel(userTrip.getUserID());
+                push.setMessage(message);
+                push.sendInBackground();
+            }
+        }
     }
 
+    public Trip getActiveTrip() {
+        return activeTrip;
+    }
+
+    public void setActiveTrip(Trip activeTrip) {
+        this.activeTrip = activeTrip;
+    }
+
+    public Persistence getPersistence() {
+        return persistence;
+    }
+
+    public void setPersistence(Persistence persistence) {
+        this.persistence = persistence;
+    }
 }
