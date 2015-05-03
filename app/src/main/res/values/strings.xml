@@ -25,5 +25,26 @@
     <string name="Page5Message">Create as many trips as you wish.</string>
     <string name="StartTracking">START TRACKING</string>
 
+    <!--signin view-->
+    <string name="YourPhone">Your phone</string>
+    <string name="StartText">Please confirm your country code and enter your phone number.</string>
+    <string name="ChooseCountry">Choose a country</string>
+    <string name="WrongCountry">Wrong country code</string>
+    <!--code enter view-->
+    <string name="YourCode">Your code</string>
+    <string name="SentSmsCode">We\'ve sent an SMS with an activation code to your phone</string>
+    <string name="CallText">We will call you in %1$d:%2$02d</string>
+    <string name="Calling">Calling you...</string>
+    <string name="Code">Code</string>
+    <string name="WrongNumber">Wrong number?</string>
+    <string name="DidNotGetTheCode">Didn\'t get the code?</string>
+    <!--signup view-->
+    <string name="YourName">Your name</string>
+    <string name="RegisterText">Set up your first and last name</string>
+    <!--<string name="RegisterText">Set up your name and picture</string>-->
+    <string name="FirstName">First name (required)</string>
+    <string name="LastName">Last name (optional)</string>
+    <string name="CancelRegistration">Cancel registration</string>
+
 
 </resources>

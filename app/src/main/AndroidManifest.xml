@@ -45,8 +45,8 @@
         android:name="me.sahiljain.tripTracker.main.App"
         android:allowBackup="true"
         android:icon="@drawable/icon"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:label="@string/app_name">
+        <!--android:theme="@style/AppTheme">-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -131,12 +131,6 @@
                 android:value="me.sahiljain.tripTracker.addTrip.AddATripThirdWindow" />
         </activity>
 
-        <!-- This was main activity earlier -->
-        <activity
-            android:name=".main.MapsActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat"></activity>
-
         <activity
             android:name="com.facebook.LoginActivity"
             android:label="title_facebook_login" />
@@ -157,10 +151,22 @@
                 android:value=".main.MapsActivity" />
         </activity>
 
-        <!-- Another child of the main activity -->
+        <!-- Another child of the main activity -Technically not a child because on back press
+        it doesnt go to main activity>-->
         <activity
             android:name="me.sahiljain.tripTracker.main.IntroActivity"
             android:label="Welcome!" />
+
+        <!-- A child of the intro activity -->
+        <activity
+            android:name="me.sahiljain.tripTracker.main.SignUpActivity"
+            android:parentActivityName="me.sahiljain.tripTracker.main.IntroActivity"
+            android:label="@string/YourPhone">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.sahiljain.tripTracker.main.IntroActivity" />
+        </activity>
 
         <!-- Another child of the main activity -->
         <activity
@@ -177,17 +183,6 @@
         <activity
             android:name=".windows.SearchResults"
             android:label="Search Results" />
-
-        <!--
-                    android:parentActivityName=".main.MapsActivity">
-                    &lt;!&ndash; Parent activity meta-data to support 4.0 and lower &ndash;&gt;
-                    <meta-data
-                        android:name="android.support.PARENT_ACTIVITY"
-                        android:value=".main.MapsActivity" />
-
-                </activity>
-        -->
-
 
         <!-- Another child of the prefernce  activity -->
         <activity

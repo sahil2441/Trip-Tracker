@@ -1,8 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="Launch_Activity_Theme" parent="Theme.AppCompat">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBarOverlay">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <!--
+                <item name="android:itemTextAppearance">@style/ActionBar.Transparent.TMessages.Item</item>
+                <item name="android:listViewStyle">@style/Theme.TMessages.ListView</item>
+                <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector</item>
+                <item name="android:editTextStyle">@style/Theme.TMessages.EditText</item>
+                &lt;!&ndash;<item name="android:actionBarItemBackground">@drawable/bar_selector_style</item>&ndash;&gt;
+        -->
     </style>
 
 </resources>
