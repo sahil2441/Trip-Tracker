@@ -116,4 +116,6 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final String ENABLE_LOCATION_SERVICES_MESSAGE = "Enable Location Services before adding a new Trip.";
     public static final String ENABLE_LOCATION_SERVICES_TITLE = "Location not Found";
+    public static final String TRIP_ID = "tripId";
+    public static final String TRIP_NAME = "tripName";
 }

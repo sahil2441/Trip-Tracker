@@ -3,6 +3,7 @@ package me.sahiljain.tripTracker.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.Constants;
 import me.sahiljain.tripTracker.main.TabMainActivityUpdateListener;
+import me.sahiljain.tripTracker.main.TripDetailView;
 
 /**
  * Created by sahil on 22/3/15.
@@ -64,11 +65,11 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.findViewById(R.id.text_view_trips_list_item).setBackgroundColor(currentColor);
-                Toast toast = Toast.makeText(context, name + " " + "has been set as Default Trip",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-                activateTrip(trips.get(position).getTripId(), trips.get(position).getTripName());
+                /**
+                 * Launch new Activity- TripDetailView
+                 */
+                launchTripDetailViewActivity(trips.get(position).getTripId(), trips.get(position).getTripName());
+//                activateTrip(trips.get(position).getTripId(), trips.get(position).getTripName());
             }
         });
 
@@ -76,6 +77,7 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
         if (trips.get(position).getTripId().equals(activeTripId)) {
             rowView.findViewById(R.id.text_view_trips_list_item).setBackgroundColor(currentColor);
         }
+/*
         ImageView imageViewDelete = (ImageView) rowView.findViewById(R.id.delete_trips_list_item);
         imageViewDelete.setImageResource(R.drawable.delete_trip);
         imageViewDelete.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +86,16 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
                 showConfirmationDialogue(trips.get(position).getTripId(), trips.get(position).getTripName());
             }
         });
+*/
 
         return rowView;
+    }
+
+    private void launchTripDetailViewActivity(Integer tripId, String tripName) {
+        Intent intent = new Intent(context, TripDetailView.class);
+        intent.putExtra(Constants.TRIP_ID, tripId);
+        intent.putExtra(Constants.TRIP_NAME, tripName);
+        context.startActivity(intent);
     }
 
     private void showConfirmationDialogue(final Integer tripId, final String tripName) {
@@ -100,45 +110,55 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
                 setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        initiateDeleteTrip(tripId, tripName);
+//                        initiateDeleteTrip(tripId, tripName);
 
                     }
                 }).
                 show();
     }
 
+/*
     private void initiateDeleteTrip(Integer tripId, String tripName) {
         persistence.deleteTrip(context, tripId);
         Toast toast = Toast.makeText(context, tripName + " " + "has been deleted",
                 Toast.LENGTH_SHORT);
         toast.show();
 
-        /**
+        */
+/**
          * Raise event through TabMainActivityUpdateListener that wll be consumed by TabMainActivity class
          * to update the main list view
-         */
+ *//*
+
         //TODO
         if (tabMainActivityUpdateListener != null) {
             tabMainActivityUpdateListener.onUpdateCallToTabMainActivity();
         }
     }
+*/
 
+/*
     private void activateTrip(Integer tripId, String tripName) {
         persistence.activateTrip(context, tripId);
-        /**
+        */
+/**
          * save default active trip is in shared preferences
-         */
+ *//*
+
         preferences = context.getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, 0);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Constants.ACTIVE_TRIP, tripId);
 //        editor.putInt(Constants.ACTIVE_TRIP_POSITION, position);
         editor.apply();
 
-        /**
+        */
+/**
          * Show Toast
-         */
+ *//*
+
         Toast toast = Toast.makeText(context, tripName + " " + "has been set as Default Trip",
                 Toast.LENGTH_SHORT);
         toast.show();
     }
+*/
 }

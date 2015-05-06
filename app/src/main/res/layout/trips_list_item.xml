@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/text_view_trips_list_item"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="10sp"
         android:textSize="14sp"
@@ -31,20 +31,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:text="Home to Work"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:id="@+id/delete_trips_list_item"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_width="30sp"
-        android:layout_height="30sp"
-        android:layout_marginLeft="5sp"
-        android:layout_marginRight="20sp"
-        android:layout_marginStart="5sp"
-        android:layout_marginEnd="5sp"
-        android:layout_marginTop="5sp"
-        android:visibility="visible" />
+        android:layout_toRightOf="@+id/logo_trips_list_item" />
 
 
 </RelativeLayout>
