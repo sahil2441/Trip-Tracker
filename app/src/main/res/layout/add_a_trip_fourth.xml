@@ -1,151 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".addTrip.AddATripFourthWindow">
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:id="@+id/ll_add_a_trip_fourth"
-        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:orientation="vertical"
         android:paddingLeft="20sp"
-        android:paddingTop="20sp"
-        android:layout_marginTop="20sp">
+        android:paddingTop="20sp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Add Friends"
-            android:id="@+id/select_friends_add_a_trip_fourth"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="0dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Add friends whom you&apos;d like to send notifications"
             android:id="@+id/tick_friends_add_a_trip_fourth"
-            android:layout_below="@+id/select_friends_add_a_trip_fourth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/select_friends_add_a_trip_fourth"
             android:layout_alignStart="@+id/select_friends_add_a_trip_fourth"
-            android:paddingBottom="10sp" />
+            android:layout_below="@+id/select_friends_add_a_trip_fourth"
+            android:paddingBottom="10sp"
+            android:text="Add friends whom you&apos;d like to send notifications"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
 
     </LinearLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:padding="15sp"
-        android:layout_below="@+id/ll_add_a_trip_fourth"
-        android:layout_alignLeft="@+id/progressBar2"
-        android:layout_alignStart="@+id/progressBar2"
-        android:layout_alignRight="@+id/progressBar2"
-        android:layout_alignEnd="@+id/progressBar2"
-        android:id="@+id/relativeLayout">
-
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/country_code1"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="36dp"
-            android:hint="Country Code"
-            android:editable="true"
-            android:enabled="true" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/phoneNumber1"
-            android:layout_below="@+id/country_code1"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:hint="Phone Number"
-            android:editable="true"
-            android:enabled="true" />
-    </RelativeLayout>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:padding="15sp"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_alignLeft="@+id/relativeLayout"
-        android:layout_alignStart="@+id/relativeLayout">
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/country_code2"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="36dp"
-            android:hint="Country Code"
-            android:editable="true"
-            android:enabled="true" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/phoneNumber2"
-            android:layout_below="@+id/country_code2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:hint="Phone Number"
-            android:editable="true"
-            android:enabled="true" />
-    </RelativeLayout>
-
     <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="100sp"
-        android:layout_height="wrap_content"
-        android:text="Previous"
         android:id="@+id/previous_button_add_a_trip_fourth"
-        android:layout_above="@+id/progressBar2"
-        android:layout_alignLeft="@+id/progressBar2"
-        android:layout_alignStart="@+id/progressBar2" />
-
-    <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="100sp"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:layout_above="@+id/progressBarAddATrip"
+        android:layout_alignLeft="@+id/progressBarAddATrip"
+        android:layout_alignStart="@+id/progressBarAddATrip"
+        android:text="Previous" />
+
+    <Button
         android:id="@+id/save_button_add_a_trip_fourth"
-        android:layout_above="@+id/progressBar2"
-        android:layout_alignRight="@+id/progressBar2"
-        android:layout_alignEnd="@+id/progressBar2" />
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/progressBarAddATrip"
+        android:layout_alignEnd="@+id/progressBarAddATrip"
+        android:layout_alignRight="@+id/progressBarAddATrip"
+        android:text="Save" />
 
     <ProgressBar
+        android:id="@+id/progressBarAddATrip"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="25sp"
-        android:id="@+id/progressBar2"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:progress="75"
         android:layout_marginLeft="20sp"
-        android:layout_marginRight="20sp" />
+        android:layout_marginRight="20sp"
+        android:progress="75" />
+
+    <Button
+        android:id="@+id/search_friends_add_trip_fourth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/previous_button_add_a_trip_fourth"
+        android:layout_centerHorizontal="true"
+        android:text="Search Friends" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/search_friends_add_trip_fourth"
+        android:id="@+id/scroll_view"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/ll_add_a_trip_fourth"
+        android:padding="20sp"
+        android:layout_marginLeft="40sp"
+        android:layout_marginRight="40sp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_inside_scroll"></LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

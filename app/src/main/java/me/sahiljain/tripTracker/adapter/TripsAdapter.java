@@ -14,10 +14,11 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.Constants;
+import me.sahiljain.tripTracker.main.TabMainActivityUpdateListener;
 
 /**
  * Created by sahil on 22/3/15.
@@ -35,6 +36,8 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
     private int activeTripId;
 
     private int currentColor;
+
+    private TabMainActivityUpdateListener tabMainActivityUpdateListener;
 
     public TripsAdapter(Context context, List<Trip> resource) {
         super(context, R.layout.trips_list_item, resource);
@@ -110,6 +113,14 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
                 Toast.LENGTH_SHORT);
         toast.show();
 
+        /**
+         * Raise event through TabMainActivityUpdateListener that wll be consumed by TabMainActivity class
+         * to update the main list view
+         */
+        //TODO
+        if (tabMainActivityUpdateListener != null) {
+            tabMainActivityUpdateListener.onUpdateCallToTabMainActivity();
+        }
     }
 
     private void activateTrip(Integer tripId, String tripName) {

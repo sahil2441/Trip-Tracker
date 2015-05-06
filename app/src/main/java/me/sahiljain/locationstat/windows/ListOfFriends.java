@@ -9,7 +9,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.locationstat.db.DataBaseFriends;
 
 /**

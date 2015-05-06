@@ -11,7 +11,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
@@ -36,7 +36,7 @@ import me.sahiljain.tripTracker.service.GPSTracker;
 /**
  * Created by sahil on 22/3/15.
  */
-public class AddATripSecondWindow extends ActionBarActivity implements GoogleMap.OnMapClickListener {
+public class AddATripSecondWindow extends AppCompatActivity implements GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private SharedPreferences preferences;
@@ -168,7 +168,9 @@ public class AddATripSecondWindow extends ActionBarActivity implements GoogleMap
         final EditText input = new EditText(this);
         final Intent intentAddATripThirdWindow = new Intent(this, AddATripThirdWindow.class);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        new AlertDialog.Builder(this).setTitle(Constants.ENTER_SOURCE_NAME)
+        input.setHint("e.g. Home");
+        new AlertDialog.Builder(this).setTitle(Constants.ENTER_SOURCE_NAME_TITLE).
+                setMessage(Constants.ENTER_SOURCE_NAME_MESSAGE)
                 .setView(input)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override

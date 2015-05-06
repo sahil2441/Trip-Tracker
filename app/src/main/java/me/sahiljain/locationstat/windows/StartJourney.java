@@ -7,7 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 
 /**
  * This class is not needed

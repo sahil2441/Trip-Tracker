@@ -86,14 +86,6 @@ public class Constants {
     public static final String WORK_LONGITUDE = "WORK_LONGITUDE";
 
     /**
-     * Home and Work Location Status
-     */
-    public static final String AT_HOME = "AT_HOME";
-    public static final String AT_WORK = "AT_WORK";
-    public static final String FLAG_HOME = "FLAG_HOME";
-    public static final String FLAG_WORK = "FLAG_WORK";
-
-    /**
      * Search Location coord
      */
     public static final String SEARCH_LAT = "SEARCH_LAT";
@@ -117,7 +109,11 @@ public class Constants {
     public static final String ACTIVE_TRIP = "ACTIVE_TRIP";
     public static final String ACTIVE_TRIP_POSITION = "ACTIVE_TRIP_POSITION";
 
-    public static final String ENTER_SOURCE_NAME = "Enter Source Name";
-    public static final String ENTER_DESTINATION_NAME = "Enter Destination Name";
+    public static final String ENTER_SOURCE_NAME_TITLE = "Enter Source Name";
+    public static final String ENTER_SOURCE_NAME_MESSAGE = "Give a name to your Source Location.";
+    public static final String ENTER_DESTINATION_NAME_TITLE = "Enter Destination Name";
+    public static final String ENTER_DESTINATION_NAME_MESSAGE = "Give a name to your Destination Location.";
     public static final String EMPTY_STRING = "";
+    public static final String ENABLE_LOCATION_SERVICES_MESSAGE = "Enable Location Services before adding a new Trip.";
+    public static final String ENABLE_LOCATION_SERVICES_TITLE = "Location not Found";
 }

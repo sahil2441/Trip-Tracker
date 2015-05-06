@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +26,11 @@ import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.notificationService.NotificationService;
 
 /**
@@ -55,11 +54,14 @@ public class SignUpActivity extends Activity {
 
         Cognalys.enableAnalytics(getApplicationContext(), true, true);
         setContentView(R.layout.sign_up_mobile);
-        Spinner spinner = (Spinner) findViewById(R.id.country_code_input);
+//        Spinner spinner = (Spinner) findViewById(R.id.country_code_input);
+        EditText editText = (EditText) findViewById(R.id.country_code_input);
 
+/*
         List<String> countryList = new ArrayList<String>();
         countryList = getItemsInSpinner();
         Collections.sort(countryList);
+*/
 /*
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.support_simple_spinner_dropdown_item, countryList);
@@ -68,12 +70,15 @@ public class SignUpActivity extends Activity {
 */
 
         String cc = Cognalys.getCountryCode(this);
+        editText.setText(cc);
+/*
         for (int i = 0; i < countryList.size(); i++) {
             if (countryList.get(i).contains(cc)) {
                 spinner.setSelection(i);
                 break;
             }
         }
+*/
 
         final Button continueButton = (Button) findViewById(R.id.continue_button);
 
@@ -82,15 +87,17 @@ public class SignUpActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                final Spinner tv_country_code = (Spinner) findViewById(R.id.country_code_input);
+//                final Spinner tv_country_code = (Spinner) findViewById(R.id.country_code_input);
+                final EditText tv_country_code = (EditText) findViewById(R.id.country_code_input);
+
                 final TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
 
                 String mobileNumber = tv_mobile_no.getText().toString();
-                String countryCode = tv_country_code.getSelectedItem().toString();
+                String countryCode = tv_country_code.getText().toString();
                 countryCode = countryCode.replaceAll("[-+.^:,]", "");
                 countryCode = countryCode.replaceAll("[^\\d.]", "");
 
-                String userName = countryCode + tv_mobile_no.getText().toString();
+                String userName = countryCode + mobileNumber;
 
                 if (mobileNumber == null || mobileNumber == "") {
                     showErrorDialog("Please enter a valid mobile number");
@@ -231,7 +238,8 @@ public class SignUpActivity extends Activity {
     }
 
     private void disableUIComponents() {
-        Spinner tv_countryCode = (Spinner) findViewById(R.id.country_code_input);
+//        Spinner tv_countryCode = (Spinner) findViewById(R.id.country_code_input);
+        EditText tv_countryCode = (EditText) findViewById(R.id.country_code_input);
         TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
         Button continueButton = (Button) findViewById(R.id.continue_button);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.welcome_screen_progress_bar);
@@ -244,11 +252,13 @@ public class SignUpActivity extends Activity {
 
     private void enableUIComponents() {
         TextView tv_mobile_no = (TextView) findViewById(R.id.mobile_no_input);
+        TextView countryCode = (TextView) findViewById(R.id.country_code_input);
         Button createAccountButton = (Button) findViewById(R.id.continue_button);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.welcome_screen_progress_bar);
 
         progressBar.setVisibility(View.GONE);
         tv_mobile_no.setEnabled(true);
+        countryCode.setEnabled(true);
         createAccountButton.setEnabled(true);
     }
 

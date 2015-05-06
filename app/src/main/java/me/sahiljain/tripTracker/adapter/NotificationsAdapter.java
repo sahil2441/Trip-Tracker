@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.Notification;
 
 /**

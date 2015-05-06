@@ -15,7 +15,8 @@ import com.facebook.widget.LoginButton;
 
 import java.util.Arrays;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
+
 
 /**
  * Created by sahil on 9/2/15.

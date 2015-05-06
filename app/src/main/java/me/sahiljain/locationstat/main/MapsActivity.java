@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.locationstat.windows.Preferences;
 import me.sahiljain.locationstat.windows.SearchResults;
 import me.sahiljain.locationstat.windows.StartJourney;

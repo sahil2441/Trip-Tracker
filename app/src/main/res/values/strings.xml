@@ -25,6 +25,8 @@
     <string name="Page5Message">Create as many trips as you wish.</string>
     <string name="StartTracking">START TRACKING</string>
 
+    <string name="sign_up_message">Enter your Country Code &amp; Mobile number and press Continue.</string>
+
     <!--signin view-->
     <string name="YourPhone">Your phone</string>
     <string name="StartText">Please confirm your country code and enter your phone number.</string>

@@ -17,6 +17,10 @@ public class UserTrip implements IUser {
         this.name = name;
     }
 
+    public UserTrip(String userID) {
+        this.userID = userID;
+    }
+
     /**
      * The first and last name of the user
      */

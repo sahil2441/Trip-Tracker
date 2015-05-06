@@ -1,5 +1,8 @@
 package me.sahiljain.tripTracker.main;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -8,12 +11,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -31,8 +36,8 @@ import com.shamanland.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.sahiljain.locationstat.R;
 import me.sahiljain.locationstat.windows.Preferences;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.adapter.TabMainActivityAdapter;
 import me.sahiljain.tripTracker.addTrip.AddATripSecondWindow;
 import me.sahiljain.tripTracker.db.Persistence;
@@ -42,7 +47,7 @@ import me.sahiljain.tripTracker.notificationService.NotificationService;
 /**
  * Created by sahil on 21/3/15.
  */
-public class TabMainActivity extends ActionBarActivity {
+public class TabMainActivity extends AppCompatActivity implements TabMainActivityUpdateListener {
 
     private ViewPager viewPager;
     private PagerSlidingTabStrip tabs;
@@ -83,8 +88,15 @@ public class TabMainActivity extends ActionBarActivity {
         Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
         getApplicationContext().startService(notificationServiceIntent);
 
-        //Initialize screen
-        initializeMainScreen();
+        /**
+         * Initialize screen only if view is null
+         * --it's a fix to that long time bug--where the screen doesnt render properly from
+         * on resume.
+         */
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        if (viewPager == null) {
+            initializeMainScreen();
+        }
 
         //Create list of default users
 //        prepareListViewUserDefault();
@@ -101,6 +113,13 @@ public class TabMainActivity extends ActionBarActivity {
         if (persistence.fetchUserDefault(this) == null || persistence.fetchUserDefault(this).size() == 0) {
             new PrepareListViewUsers().execute();
         }
+    }
+
+    @Override
+    public void onUpdateCallToTabMainActivity() {
+        //Refresh List View here
+        String a = null;
+
     }
 
     public class PrepareListViewUsers extends AsyncTask<Void, Void, Void> {
@@ -230,7 +249,7 @@ public class TabMainActivity extends ActionBarActivity {
 
                 //Disable the visibility of floating button of Notification tab is selected
                 if (position != 0) {
-                    floatingActionButton.setVisibility(View.INVISIBLE);
+                    floatingActionButton.setVisibility(View.GONE);
                 } else {
                     floatingActionButton.setVisibility(View.VISIBLE);
                 }
@@ -259,11 +278,59 @@ public class TabMainActivity extends ActionBarActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                /**
+                 * Verify whether location services are enabled. If not -prompt the user to enable
+                 */
+                boolean isLocationServiceEnabled = getLocationServicesStatus();
+                if (isLocationServiceEnabled) {
+                    startActivity(intent);
+                } else {
+                    showDialogToEnableLocationServices();
+                }
             }
         });
 
         changeColor(currentColor);
+    }
+
+    private void showDialogToEnableLocationServices() {
+        new AlertDialog.Builder(this).setTitle(Constants.ENABLE_LOCATION_SERVICES_TITLE).
+                setMessage(Constants.ENABLE_LOCATION_SERVICES_MESSAGE)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showLocationServicesIntent();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
+    }
+
+    private void showLocationServicesIntent() {
+        Intent locationIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(locationIntent);
+    }
+
+    private boolean getLocationServicesStatus() {
+        LocationManager locationManager = null;
+        boolean gps_enabled = false, network_enabled = false;
+        if (locationManager == null) {
+            locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        }
+        try {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception e) {
+            Log.d(Constants.TAG, "Error: " + e.toString() +
+                    "Exception caught in getLocationServicesStatus() in" + this.getLocalClassName());
+        }
+        if (gps_enabled || network_enabled) return true;
+        return false;
     }
 
     private void changeColor(int newColor) {

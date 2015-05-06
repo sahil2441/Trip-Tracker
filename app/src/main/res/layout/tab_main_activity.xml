@@ -24,12 +24,11 @@
         android:src="@drawable/ic_action_edit_light"
         android:elevation="5sp"
         app:floatingActionButtonImplicitElevation="false"
-        android:layout_marginRight="33sp"
-        android:layout_marginBottom="33sp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="33dp" />
+        android:layout_above="@+id/colors"
+        android:layout_alignRight="@+id/colors"
+        android:layout_alignEnd="@+id/colors"
+        android:layout_marginRight="0dp"
+        android:layout_marginEnd="35dp" />
 
     <LinearLayout
         android:id="@+id/colors"
@@ -40,7 +39,7 @@
         android:layout_marginLeft="4dip"
         android:layout_marginRight="4dip"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="0dip"

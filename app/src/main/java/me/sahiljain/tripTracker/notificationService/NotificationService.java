@@ -120,8 +120,10 @@ public class NotificationService extends Service {
 
     private Location getLocation(Float latCoordinate, Float longCoordinate) {
         Location location = new Location(Constants.EMPTY_STRING);
-        location.setLatitude(Double.parseDouble(latCoordinate.toString()));
-        location.setLongitude(Double.parseDouble(longCoordinate.toString()));
+        if (latCoordinate != null && longCoordinate != null) {
+            location.setLatitude(Double.parseDouble(latCoordinate.toString()));
+            location.setLongitude(Double.parseDouble(longCoordinate.toString()));
+        }
         return location;
     }
 

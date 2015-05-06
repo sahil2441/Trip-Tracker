@@ -5,7 +5,7 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.UserDefault;
 
 /**

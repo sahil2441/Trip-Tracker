@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 
 /**
  * Created by sahil on 1/3/15.

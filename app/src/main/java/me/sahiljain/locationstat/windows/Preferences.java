@@ -29,7 +29,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.locationstat.adapter.PreferencesAdapter;
 import me.sahiljain.locationstat.db.DataBaseFriends;
 import me.sahiljain.tripTracker.main.Constants;
@@ -101,7 +101,6 @@ public class Preferences extends ActionBarActivity {
 
     /**
      * The method is called when a contact is chosen from the Contacts Intent
-     *
      * @param requestCode
      * @param resultCode
      * @param data

@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
@@ -166,7 +166,9 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
         final EditText input = new EditText(this);
         final Intent intentAddATripFourthWindow = new Intent(this, AddATripFourthWindow.class);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        new AlertDialog.Builder(this).setTitle(Constants.ENTER_DESTINATION_NAME)
+        input.setHint("e.g. Office");
+        new AlertDialog.Builder(this).setTitle(Constants.ENTER_DESTINATION_NAME_TITLE).
+                setMessage(Constants.ENTER_DESTINATION_NAME_MESSAGE)
                 .setView(input)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override

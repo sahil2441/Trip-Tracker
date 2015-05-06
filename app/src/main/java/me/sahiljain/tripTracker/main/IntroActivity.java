@@ -16,7 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import me.sahiljain.locationstat.R;
+import me.sahiljain.tripTracker.R;
 
 /**
  * Created by sahil on 16/2/15.
@@ -24,6 +24,7 @@ import me.sahiljain.locationstat.R;
 public class IntroActivity extends Activity {
     /**
      * Copy paste  from Telegram souce code
+     * :D
      */
     private ViewPager viewPager;
     private ImageView topImage1;
