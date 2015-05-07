@@ -226,6 +226,12 @@ public class AddATripFourthWindow extends AppCompatActivity {
         if (trip == null) {
             trip = ((App) getApplication()).getTrip();
         }
+        /**
+         * Generate Random trip ID
+         */
+        Random rand = new Random();
+        Integer tripId = Math.abs(rand.nextInt() % 1000000000);
+        trip.setTripId(tripId);
         List<UserTrip> userTrips = new ArrayList<>();
 
         //Add user details
@@ -239,7 +245,7 @@ public class AddATripFourthWindow extends AppCompatActivity {
                 if ((view.getClass() == CheckBox.class)) {
                     CheckBox checkBox = (CheckBox) view;
                     if (checkBox.isChecked()) {
-                        userTrips.add(new UserTrip(checkBox.getText().toString().replaceAll("[-+\\s]", "")));
+                        userTrips.add(new UserTrip(checkBox.getText().toString().replaceAll("[-+\\s]", ""), tripId));
                     }
                 }
             }

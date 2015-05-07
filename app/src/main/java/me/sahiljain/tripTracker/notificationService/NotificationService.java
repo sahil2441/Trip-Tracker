@@ -16,6 +16,7 @@ import java.util.Collection;
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.entity.UserTrip;
+import me.sahiljain.tripTracker.enumeration.LocationStatus;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
 
@@ -70,52 +71,57 @@ public class NotificationService extends Service {
 
             }
         };
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 1, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
         return Service.START_STICKY;
     }
 
     private void analyzeLocation(Trip activeTrip, Location location) {
-        if (activeTrip.getTripId() != ((App) getApplicationContext()).getActiveTripId()) {
-            /**
-             * Reset source and destination flags if a new active trip is set by the user
-             */
-            ((App) getApplicationContext()).setAtSource(true);
-            ((App) getApplicationContext()).setAtDestination(false);
-            ((App) getApplicationContext()).setActiveTripId(activeTrip.getTripId());
-        }
 
-        if (((App) getApplicationContext()).isAtSource() &&
+        //Left Source
+        if (activeTrip.getLocationStatus().equals(LocationStatus.SOURCE) &&
                 location.distanceTo(getLocation(activeTrip.getLatSource(),
                         activeTrip.getLongSource())) > 500) {
             sendNotification(((App) getApplicationContext()).getUserName() + " has left " +
-                    activeTrip.getSourceName()); //Left Source
-            ((App) getApplicationContext()).setAtSource(false);
+                    activeTrip.getSourceName());
+            activeTrip.setLocationStatus(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION);
+            updateLocationStatusOfTrip(activeTrip);
 
-        } else if (((App) getApplicationContext()).isAtDestination() &&
+        }
+        //Left Destination
+        else if (activeTrip.getLocationStatus().equals(LocationStatus.DESTINATION) &&
                 location.distanceTo(getLocation(activeTrip.getLatDestination(),
                         activeTrip.getLongDestination())) > 500) {
             sendNotification(((App) getApplicationContext()).getUserName() + " has left " +
-                    activeTrip.getDestinationName()); //Left Destination
-            ((App) getApplicationContext()).setAtDestination(false);
+                    activeTrip.getDestinationName());
+            activeTrip.setLocationStatus(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION);
+            updateLocationStatusOfTrip(activeTrip);
 
-        } else if (!((App) getApplicationContext()).isAtDestination() ||
-                !((App) getApplicationContext()).isAtSource()) {
+        } else if (activeTrip.getLocationStatus().equals(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION)) {
 
+            //Reached  Source
             if (location.distanceTo(getLocation(activeTrip.getLatSource(),
                     activeTrip.getLongSource())) < 500) {
                 sendNotification(((App) getApplicationContext()).getUserName() + " has reached " +
-                        activeTrip.getSourceName()); //Reached  Source
-                ((App) getApplicationContext()).setAtSource(true);
+                        activeTrip.getSourceName());
+                activeTrip.setLocationStatus(LocationStatus.SOURCE);
+                updateLocationStatusOfTrip(activeTrip);
 
-            } else if (location.distanceTo(getLocation(activeTrip.getLatDestination(),
+            }
+            //Reached  destination
+            else if (location.distanceTo(getLocation(activeTrip.getLatDestination(),
                     activeTrip.getLongDestination())) < 500) {
                 sendNotification(((App) getApplicationContext()).getUserName() + " has reached " +
-                        activeTrip.getDestinationName()); //Reached  destination
-                ((App) getApplicationContext()).setAtDestination(true);
+                        activeTrip.getDestinationName());
+                activeTrip.setLocationStatus(LocationStatus.DESTINATION);
+                updateLocationStatusOfTrip(activeTrip);
             }
         }
+    }
 
+    private void updateLocationStatusOfTrip(Trip activeTrip) {
+        persistence = new Persistence();
+        persistence.updateTrip(this, activeTrip);
     }
 
     private Location getLocation(Float latCoordinate, Float longCoordinate) {
@@ -152,7 +158,7 @@ public class NotificationService extends Service {
         if (userTrips != null && userTrips.size() > 0) {
             for (UserTrip userTrip : userTrips) {
                 push = new ParsePush();
-                push.setChannel(userTrip.getUserID());
+                push.setChannel("c" + userTrip.getUserID());
                 push.setMessage(message);
                 push.sendInBackground();
             }

@@ -8,16 +8,14 @@ import java.sql.SQLException;
 
 import me.sahiljain.tripTracker.entity.Notification;
 import me.sahiljain.tripTracker.entity.Trip;
-import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.entity.UserTrip;
-import me.sahiljain.tripTracker.entity.Week;
 
 /**
  * Created by sahil on 3/4/15.
  */
 public class DatabaseConfigUtil extends OrmLiteConfigUtil {
-    private static final Class[] classes = new Class[]{Trip.class, Notification.class, UserDefault.class
-            , UserTrip.class, Week.class};
+    private static final Class[] classes = new Class[]{Trip.class, Notification.class
+            , UserTrip.class};
 
     public static void main(String[] args) throws IOException, SQLException {
 

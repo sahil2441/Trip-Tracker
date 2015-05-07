@@ -1,5 +1,5 @@
 #
-# generated on 2015/04/04 10:42:07
+# generated on 2015/05/08 01:15:23
 #
 # --table-start--
 dataClass=me.sahiljain.tripTracker.entity.Trip
@@ -8,10 +8,16 @@ tableName=tt_trips_all
 # --field-start--
 fieldName=tripId
 canBeNull=false
-generatedId=true
+id=true
 # --field-end--
 # --field-start--
 fieldName=tripName
+# --field-end--
+# --field-start--
+fieldName=sourceName
+# --field-end--
+# --field-start--
+fieldName=destinationName
 # --field-end--
 # --field-start--
 fieldName=latSource
@@ -26,11 +32,6 @@ fieldName=latDestination
 fieldName=longDestination
 # --field-end--
 # --field-start--
-fieldName=friendList
-foreignCollection=true
-foreignCollectionEager=true
-# --field-end--
-# --field-start--
 fieldName=toAndFro
 # --field-end--
 # --field-start--
@@ -38,6 +39,9 @@ fieldName=oneTimeTrip
 # --field-end--
 # --field-start--
 fieldName=active
+# --field-end--
+# --field-start--
+fieldName=locationStatus
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -60,24 +64,15 @@ fieldName=time
 # --table-end--
 #################################
 # --table-start--
-dataClass=me.sahiljain.tripTracker.entity.UserDefault
-tableName=tt_user_default_all
-# --table-fields-start--
-# --field-start--
-fieldName=name
-# --field-end--
-# --field-start--
-fieldName=userID
-canBeNull=false
-# --field-end--
-# --table-fields-end--
-# --table-end--
-#################################
-# --table-start--
 dataClass=me.sahiljain.tripTracker.entity.UserTrip
 tableName=tt_user_trip_all
 # --table-fields-start--
 # --field-start--
+fieldName=id
+id=true
+useGetSet=true
+# --field-end--
+# --field-start--
 fieldName=name
 # --field-end--
 # --field-start--
@@ -85,49 +80,8 @@ fieldName=userID
 canBeNull=false
 # --field-end--
 # --field-start--
-fieldName=trip
+fieldName=tripId
 canBeNull=false
-foreign=true
-foreignAutoRefresh=true
-# --field-end--
-# --table-fields-end--
-# --table-end--
-#################################
-# --table-start--
-dataClass=me.sahiljain.tripTracker.entity.Week
-tableName=tt_week_trip
-# --table-fields-start--
-# --field-start--
-fieldName=weekId
-canBeNull=false
-generatedId=true
-# --field-end--
-# --field-start--
-fieldName=monday
-# --field-end--
-# --field-start--
-fieldName=tuesday
-# --field-end--
-# --field-start--
-fieldName=wednesday
-# --field-end--
-# --field-start--
-fieldName=thursday
-# --field-end--
-# --field-start--
-fieldName=friday
-# --field-end--
-# --field-start--
-fieldName=saturday
-# --field-end--
-# --field-start--
-fieldName=sunday
-# --field-end--
-# --field-start--
-fieldName=trip
-canBeNull=false
-foreign=true
-foreignAutoRefresh=true
 # --field-end--
 # --table-fields-end--
 # --table-end--

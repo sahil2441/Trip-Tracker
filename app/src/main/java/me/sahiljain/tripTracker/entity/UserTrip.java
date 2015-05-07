@@ -12,14 +12,17 @@ public class UserTrip implements IUser {
     public UserTrip() {
     }
 
-    public UserTrip(String name, String userID) {
+    public UserTrip(String userID, Integer tripId) {
         this.userID = userID;
-        this.name = name;
+        this.tripId = tripId;
     }
 
-    public UserTrip(String userID) {
-        this.userID = userID;
-    }
+    /**
+     * Primary Key of any User--a composite key which is a combination of
+     * userID and TripID
+     */
+    @DatabaseField(id = true, useGetSet = true)
+    private String id;
 
     /**
      * The first and last name of the user
@@ -36,11 +39,10 @@ public class UserTrip implements IUser {
 
     /**
      * To map a trip with one to many relationship
-     * "Parent in Child class is defined as parent_id in Child Table. That is point.
-     * To access using DAO, you should use parent_id"
+     * One to many here is not exactly working as per ORM--it's kind of hard coded
      */
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
-    private Trip trip;
+    @DatabaseField(canBeNull = false)
+    private Integer tripId;
 
     public String getName() {
         return name;
@@ -58,11 +60,19 @@ public class UserTrip implements IUser {
         this.userID = userID;
     }
 
-    public Trip getTrip() {
-        return trip;
+    public Integer getTripId() {
+        return tripId;
     }
 
-    public void setTrip(Trip trip) {
-        this.trip = trip;
+    public void setTripId(Integer tripId) {
+        this.tripId = tripId;
+    }
+
+    public String getId() {
+        return this.userID + "-" + this.getTripId();
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

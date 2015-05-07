@@ -1,10 +1,11 @@
 package me.sahiljain.tripTracker.entity;
 
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Collection;
+
+import me.sahiljain.tripTracker.enumeration.LocationStatus;
 
 /**
  * Created by sahil on 15/3/15.
@@ -20,7 +21,7 @@ public class Trip {
      * Primary Key
      * @PK
      */
-    @DatabaseField(canBeNull = false, generatedId = true)
+    @DatabaseField(canBeNull = false, id = true)
     private Integer tripId;
 
     /**
@@ -67,9 +68,9 @@ public class Trip {
 
     /**
      * List of friends for this trip who must be informed
-     * through push notifications
+     * through push notifications.
+     * One to many here is not exactly working as per ORM--it's kind of hard coded
      */
-    @ForeignCollectionField(eager = true)
     private Collection<UserTrip> friendList;
 
     /**
@@ -99,6 +100,13 @@ public class Trip {
      * Details of week
      */
     private Week week;
+
+    /**
+     * Indicates the current status of Trip
+     * This will be updated in the class NotificationService
+     */
+    @DatabaseField
+    private LocationStatus locationStatus = LocationStatus.SOURCE;
 
     public Week getWeek() {
         return week;
@@ -202,5 +210,13 @@ public class Trip {
 
     public void setDestinationName(String destinationName) {
         this.destinationName = destinationName;
+    }
+
+    public LocationStatus getLocationStatus() {
+        return locationStatus;
+    }
+
+    public void setLocationStatus(LocationStatus locationStatus) {
+        this.locationStatus = locationStatus;
     }
 }

@@ -37,9 +37,11 @@ public class TripFragment extends Fragment {
         persistence = new Persistence();
 
         List<Trip> list = persistence.fetchTrips(getActivity());
-        TripsAdapter adapter = new TripsAdapter(getActivity(), list);
-        adapter.notifyDataSetChanged();
-        listView.setAdapter(adapter);
+        if (list != null && list.size() > 0) {
+            TripsAdapter adapter = new TripsAdapter(getActivity(), list);
+            adapter.notifyDataSetChanged();
+            listView.setAdapter(adapter);
+        }
         return listView;
     }
 }

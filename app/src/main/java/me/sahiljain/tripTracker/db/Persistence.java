@@ -7,11 +7,13 @@ import android.util.Log;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
+import java.util.Collection;
 import java.util.List;
 
 import me.sahiljain.tripTracker.entity.Notification;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.entity.UserDefault;
+import me.sahiljain.tripTracker.entity.UserTrip;
 import me.sahiljain.tripTracker.main.Constants;
 
 /**
@@ -54,20 +56,43 @@ public class Persistence extends Activity {
         RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
                 dataBaseHelper.getTripRuntimeExceptionDao();
 
-        //persist into DB
+        //persist Trip into DB
         tripRuntimeExceptionDao.create(trip);
         Log.d(Constants.TAG, trip.toString());
+
+        //persist Users in DB
+        saveUserInDB(context, trip.getFriendList());
 
         //Release helper after using
         OpenHelperManager.releaseHelper();
     }
 
+    private void saveUserInDB(Context context, Collection<UserTrip> friendList) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        RuntimeExceptionDao<UserTrip, Integer> tripRuntimeExceptionDao =
+                dataBaseHelper.getUserTripRuntimeExceptionDao();
+        for (UserTrip userTrip : friendList) {
+            tripRuntimeExceptionDao.create(userTrip);
+        }
+    }
+
     public List<Trip> fetchTrips(Context context) {
         dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        List<Trip> trips = null;
         if (dataBaseHelper != null) {
             RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
                     dataBaseHelper.getTripRuntimeExceptionDao();
-            return tripRuntimeExceptionDao.queryForAll();
+            trips = tripRuntimeExceptionDao.queryForAll();
+            /**
+             * Put Set of Trip Users in individual trip
+             */
+            RuntimeExceptionDao<UserTrip, Integer> userTripDAO =
+                    dataBaseHelper.getUserTripRuntimeExceptionDao();
+
+            for (Trip trip : trips) {
+                trip.setFriendList((Collection<UserTrip>) userTripDAO.queryForEq("tripId", trip.getTripId()));
+            }
+            return trips;
         }
         return null;
     }
@@ -118,7 +143,6 @@ public class Persistence extends Activity {
         }
         //Release helper after using
         OpenHelperManager.releaseHelper();
-
     }
 
     public void deleteTrip(Context context, Integer tripId) {
@@ -140,14 +164,35 @@ public class Persistence extends Activity {
      */
     public List<Trip> fetchActiveTrip(Context context) {
         dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        List<Trip> trips = null;
         if (dataBaseHelper != null) {
             RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
                     dataBaseHelper.getTripRuntimeExceptionDao();
-            return tripRuntimeExceptionDao.queryForEq("active", true);
+            trips = tripRuntimeExceptionDao.queryForEq("active", true);
+            /**
+             * Put Set of Trip Users in individual trip
+             */
+            RuntimeExceptionDao<UserTrip, Integer> userTripDAO =
+                    dataBaseHelper.getUserTripRuntimeExceptionDao();
+
+            for (Trip trip : trips) {
+                trip.setFriendList((Collection<UserTrip>) userTripDAO.queryForEq("tripId", trip.getTripId()));
+            }
+            return trips;
         }
         //Release helper after using
         OpenHelperManager.releaseHelper();
-        return null;
+        return trips;
 
+    }
+
+    public void updateTrip(Context context, Trip trip) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        if (dataBaseHelper != null) {
+            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                    dataBaseHelper.getTripRuntimeExceptionDao();
+        }
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
     }
 }
