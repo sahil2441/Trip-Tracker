@@ -188,9 +188,13 @@ public class Persistence extends Activity {
 
     public void updateTrip(Context context, Trip trip) {
         dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao = null;
         if (dataBaseHelper != null) {
-            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+            tripRuntimeExceptionDao =
                     dataBaseHelper.getTripRuntimeExceptionDao();
+        }
+        if (tripRuntimeExceptionDao != null) {
+            tripRuntimeExceptionDao.update(trip);
         }
         //Release helper after using
         OpenHelperManager.releaseHelper();

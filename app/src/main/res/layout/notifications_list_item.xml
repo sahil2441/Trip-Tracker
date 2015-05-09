@@ -26,10 +26,12 @@
         android:textStyle="normal"
         android:typeface="serif"
         android:gravity="start"
-        android:layout_toEndOf="@+id/logo_notifications_list_item"
         android:layout_toRightOf="@+id/logo_notifications_list_item"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:text="Sahil Jain has reached home" />
+        android:text="Sahil Jain has reached home"
+        android:layout_toLeftOf="@+id/time_stamp_notifications_list_item"
+        android:layout_toStartOf="@+id/time_stamp_notifications_list_item"
+        android:layout_centerInParent="true" />
 
     <TextView
         android:id="@+id/time_stamp_notifications_list_item"
@@ -37,14 +39,13 @@
         android:layout_height="wrap_content"
         android:padding="10sp"
         android:paddingBottom="0sp"
-        android:layout_marginBottom="0sp"
         android:textSize="10sp"
         android:textStyle="normal"
         android:typeface="serif"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:text="8:39 pm"
-        android:layout_marginTop="10dp" />
+        android:layout_alignBottom="@+id/text_view_notifications_list_item"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
