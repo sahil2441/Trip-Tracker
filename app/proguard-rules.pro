@@ -16,3 +16,23 @@
 #   public *;
 #}
 -dontwarn com.activate.gcm.**
+-keep class com.android.internal.telephony.ITelephony { *; }
+
+# OrmLite uses reflection
+-keep class com.j256.**
+-keepclassmembers class com.j256.** { *; }
+-keep enum com.j256.**
+-keepclassmembers enum com.j256.** { *; }
+-keep interface com.j256.**
+-keepclassmembers interface com.j256.** { *; }
+
+-keepclassmembers class * { public <init>(android.content.​Context); }
+-keepattributes *Annotation*
+
+#keep entity
+-keep class me.sahiljain.tripTracker.entity.**
+-keepclassmembers class me.sahiljain.tripTracker.entity.** {*;}
+
+#keep db package
+-keep class me.sahiljain.tripTracker.db.**
+-keepclassmembers class me.sahiljain.tripTracker.db.** {*;}
