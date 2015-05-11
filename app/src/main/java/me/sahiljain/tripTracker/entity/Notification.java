@@ -3,6 +3,8 @@ package me.sahiljain.tripTracker.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.joda.time.DateTime;
+
 /**
  * Created by sahil on 15/3/15.
  */
@@ -14,25 +16,26 @@ public class Notification {
     @DatabaseField
     private String message;
 
+    /**
+     * This is a regular string that is shown in the notifications list view
+     */
     @DatabaseField
     private String time;
 
-    @Override
-    public String toString() {
-        return "Notification{" +
-                "notificationId=" + notificationId +
-                ", message='" + message + '\'' +
-                ", time='" + time + '\'' +
-                '}';
-    }
+    /**
+     * This is the actual date that is used to sort messages
+     */
+    @DatabaseField
+    private DateTime dateTime;
+
 
     public Notification() {
     }
 
-    public Notification(String message, String time) {
-
+    public Notification(String message, String time, DateTime dateTime) {
         this.message = message;
         this.time = time;
+        this.dateTime = dateTime;
     }
 
     public long getNotificationId() {
@@ -59,4 +62,11 @@ public class Notification {
         this.time = time;
     }
 
+    public DateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(DateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 }

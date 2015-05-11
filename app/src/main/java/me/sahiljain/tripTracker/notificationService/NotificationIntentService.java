@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,12 +72,18 @@ public class NotificationIntentService extends IntentService {
                 String time = getTime();
                 Date date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                saveMessageToDataBase(message, time + " " + sdf.format(date).toString());
+                String timeInString = time + " " + sdf.format(date).toString();
+                saveMessageToDataBase(message, timeInString, getRealDate(timeInString));
             }
             // Release the wake lock provided by the WakefulBroadcastReceiver.
             NotificationReceiver.completeWakefulIntent(intent);
         }
     }
+
+    private DateTime getRealDate(String timeInString) {
+        return DateTime.now();
+    }
+
 
     private String getTime() {
         Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
@@ -91,13 +99,12 @@ public class NotificationIntentService extends IntentService {
         return curTime;
     }
 
-    private void saveMessageToDataBase(String message, String time) {
+    private void saveMessageToDataBase(String message, String time, DateTime dateTime) {
 
         if (persistence == null) {
             persistence = new Persistence();
         }
-        Notification notification = new Notification(message, time);
-
+        Notification notification = new Notification(message, time, dateTime);
         persistence.saveNotificationInDatabase(this, notification);
     }
 

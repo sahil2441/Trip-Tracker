@@ -6,7 +6,10 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
@@ -112,10 +115,18 @@ public class Persistence extends Activity {
 
     public List<Notification> fetchNotifications(Context context) {
         dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        PreparedQuery<Notification> preparedQuery = null;
         if (dataBaseHelper != null) {
             RuntimeExceptionDao<Notification, Integer> notificationRuntimeExceptionDao =
                     dataBaseHelper.getNotificationRuntimeExceptionDao();
-            return notificationRuntimeExceptionDao.queryForAll();
+            QueryBuilder<Notification, Integer> queryBuilder = notificationRuntimeExceptionDao.queryBuilder();
+            queryBuilder.orderBy(Constants.DATE_TIME, false);
+            try {
+                preparedQuery = queryBuilder.prepare();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return notificationRuntimeExceptionDao.query(preparedQuery);
         }
         return null;
     }

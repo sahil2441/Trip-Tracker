@@ -98,6 +98,7 @@
     <orderEntry type="library" exported="" name="fab-0.0.8" level="project" />
     <orderEntry type="library" exported="" name="facebook-android-sdk-3.23.0" level="project" />
     <orderEntry type="library" exported="" name="ormlite-core-4.48" level="project" />
+    <orderEntry type="library" exported="" name="joda-time-2.7" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.1.1" level="project" />
   </component>
