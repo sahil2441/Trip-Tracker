@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.os.Build;
 import android.provider.ContactsContract;
 
+import com.crashlytics.android.Crashlytics;
 import com.parse.Parse;
 
+import io.fabric.sdk.android.Fabric;
 import me.sahiljain.tripTracker.entity.Trip;
 
 /**
@@ -45,6 +47,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         Parse.initialize(this, Constants.PARSE_APPLICATION_ID, Constants.PARSE_CLIENT_KEY);
         trip = new Trip();
         userName = getFirstName();

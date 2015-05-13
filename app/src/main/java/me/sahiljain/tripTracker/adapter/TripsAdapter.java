@@ -19,7 +19,7 @@ import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.Constants;
 import me.sahiljain.tripTracker.main.TabMainActivityUpdateListener;
-import me.sahiljain.tripTracker.main.TripDetailView;
+import me.sahiljain.tripTracker.main.TripDetailedActivity;
 
 /**
  * Created by sahil on 22/3/15.
@@ -82,7 +82,7 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
     }
 
     private void launchTripDetailViewActivity(Integer tripId, String tripName) {
-        Intent intent = new Intent(context, TripDetailView.class);
+        Intent intent = new Intent(context, TripDetailedActivity.class);
         intent.putExtra(Constants.TRIP_ID, tripId);
         intent.putExtra(Constants.TRIP_NAME, tripName);
         context.startActivity(intent);

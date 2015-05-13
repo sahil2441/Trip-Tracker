@@ -225,7 +225,7 @@
 
         <!-- Child of the TabMainActivity-->
         <activity
-            android:name=".main.TripDetailView"
+            android:name=".main.TripDetailedActivity"
             android:label="Trip Details"
             android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity"
             android:screenOrientation="portrait"
@@ -289,5 +289,8 @@
         </receiver>
         <service android:name="me.sahiljain.tripTracker.notificationService.NotificationIntentService" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="436bb5e61ae900c10fbab6b38ddd628bd1592b32" />
     </application>
 </manifest>

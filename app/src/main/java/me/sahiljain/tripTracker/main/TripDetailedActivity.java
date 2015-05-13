@@ -15,7 +15,7 @@ import me.sahiljain.tripTracker.db.Persistence;
 /**
  * Created by sahil on 6/5/15.
  */
-public class TripDetailView extends AppCompatActivity {
+public class TripDetailedActivity extends AppCompatActivity {
 
     private Button setDefault;
     private Button deleteTrip;
