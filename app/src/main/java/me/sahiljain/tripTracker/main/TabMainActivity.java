@@ -21,8 +21,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -36,7 +34,6 @@ import com.shamanland.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.sahiljain.locationstat.windows.Preferences;
 import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.adapter.TabMainActivityAdapter;
 import me.sahiljain.tripTracker.addTrip.AddATripSecondWindow;
@@ -422,6 +419,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         changeColor(currentColor);
     }
 
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.maps_activity_action_bar, menu);
@@ -440,4 +438,5 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         Intent preferencesIntent = new Intent(this, Preferences.class);
         this.startActivity(preferencesIntent);
     }
+*/
 }

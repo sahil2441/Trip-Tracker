@@ -28,14 +28,22 @@ public class Notification {
     @DatabaseField
     private DateTime dateTime;
 
+    /**
+     * Denotes the userID of the user who sent this notification
+     * this is useful for blocking a user
+     */
+    @DatabaseField
+    private String userID;
+
 
     public Notification() {
     }
 
-    public Notification(String message, String time, DateTime dateTime) {
+    public Notification(String message, String time, DateTime dateTime, String userID) {
         this.message = message;
         this.time = time;
         this.dateTime = dateTime;
+        this.userID = userID;
     }
 
     public long getNotificationId() {
@@ -68,5 +76,13 @@ public class Notification {
 
     public void setDateTime(DateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }

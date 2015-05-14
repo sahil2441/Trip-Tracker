@@ -30,5 +30,12 @@ public class NotificationReceiver extends WakefulBroadcastReceiver {
         // Start the service, keeping the device awake while it is launching.
         startWakefulService(context, intent.setComponent(componentName));
         setResultCode(Activity.RESULT_OK);
+
+        /**
+         * For Notification Service
+         * This ensures that service resumes on restarting the phone
+         */
+        Intent startNotificationServiceIntent = new Intent(context, NotificationService.class);
+        context.startService(startNotificationServiceIntent);
     }
 }

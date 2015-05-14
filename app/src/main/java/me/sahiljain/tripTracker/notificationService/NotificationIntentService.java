@@ -13,11 +13,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.TimeZone;
 
-import me.sahiljain.locationstat.db.DataBaseNotifications;
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Notification;
+import me.sahiljain.tripTracker.entity.UserBlocked;
 import me.sahiljain.tripTracker.main.Constants;
 
 /**
@@ -25,7 +27,7 @@ import me.sahiljain.tripTracker.main.Constants;
  */
 
 /**
- * This class receives notification from GCM and pops onto the device.
+ * This class receives notification from GCM and persists it into the DB
  * <p/>
  * This {@code NotificationIntentService } does the actual handling of the GCM message.
  * {@code NotificationReceiver} holds a
@@ -36,9 +38,7 @@ import me.sahiljain.tripTracker.main.Constants;
 
 public class NotificationIntentService extends IntentService {
 
-    private DataBaseNotifications dataBaseNotifications;
     private Persistence persistence;
-
 
     public NotificationIntentService() {
         super("NotificationIntentService");
@@ -47,43 +47,75 @@ public class NotificationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        boolean flag = true;
         Bundle extras = intent.getExtras();
-        GoogleCloudMessaging googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
-        // The getMessageType() intent parameter must be the intent you received
-        // in your BroadcastReceiver.
+        String channel = ((String) extras.get("channel"));
+        flag = checkIfUserBlocked(getUserID(channel));
+        extras.get("data").getClass();
 
-        String messageType = googleCloudMessaging.getMessageType(intent);
-        if (!extras.isEmpty()) { // has effect of unparcelling Bundle
-        /*
+
+        if (flag) {
+            GoogleCloudMessaging googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
+            // The getMessageType() intent parameter must be the intent you received
+            // in your BroadcastReceiver.
+
+            String messageType = googleCloudMessaging.getMessageType(intent);
+            if (!extras.isEmpty()) { // has effect of unparcelling Bundle
+
+            /*
              * Filter messages based on message type. Since it is likely that GCM will be
              * extended in the future with new message types, just ignore any message types you're
              * not interested in, or that you don't recognize.
              */
-            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                //Do nothing
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-                //Do nothing
-            }
-            // If it's a regular GCM message, do some work.
-            else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                String message = getMessageFromBundle(extras.toString());
+                if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
+                    //Do nothing
+                } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+                    //Do nothing
+                }
+                // If it's a regular GCM message, do some work.
+                else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                    String message = getMessageFromBundle(extras.toString());
 
-                Log.i(Constants.NOTIFICATION_SERVICE_TAG, "Received : " + extras.toString());
-                String time = getTime();
-                Date date = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                String timeInString = time + " " + sdf.format(date).toString();
-                saveMessageToDataBase(message, timeInString, getRealDate(timeInString));
+                    Log.i(Constants.NOTIFICATION_SERVICE_TAG, "Received : " + extras.toString());
+                    String time = getTime();
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    String timeInString = time + " " + sdf.format(date).toString();
+                    saveMessageToDataBase(message, timeInString, DateTime.now(),
+                            getUserID((String) extras.get("channel")));
+                }
+                // Release the wake lock provided by the WakefulBroadcastReceiver.
+                NotificationReceiver.completeWakefulIntent(intent);
             }
-            // Release the wake lock provided by the WakefulBroadcastReceiver.
-            NotificationReceiver.completeWakefulIntent(intent);
         }
+
     }
 
-    private DateTime getRealDate(String timeInString) {
-        return DateTime.now();
+    /**
+     * This method checks if the user who has sent the notification belongs to the blocklist.
+     * returns true if it does.
+     *
+     * @param userID
+     * @return
+     */
+    private boolean checkIfUserBlocked(String userID) {
+        persistence = new Persistence();
+        List<UserBlocked> userBlockedList =
+                persistence.fetchListOfBlockedUsers();
+        if (userBlockedList != null && userBlockedList.size() > 0) {
+            Iterator<UserBlocked> userBlockedIterator = userBlockedList.iterator();
+            while (userBlockedIterator.hasNext()) {
+                if (userBlockedIterator.next().getUserID().equalsIgnoreCase(userID)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
+    private String getUserID(String channel) {
+        return channel.replaceAll("c", "");
+    }
 
     private String getTime() {
         Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
@@ -99,12 +131,12 @@ public class NotificationIntentService extends IntentService {
         return curTime;
     }
 
-    private void saveMessageToDataBase(String message, String time, DateTime dateTime) {
+    private void saveMessageToDataBase(String message, String time, DateTime dateTime, String userID) {
 
         if (persistence == null) {
             persistence = new Persistence();
         }
-        Notification notification = new Notification(message, time, dateTime);
+        Notification notification = new Notification(message, time, dateTime, userID);
         persistence.saveNotificationInDatabase(this, notification);
     }
 

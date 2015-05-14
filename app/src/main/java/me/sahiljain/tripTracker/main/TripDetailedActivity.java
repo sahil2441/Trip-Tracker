@@ -1,10 +1,11 @@
 package me.sahiljain.tripTracker.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +16,7 @@ import me.sahiljain.tripTracker.db.Persistence;
 /**
  * Created by sahil on 6/5/15.
  */
-public class TripDetailedActivity extends AppCompatActivity {
+public class TripDetailedActivity extends Activity {
 
     private Button setDefault;
     private Button deleteTrip;
@@ -25,6 +26,7 @@ public class TripDetailedActivity extends AppCompatActivity {
     private String tripName;
     private Persistence persistence;
     private SharedPreferences preferences;
+    private int currentColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,10 @@ public class TripDetailedActivity extends AppCompatActivity {
         tripName = intent.getStringExtra(Constants.TRIP_NAME);
         tripId = intent.getIntExtra(Constants.TRIP_ID, 0);
         tripNameTV.setText(intent.getStringExtra(Constants.TRIP_NAME));
+
+        preferences = this.getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, 0);
+        currentColor = preferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
+        tripNameTV.setBackgroundColor(currentColor);
 
         deleteTrip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +59,14 @@ public class TripDetailedActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setTitle("Trip Details");
+//        getSupportActionBar().setTitle("Trip Details");
+
+        /**
+         * Dim Background
+         */
+        WindowManager.LayoutParams windowManager = getWindow().getAttributes();
+        windowManager.dimAmount = 0.75f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     private void activateTrip(int tripId, String tripName) {

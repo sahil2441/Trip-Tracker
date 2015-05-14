@@ -15,6 +15,7 @@ import java.util.List;
 
 import me.sahiljain.tripTracker.entity.Notification;
 import me.sahiljain.tripTracker.entity.Trip;
+import me.sahiljain.tripTracker.entity.UserBlocked;
 import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.entity.UserTrip;
 import me.sahiljain.tripTracker.main.Constants;
@@ -209,5 +210,10 @@ public class Persistence extends Activity {
         }
         //Release helper after using
         OpenHelperManager.releaseHelper();
+    }
+
+    public List<UserBlocked> fetchListOfBlockedUsers() {
+        //TODO
+        return null;
     }
 }
