@@ -144,7 +144,7 @@
             android:label="title_facebook_login" />
 
         <service
-            android:name="me.sahiljain.tripTracker.notificationService.NotificationService"
+            android:name=".notificationService.NotificationSendingService"
             android:icon="@drawable/iconsmall"
             android:label="@string/app_name" />
 
@@ -227,10 +227,23 @@
         <!-- Child of the TabMainActivity-->
         <activity
             android:name=".main.TripDetailedActivity"
+            android:background="#33BBFFFF"
             android:label="Trip Details"
             android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity"
             android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow" />
+        </activity>
+
+        <!-- Child of the TabMainActivity-->
+        <activity
+            android:name=".main.NotificationDetailedActivity"
             android:background="#33BBFFFF"
+            android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -251,37 +264,49 @@
         </receiver>
 
         <!--The following receiver does the actual work of
-        handling notifications and subscribing the user to a channel-->
+        handling notifications and subscribing the user to a channel
+        Overridden the ParsePushBroadcastReceiver to implement my own NotificationReceiver
+        So that we can have option to not to show notifications from the blocked users
+        -->
 
         <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false">
+            android:name=".notificationService.ParseNotificationReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="com.google.android.c2dm.permission.SEND">
 
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <!-- For starting service on Reboot-->
+                <action android:name="android.intent.action._BOOT_COMPLETED" />
+
+                <!-- HTC devices don't seem to catch BOOT_COMPLETED-->
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
+                <category android:name="me.sahiljain.tripTracker" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
                 <!--
-                  IMPORTANT: Change "com.parse.starter" to match your app's package name.
-                -->
+                        IMPORTANT: Change "com.parse.starter" to match your app's package name.
+                      -->
                 <category android:name="me.sahiljain.tripTracker" />
             </intent-filter>
         </receiver>
 
-        <!--
-         My own receiver to hanlde notifications
-         -->
+        <!--This receiver's job is to trigger Notification Intent Service-->
         <receiver
-            android:name="me.sahiljain.tripTracker.notificationService.NotificationReceiver"
+            android:name=".notificationService.WakefulReceiver"
             android:enabled="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
@@ -295,6 +320,8 @@
                 <category android:name="me.sahiljain.tripTracker" />
             </intent-filter>
         </receiver>
+
+        <!-- Service to send Notifications-->
         <service android:name="me.sahiljain.tripTracker.notificationService.NotificationIntentService" />
 
         <meta-data

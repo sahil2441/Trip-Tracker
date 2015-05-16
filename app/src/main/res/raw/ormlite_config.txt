@@ -1,5 +1,5 @@
 #
-# generated on 2015/05/15 01:39:17
+# generated on 2015/05/16 11:26:22
 #
 # --table-start--
 dataClass=me.sahiljain.tripTracker.entity.Trip
@@ -64,7 +64,7 @@ fieldName=time
 fieldName=dateTime
 # --field-end--
 # --field-start--
-fieldName=userID
+fieldName=senderID
 # --field-end--
 # --table-fields-end--
 # --table-end--

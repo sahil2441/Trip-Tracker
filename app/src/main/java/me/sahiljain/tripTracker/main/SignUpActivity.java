@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Locale;
 
 import me.sahiljain.tripTracker.R;
-import me.sahiljain.tripTracker.notificationService.NotificationService;
+import me.sahiljain.tripTracker.notificationService.NotificationSendingService;
 
 /**
  * Created by sahil on 27/4/15.
@@ -341,7 +341,7 @@ public class SignUpActivity extends Activity {
         editor.apply();
 
         //Start the notification service
-        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+        Intent intent = new Intent(getApplicationContext(), NotificationSendingService.class);
         getApplicationContext().startService(intent);
 
         boolean status = preferences.getBoolean(Constants.FIRST_LOGIN, true);

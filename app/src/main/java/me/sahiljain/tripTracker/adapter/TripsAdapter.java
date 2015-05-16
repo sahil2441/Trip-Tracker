@@ -69,7 +69,6 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
                  * Launch new Activity- TripDetailView
                  */
                 launchTripDetailViewActivity(trips.get(position).getTripId(), trips.get(position).getTripName());
-//                activateTrip(trips.get(position).getTripId(), trips.get(position).getTripName());
             }
         });
 

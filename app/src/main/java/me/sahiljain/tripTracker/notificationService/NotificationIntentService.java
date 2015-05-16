@@ -47,14 +47,15 @@ public class NotificationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        boolean flag = true;
+        boolean isUserBlocked;
         Bundle extras = intent.getExtras();
-        String channel = ((String) extras.get("channel"));
-        flag = checkIfUserBlocked(getUserID(channel));
-        extras.get("data").getClass();
+        String senderID = null;
+        if (extras != null) {
+            senderID = (getSenderID(extras.toString()));
+        }
+        isUserBlocked = checkIfUserBlocked(senderID);
 
-
-        if (flag) {
+        if (!isUserBlocked) {
             GoogleCloudMessaging googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
             // The getMessageType() intent parameter must be the intent you received
             // in your BroadcastReceiver.
@@ -82,10 +83,10 @@ public class NotificationIntentService extends IntentService {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                     String timeInString = time + " " + sdf.format(date).toString();
                     saveMessageToDataBase(message, timeInString, DateTime.now(),
-                            getUserID((String) extras.get("channel")));
+                            getSenderID(extras.toString()));
                 }
                 // Release the wake lock provided by the WakefulBroadcastReceiver.
-                NotificationReceiver.completeWakefulIntent(intent);
+//                WakefulReceiver.completeWakefulIntent(intent);
             }
         }
 
@@ -95,26 +96,40 @@ public class NotificationIntentService extends IntentService {
      * This method checks if the user who has sent the notification belongs to the blocklist.
      * returns true if it does.
      *
-     * @param userID
+     * @param senderID
      * @return
      */
-    private boolean checkIfUserBlocked(String userID) {
+    private boolean checkIfUserBlocked(String senderID) {
         persistence = new Persistence();
         List<UserBlocked> userBlockedList =
                 persistence.fetchListOfBlockedUsers();
-        if (userBlockedList != null && userBlockedList.size() > 0) {
+        if (senderID != null && userBlockedList != null && userBlockedList.size() > 0) {
             Iterator<UserBlocked> userBlockedIterator = userBlockedList.iterator();
             while (userBlockedIterator.hasNext()) {
-                if (userBlockedIterator.next().getUserID().equalsIgnoreCase(userID)) {
-                    return false;
+                if (userBlockedIterator.next().getUserID().equalsIgnoreCase(senderID)) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
-    private String getUserID(String channel) {
-        return channel.replaceAll("c", "");
+    private String getSenderID(String string) {
+        if (string != null && string.contains("#")) {
+
+            String senderID = "";
+            int indexOfHash = string.indexOf("#");
+            int indexOfPushHash = string.indexOf("push_hash");
+
+            indexOfHash += 1;
+            indexOfPushHash -= 3;
+            //int size=indexOfAndroidSupport-indexOfMessage+1;
+            for (int i = indexOfHash; i < indexOfPushHash; i++) {
+                senderID += string.charAt(i);
+            }
+            return senderID;
+        }
+        return null;
     }
 
     private String getTime() {
@@ -150,6 +165,9 @@ public class NotificationIntentService extends IntentService {
         indexOfPushHash -= 3;
         //int size=indexOfAndroidSupport-indexOfMessage+1;
         for (int i = indexOfAlert; i < indexOfPushHash; i++) {
+            if (string.charAt(i) == '#') {
+                break;
+            }
             message += string.charAt(i);
         }
         return message;

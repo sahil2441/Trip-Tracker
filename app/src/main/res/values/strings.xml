@@ -47,6 +47,9 @@
     <string name="FirstName">First name (required)</string>
     <string name="LastName">Last name (optional)</string>
     <string name="CancelRegistration">Cancel registration</string>
+    <!-- layout/notification_detail_view.xml-->
+    <string name="blockUser">Block User</string>
+    <string name="unblockUser">Unblock User</string>
 
 
 </resources>

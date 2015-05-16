@@ -118,6 +118,8 @@ public class Constants {
     public static final String ENABLE_LOCATION_SERVICES_TITLE = "Location not Found";
     public static final String TRIP_ID = "tripId";
     public static final String TRIP_NAME = "tripName";
+    public static final String NOTIFICATION = "tripName";
+    public static final String SENDER_ID = "tripName";
 
     /**
      * Columns

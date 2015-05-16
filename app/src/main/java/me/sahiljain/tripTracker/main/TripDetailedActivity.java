@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class TripDetailedActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.trip_detail_view);
         setDefault = (Button) findViewById(R.id.set_default_button);
         deleteTrip = (Button) findViewById(R.id.delete_trip_button);
@@ -58,8 +60,6 @@ public class TripDetailedActivity extends Activity {
                 activateTrip(tripId, tripName);
             }
         });
-
-//        getSupportActionBar().setTitle("Trip Details");
 
         /**
          * Dim Background

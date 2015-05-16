@@ -25,11 +25,13 @@ import me.sahiljain.tripTracker.main.Constants;
  * Created by sahil on 14/2/15.
  * This class sends the notification to 'Parse' which in turn sends it to GCM.
  */
-public class NotificationService extends Service {
+public class NotificationSendingService extends Service {
 
     private Trip activeTrip;
 
     private Persistence persistence;
+
+    private SharedPreferences preferences;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -72,7 +74,7 @@ public class NotificationService extends Service {
 
             }
         };
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 100, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 100, locationListener);
 
         return Service.START_STICKY;
     }
@@ -152,10 +154,14 @@ public class NotificationService extends Service {
 
         Collection<UserTrip> userTrips = this.getActiveTrip().getFriendList();
         ParsePush push;
+        String userID;
 
         /**
          * Send Push Message
          */
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
+        userID = preferences.getString(Constants.USER_NAME, "");
+        message += "#" + userID;
         if (userTrips != null && userTrips.size() > 0) {
             for (UserTrip userTrip : userTrips) {
                 push = new ParsePush();

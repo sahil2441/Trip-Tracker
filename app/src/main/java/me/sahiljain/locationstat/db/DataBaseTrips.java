@@ -114,7 +114,7 @@ public class DataBaseTrips extends SQLiteOpenHelper {
             for (int i = 0; i < trip.getFriendList().size(); i++) {
                 ContentValues contentValuesUser = new ContentValues();
                 contentValuesUser.put(TRIP_ID_, trip.getId());
-    //            contentValuesUser.put(USER_ID, trip.getFriendList().get(i).getUserID());
+    //            contentValuesUser.put(USER_ID, trip.getFriendList().get(i).getSenderID());
     //            contentValuesUser.put(USER_NAME, trip.getFriendList().get(i).getName());
                 db.insert(TABLE_TRIPS_AND_USERS, null, contentValuesUser);
             }

@@ -35,7 +35,7 @@ import me.sahiljain.locationstat.windows.SearchResults;
 import me.sahiljain.locationstat.windows.StartJourney;
 import me.sahiljain.tripTracker.main.Constants;
 import me.sahiljain.tripTracker.main.IntroActivity;
-import me.sahiljain.tripTracker.notificationService.NotificationService;
+import me.sahiljain.tripTracker.notificationService.NotificationSendingService;
 import me.sahiljain.tripTracker.service.GPSTracker;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
@@ -154,7 +154,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMapCl
                 });
             }
             //Start Service
-            Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
+            Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationSendingService.class);
             getApplicationContext().startService(notificationServiceIntent);
         }
     }

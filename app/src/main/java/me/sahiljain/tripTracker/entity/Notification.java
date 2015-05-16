@@ -29,21 +29,21 @@ public class Notification {
     private DateTime dateTime;
 
     /**
-     * Denotes the userID of the user who sent this notification
+     * Denotes the senderID of the user who sent this notification
      * this is useful for blocking a user
      */
     @DatabaseField
-    private String userID;
+    private String senderID;
 
 
     public Notification() {
     }
 
-    public Notification(String message, String time, DateTime dateTime, String userID) {
+    public Notification(String message, String time, DateTime dateTime, String senderID) {
         this.message = message;
         this.time = time;
         this.dateTime = dateTime;
-        this.userID = userID;
+        this.senderID = senderID;
     }
 
     public long getNotificationId() {
@@ -78,11 +78,11 @@ public class Notification {
         this.dateTime = dateTime;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getSenderID() {
+        return senderID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setSenderID(String senderID) {
+        this.senderID = senderID;
     }
 }

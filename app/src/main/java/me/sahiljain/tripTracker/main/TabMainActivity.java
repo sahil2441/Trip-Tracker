@@ -39,7 +39,7 @@ import me.sahiljain.tripTracker.adapter.TabMainActivityAdapter;
 import me.sahiljain.tripTracker.addTrip.AddATripSecondWindow;
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.UserDefault;
-import me.sahiljain.tripTracker.notificationService.NotificationService;
+import me.sahiljain.tripTracker.notificationService.NotificationSendingService;
 
 /**
  * Created by sahil on 21/3/15.
@@ -82,7 +82,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         super.onResume();
 
         //Start Service
-        Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
+        Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationSendingService.class);
         getApplicationContext().startService(notificationServiceIntent);
 
         /**

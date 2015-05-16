@@ -75,7 +75,7 @@ public class TripTrackerHelper {
  *//*
 
                 if (analysePhoneNumber(number)) {
-                    userDefault.setUserID(number);
+                    userDefault.setSenderID(number);
                     userDefault.setName(name);
                     userDefaultList.add(userDefault);
                 }

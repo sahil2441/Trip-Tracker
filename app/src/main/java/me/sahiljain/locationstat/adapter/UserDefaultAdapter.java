@@ -34,7 +34,7 @@ public class UserDefaultAdapter extends ArrayAdapter {
 
         //Set userName
         TextView textViewUserName = (TextView) rowView.findViewById(R.id.username_list_of_friends_list_item);
-        textViewUserName.setText(list.get(position).getUserID());
+        textViewUserName.setText(list.get(position).getSenderID());
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.logo_list_of_friends_list_item);
         imageView.setImageResource(R.drawable.buddy);
