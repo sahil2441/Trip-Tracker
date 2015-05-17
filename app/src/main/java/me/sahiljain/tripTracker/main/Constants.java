@@ -124,5 +124,5 @@ public class Constants {
     /**
      * Columns
      */
-    public static final String DATE_TIME = "dateTime";
+    public static final String DATE = "date";
 }

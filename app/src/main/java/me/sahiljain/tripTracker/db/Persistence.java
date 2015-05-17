@@ -126,32 +126,39 @@ public class Persistence extends Activity {
     }
 
     public void saveNotificationInDatabase(Context context, Notification notification) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        RuntimeExceptionDao<Notification, Integer> notificationRuntimeExceptionDao =
-                dataBaseHelper.getNotificationRuntimeExceptionDao();
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            RuntimeExceptionDao<Notification, Integer> notificationRuntimeExceptionDao =
+                    dataBaseHelper.getNotificationRuntimeExceptionDao();
 
-        //persist into DB
-        notificationRuntimeExceptionDao.create(notification);
-        Log.d(Constants.TAG, notification.toString());
-
+            //persist into DB
+            notificationRuntimeExceptionDao.create(notification);
+            Log.d(Constants.TAG, notification.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //Release helper after using
         OpenHelperManager.releaseHelper();
     }
 
     public List<Notification> fetchNotifications(Context context) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        PreparedQuery<Notification> preparedQuery = null;
-        if (dataBaseHelper != null) {
-            RuntimeExceptionDao<Notification, Integer> notificationRuntimeExceptionDao =
-                    dataBaseHelper.getNotificationRuntimeExceptionDao();
-            QueryBuilder<Notification, Integer> queryBuilder = notificationRuntimeExceptionDao.queryBuilder();
-            queryBuilder.orderBy(Constants.DATE_TIME, false);
-            try {
-                preparedQuery = queryBuilder.prepare();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            PreparedQuery<Notification> preparedQuery = null;
+            if (dataBaseHelper != null) {
+                RuntimeExceptionDao<Notification, Integer> notificationRuntimeExceptionDao =
+                        dataBaseHelper.getNotificationRuntimeExceptionDao();
+                QueryBuilder<Notification, Integer> queryBuilder = notificationRuntimeExceptionDao.queryBuilder();
+                queryBuilder.orderBy(Constants.DATE, false);
+                try {
+                    preparedQuery = queryBuilder.prepare();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                return notificationRuntimeExceptionDao.query(preparedQuery);
             }
-            return notificationRuntimeExceptionDao.query(preparedQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

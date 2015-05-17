@@ -7,8 +7,6 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.joda.time.DateTime;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,7 +80,7 @@ public class NotificationIntentService extends IntentService {
                     Date date = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                     String timeInString = time + " " + sdf.format(date).toString();
-                    saveMessageToDataBase(message, timeInString, DateTime.now(),
+                    saveMessageToDataBase(message, timeInString, new Date(),
                             getSenderID(extras.toString()));
                 }
                 // Release the wake lock provided by the WakefulBroadcastReceiver.
@@ -146,12 +144,12 @@ public class NotificationIntentService extends IntentService {
         return curTime;
     }
 
-    private void saveMessageToDataBase(String message, String time, DateTime dateTime, String userID) {
+    private void saveMessageToDataBase(String message, String time, Date date, String userID) {
 
         if (persistence == null) {
             persistence = new Persistence();
         }
-        Notification notification = new Notification(message, time, dateTime, userID);
+        Notification notification = new Notification(message, time, date, userID);
         persistence.saveNotificationInDatabase(this, notification);
     }
 

@@ -41,18 +41,9 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
         //TODO: This is tricky
         String senderID = null;
         //It needs some time process the variable extras--found while debugging
-/*
         if (extras != null) {
-            synchronized (extras) {
-                try {
-                    extras.wait(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
             senderID = (getSenderID(extras.toString()));
         }
-*/
         isUserBlocked = checkIfUserBlocked(context, senderID);
 
 

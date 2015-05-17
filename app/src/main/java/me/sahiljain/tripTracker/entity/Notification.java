@@ -3,7 +3,7 @@ package me.sahiljain.tripTracker.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import org.joda.time.DateTime;
+import java.util.Date;
 
 /**
  * Created by sahil on 15/3/15.
@@ -26,7 +26,7 @@ public class Notification {
      * This is the actual date that is used to sort messages
      */
     @DatabaseField
-    private DateTime dateTime;
+    private Date date;
 
     /**
      * Denotes the senderID of the user who sent this notification
@@ -39,10 +39,10 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(String message, String time, DateTime dateTime, String senderID) {
+    public Notification(String message, String time, Date date, String senderID) {
         this.message = message;
         this.time = time;
-        this.dateTime = dateTime;
+        this.date = date;
         this.senderID = senderID;
     }
 
@@ -68,14 +68,6 @@ public class Notification {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public DateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(DateTime dateTime) {
-        this.dateTime = dateTime;
     }
 
     public String getSenderID() {
