@@ -18,6 +18,13 @@ public class UserBlocked implements IUser {
     @DatabaseField
     private String name;
 
+    public UserBlocked() {
+    }
+
+    public UserBlocked(String userID) {
+        this.userID = userID;
+    }
+
     @Override
     public String getUserID() {
         return userID;

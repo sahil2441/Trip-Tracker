@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import me.sahiljain.tripTracker.entity.Notification;
 import me.sahiljain.tripTracker.entity.Trip;
+import me.sahiljain.tripTracker.entity.UserBlocked;
 import me.sahiljain.tripTracker.entity.UserTrip;
 
 /**
@@ -15,7 +16,7 @@ import me.sahiljain.tripTracker.entity.UserTrip;
  */
 public class DatabaseConfigUtil extends OrmLiteConfigUtil {
     private static final Class[] classes = new Class[]{Trip.class, Notification.class
-            , UserTrip.class};
+            , UserTrip.class, UserBlocked.class};
 
     public static void main(String[] args) throws IOException, SQLException {
 

@@ -9,9 +9,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.db.Persistence;
+import me.sahiljain.tripTracker.entity.UserBlocked;
 
 /**
  * Created by sahil on 6/5/15.
@@ -42,11 +44,13 @@ public class NotificationDetailedActivity extends Activity {
         Intent intent = getIntent();
         notificationFromIntent = intent.getStringExtra(Constants.NOTIFICATION);
         senderIDFromIntent = intent.getStringExtra(Constants.SENDER_ID);
-        notification.setText(intent.getStringExtra(Constants.TRIP_NAME));
+        notification.setText(notificationFromIntent);
+        senderID.setText("From: " + senderIDFromIntent);
 
         preferences = this.getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, 0);
         currentColor = preferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
         notification.setBackgroundColor(currentColor);
+        senderID.setBackgroundColor(currentColor);
 
         blockUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,12 +75,22 @@ public class NotificationDetailedActivity extends Activity {
     }
 
     private void unblockUser(String senderIDFromIntent) {
-        //TODO:
+        persistence = new Persistence();
+        UserBlocked userBlocked = new UserBlocked(senderIDFromIntent);
+        persistence.unblockUser(this, userBlocked);
+        //Show Toast
+        Toast toast = Toast.makeText(this, "User " + senderIDFromIntent + " Removed from Block List", Toast.LENGTH_LONG);
+        toast.show();
         launchTabMainActivity();
     }
 
     private void blockUser(String senderIDFromIntent) {
-        //TODO:
+        persistence = new Persistence();
+        UserBlocked userBlocked = new UserBlocked(senderIDFromIntent);
+        persistence.blockUser(this, userBlocked);
+        //Show Toast
+        Toast toast = Toast.makeText(this, "User " + senderIDFromIntent + " Added to Block List", Toast.LENGTH_LONG);
+        toast.show();
         launchTabMainActivity();
     }
 

@@ -102,7 +102,7 @@ public class NotificationIntentService extends IntentService {
     private boolean checkIfUserBlocked(String senderID) {
         persistence = new Persistence();
         List<UserBlocked> userBlockedList =
-                persistence.fetchListOfBlockedUsers();
+                persistence.fetchListOfBlockedUsers(this);
         if (senderID != null && userBlockedList != null && userBlockedList.size() > 0) {
             Iterator<UserBlocked> userBlockedIterator = userBlockedList.iterator();
             while (userBlockedIterator.hasNext()) {

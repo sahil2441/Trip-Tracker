@@ -412,12 +412,14 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         outState.putInt("currentColor", currentColor);
     }
 
+/*
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentColor = savedInstanceState.getInt("currentColor");
         changeColor(currentColor);
     }
+*/
 
 /*
     @Override

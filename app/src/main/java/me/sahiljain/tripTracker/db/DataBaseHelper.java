@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.Notification;
 import me.sahiljain.tripTracker.entity.Trip;
+import me.sahiljain.tripTracker.entity.UserBlocked;
 import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.entity.UserTrip;
 import me.sahiljain.tripTracker.entity.Week;
@@ -25,7 +26,7 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME = "tripTracker.db";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     private Dao<Trip, Integer> tripDao = null;
     private Dao<UserDefault, Integer> userDefaultDao = null;
@@ -48,9 +49,8 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.createTableIfNotExists(connectionSource, Trip.class);
             TableUtils.createTableIfNotExists(connectionSource, Notification.class);
-            TableUtils.createTableIfNotExists(connectionSource, UserDefault.class);
             TableUtils.createTableIfNotExists(connectionSource, UserTrip.class);
-            TableUtils.createTableIfNotExists(connectionSource, Week.class);
+            TableUtils.createTableIfNotExists(connectionSource, UserBlocked.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,9 +62,8 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.dropTable(connectionSource, Trip.class, true);
             TableUtils.dropTable(connectionSource, Notification.class, true);
-            TableUtils.dropTable(connectionSource, UserDefault.class, true);
             TableUtils.dropTable(connectionSource, UserTrip.class, true);
-            TableUtils.dropTable(connectionSource, Week.class, true);
+            TableUtils.dropTable(connectionSource, UserBlocked.class, true);
             onCreate(sqLiteDatabase, connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -140,5 +139,9 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
             weekRuntimeExceptionDao = getRuntimeExceptionDao(Week.class);
         }
         return weekRuntimeExceptionDao;
+    }
+
+    public RuntimeExceptionDao<UserBlocked, Integer> getUserBlockedRuntimeExceptionDao() {
+        return getRuntimeExceptionDao(UserBlocked.class);
     }
 }

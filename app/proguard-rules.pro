@@ -16,6 +16,7 @@
 #   public *;
 #}
 -dontwarn com.activate.gcm.**
+-dontwarn org.joda.**
 -keep class com.android.internal.telephony.ITelephony { *; }
 
 # OrmLite uses reflection
@@ -36,3 +37,9 @@
 #keep db package
 -keep class me.sahiljain.tripTracker.db.**
 -keepclassmembers class me.sahiljain.tripTracker.db.** {*;}
+
+#Logs
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+}

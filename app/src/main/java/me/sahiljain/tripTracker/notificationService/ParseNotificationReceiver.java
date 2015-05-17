@@ -31,17 +31,29 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
         /**
          * Check if user belongs to the block list
          */
-        boolean isUserBlocked = false;
+        boolean isUserBlocked;
         Bundle extras = intent.getExtras();
+
+        //Waste some time
+        //TODO: This is tricky
         String senderID = null;
+        //It needs some time process the variable extras--found while debugging
+/*
         if (extras != null) {
+            synchronized (extras) {
+                try {
+                    extras.wait(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             senderID = (getSenderID(extras.toString()));
         }
-        isUserBlocked = checkIfUserBlocked(senderID);
+*/
+        isUserBlocked = checkIfUserBlocked(context, senderID);
 
 
         String intentAction = intent.getAction();
@@ -78,6 +90,7 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
         }
     }
 
+
     private String getSenderID(String string) {
         if (string != null && string.contains("#")) {
 
@@ -100,13 +113,14 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
      * This method checks if the user who has sent the notification belongs to the blocklist.
      * returns true if it does.web
      *
+     * @param context
      * @param userID
      * @return
      */
-    private boolean checkIfUserBlocked(String userID) {
+    private boolean checkIfUserBlocked(Context context, String userID) {
         persistence = new Persistence();
         List<UserBlocked> userBlockedList =
-                persistence.fetchListOfBlockedUsers();
+                persistence.fetchListOfBlockedUsers(context);
         if (userID != null && userBlockedList != null && userBlockedList.size() > 0) {
             Iterator<UserBlocked> userBlockedIterator = userBlockedList.iterator();
             while (userBlockedIterator.hasNext()) {
@@ -117,4 +131,5 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
         }
         return false;
     }
+
 }

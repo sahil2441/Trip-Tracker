@@ -29,15 +29,19 @@ public class Persistence extends Activity {
     private DataBaseHelper dataBaseHelper;
 
     public void persistUserDefault(List<UserDefault> userDefaults) {
-        dataBaseHelper = OpenHelperManager.getHelper(this, DataBaseHelper.class);
-        RuntimeExceptionDao<UserDefault, Integer> userDefaultIntegerRuntimeExceptionDao =
-                dataBaseHelper.getUserDefaultRuntimeExceptionDao();
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(this, DataBaseHelper.class);
+            RuntimeExceptionDao<UserDefault, Integer> userDefaultIntegerRuntimeExceptionDao =
+                    dataBaseHelper.getUserDefaultRuntimeExceptionDao();
 
-        //For each user --make entry  in Dao
-        for (UserDefault userDefault : userDefaults) {
-            //persist into DB
-            userDefaultIntegerRuntimeExceptionDao.create(userDefault);
-            Log.d(Constants.TAG, userDefault.toString());
+            //For each user --make entry  in Dao
+            for (UserDefault userDefault : userDefaults) {
+                //persist into DB
+                userDefaultIntegerRuntimeExceptionDao.create(userDefault);
+                Log.d(Constants.TAG, userDefault.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         //Release helper after using
@@ -45,58 +49,78 @@ public class Persistence extends Activity {
     }
 
     public List<UserDefault> fetchUserDefault(Context context) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        if (dataBaseHelper != null) {
-            RuntimeExceptionDao<UserDefault, Integer> userDefaultIntegerRuntimeExceptionDao =
-                    dataBaseHelper.getUserDefaultRuntimeExceptionDao();
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            if (dataBaseHelper != null) {
+                RuntimeExceptionDao<UserDefault, Integer> userDefaultIntegerRuntimeExceptionDao =
+                        dataBaseHelper.getUserDefaultRuntimeExceptionDao();
 
-            return userDefaultIntegerRuntimeExceptionDao.queryForAll();
+                return userDefaultIntegerRuntimeExceptionDao.queryForAll();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
         return null;
     }
 
     public void saveTripInDataBase(Context context, Trip trip) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
-                dataBaseHelper.getTripRuntimeExceptionDao();
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                    dataBaseHelper.getTripRuntimeExceptionDao();
 
-        //persist Trip into DB
-        tripRuntimeExceptionDao.create(trip);
-        Log.d(Constants.TAG, trip.toString());
+            //persist Trip into DB
+            tripRuntimeExceptionDao.create(trip);
+            Log.d(Constants.TAG, trip.toString());
 
-        //persist Users in DB
-        saveUserInDB(context, trip.getFriendList());
+            //persist Users in DB
+            saveUserInDB(context, trip.getFriendList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //Release helper after using
         OpenHelperManager.releaseHelper();
     }
 
     private void saveUserInDB(Context context, Collection<UserTrip> friendList) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        RuntimeExceptionDao<UserTrip, Integer> tripRuntimeExceptionDao =
-                dataBaseHelper.getUserTripRuntimeExceptionDao();
-        for (UserTrip userTrip : friendList) {
-            tripRuntimeExceptionDao.create(userTrip);
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            RuntimeExceptionDao<UserTrip, Integer> tripRuntimeExceptionDao =
+                    dataBaseHelper.getUserTripRuntimeExceptionDao();
+            for (UserTrip userTrip : friendList) {
+                tripRuntimeExceptionDao.create(userTrip);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
     }
 
     public List<Trip> fetchTrips(Context context) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        List<Trip> trips = null;
-        if (dataBaseHelper != null) {
-            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
-                    dataBaseHelper.getTripRuntimeExceptionDao();
-            trips = tripRuntimeExceptionDao.queryForAll();
-            /**
-             * Put Set of Trip Users in individual trip
-             */
-            RuntimeExceptionDao<UserTrip, Integer> userTripDAO =
-                    dataBaseHelper.getUserTripRuntimeExceptionDao();
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            List<Trip> trips;
+            if (dataBaseHelper != null) {
+                RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                        dataBaseHelper.getTripRuntimeExceptionDao();
+                trips = tripRuntimeExceptionDao.queryForAll();
 
-            for (Trip trip : trips) {
-                trip.setFriendList((Collection<UserTrip>) userTripDAO.queryForEq("tripId", trip.getTripId()));
+                // Put Set of Trip Users in individual trip
+
+                RuntimeExceptionDao<UserTrip, Integer> userTripDAO =
+                        dataBaseHelper.getUserTripRuntimeExceptionDao();
+
+                for (Trip trip : trips) {
+                    trip.setFriendList(userTripDAO.queryForEq("tripId", trip.getTripId()));
+                }
+                return trips;
             }
-            return trips;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -140,29 +164,37 @@ public class Persistence extends Activity {
      * @param tripId
      */
     public void activateTrip(Context context, Integer tripId) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        if (dataBaseHelper != null) {
-            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
-                    dataBaseHelper.getTripRuntimeExceptionDao();
-            List<Trip> trips = fetchTrips(context);
-            for (Trip trip : trips) {
-                trip.setActive(false);
-                if (tripId.equals(trip.getTripId())) {
-                    trip.setActive(true);
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            if (dataBaseHelper != null) {
+                RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                        dataBaseHelper.getTripRuntimeExceptionDao();
+                List<Trip> trips = fetchTrips(context);
+                for (Trip trip : trips) {
+                    trip.setActive(false);
+                    if (tripId.equals(trip.getTripId())) {
+                        trip.setActive(true);
+                    }
+                    tripRuntimeExceptionDao.update(trip);
                 }
-                tripRuntimeExceptionDao.update(trip);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         //Release helper after using
         OpenHelperManager.releaseHelper();
     }
 
     public void deleteTrip(Context context, Integer tripId) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        if (dataBaseHelper != null) {
-            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
-                    dataBaseHelper.getTripRuntimeExceptionDao();
-            tripRuntimeExceptionDao.deleteById(tripId);
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            if (dataBaseHelper != null) {
+                RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                        dataBaseHelper.getTripRuntimeExceptionDao();
+                tripRuntimeExceptionDao.deleteById(tripId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         //Release helper after using
         OpenHelperManager.releaseHelper();
@@ -175,22 +207,26 @@ public class Persistence extends Activity {
      * and notification will be send subsequently
      */
     public List<Trip> fetchActiveTrip(Context context) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
         List<Trip> trips = null;
-        if (dataBaseHelper != null) {
-            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
-                    dataBaseHelper.getTripRuntimeExceptionDao();
-            trips = tripRuntimeExceptionDao.queryForEq("active", true);
-            /**
-             * Put Set of Trip Users in individual trip
-             */
-            RuntimeExceptionDao<UserTrip, Integer> userTripDAO =
-                    dataBaseHelper.getUserTripRuntimeExceptionDao();
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            if (dataBaseHelper != null) {
+                RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                        dataBaseHelper.getTripRuntimeExceptionDao();
+                trips = tripRuntimeExceptionDao.queryForEq("active", true);
+                /**
+                 * Put Set of Trip Users in individual trip
+                 */
+                RuntimeExceptionDao<UserTrip, Integer> userTripDAO =
+                        dataBaseHelper.getUserTripRuntimeExceptionDao();
 
-            for (Trip trip : trips) {
-                trip.setFriendList((Collection<UserTrip>) userTripDAO.queryForEq("tripId", trip.getTripId()));
+                for (Trip trip : trips) {
+                    trip.setFriendList(userTripDAO.queryForEq("tripId", trip.getTripId()));
+                }
+                return trips;
             }
-            return trips;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         //Release helper after using
         OpenHelperManager.releaseHelper();
@@ -199,21 +235,59 @@ public class Persistence extends Activity {
     }
 
     public void updateTrip(Context context, Trip trip) {
-        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
-        RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao = null;
-        if (dataBaseHelper != null) {
-            tripRuntimeExceptionDao =
-                    dataBaseHelper.getTripRuntimeExceptionDao();
-        }
-        if (tripRuntimeExceptionDao != null) {
-            tripRuntimeExceptionDao.update(trip);
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao = null;
+            if (dataBaseHelper != null) {
+                tripRuntimeExceptionDao =
+                        dataBaseHelper.getTripRuntimeExceptionDao();
+            }
+            if (tripRuntimeExceptionDao != null) {
+                tripRuntimeExceptionDao.update(trip);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         //Release helper after using
         OpenHelperManager.releaseHelper();
     }
 
-    public List<UserBlocked> fetchListOfBlockedUsers() {
-        //TODO
-        return null;
+    public List<UserBlocked> fetchListOfBlockedUsers(Context context) {
+
+        List<UserBlocked> list = null;
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            RuntimeExceptionDao<UserBlocked, Integer> userBlockedRuntimeExceptionDao =
+                    dataBaseHelper.getUserBlockedRuntimeExceptionDao();
+            list = userBlockedRuntimeExceptionDao.queryForAll();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void blockUser(Context context, UserBlocked userBlocked) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        try {
+            RuntimeExceptionDao<UserBlocked, Integer> userBlockedRuntimeExceptionDao =
+                    dataBaseHelper.getUserBlockedRuntimeExceptionDao();
+            userBlockedRuntimeExceptionDao.create(userBlocked);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OpenHelperManager.releaseHelper();
+    }
+
+    public void unblockUser(Context context, UserBlocked userBlocked) {
+        dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+        try {
+            RuntimeExceptionDao<UserBlocked, Integer> userBlockedRuntimeExceptionDao =
+                    dataBaseHelper.getUserBlockedRuntimeExceptionDao();
+            userBlockedRuntimeExceptionDao.delete(userBlocked);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OpenHelperManager.releaseHelper();
     }
 }

@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Collection;
+import java.util.Date;
 
 import me.sahiljain.tripTracker.enumeration.LocationStatus;
 
@@ -102,11 +103,25 @@ public class Trip {
     private Week week;
 
     /**
-     * Indicates the current status of Trip
-     * This will be updated in the class NotificationService
+     * Indicates the current status of Trip.
+     * This will be updated in the class NotificationService every time a notification is sent
      */
     @DatabaseField
     private LocationStatus locationStatus = LocationStatus.SOURCE;
+
+    /**
+     * Indicates the time when a notification was sent while leaving/entering source.
+     * Notifications are sent only is time gap is >2 hours
+     */
+    @DatabaseField
+    private Date sourceTimeStamp = null;
+
+    /**
+     * Indicates the time when a notification was sent while leaving/entering destination.
+     * Notifications are sent only is time gap is >2 hours
+     */
+    @DatabaseField
+    private Date destinationTimeStamp = null;
 
     public Week getWeek() {
         return week;
@@ -218,5 +233,21 @@ public class Trip {
 
     public void setLocationStatus(LocationStatus locationStatus) {
         this.locationStatus = locationStatus;
+    }
+
+    public Date getSourceTimeStamp() {
+        return sourceTimeStamp;
+    }
+
+    public void setSourceTimeStamp(Date sourceTimeStamp) {
+        this.sourceTimeStamp = sourceTimeStamp;
+    }
+
+    public Date getDestinationTimeStamp() {
+        return destinationTimeStamp;
+    }
+
+    public void setDestinationTimeStamp(Date destinationTimeStamp) {
+        this.destinationTimeStamp = destinationTimeStamp;
     }
 }

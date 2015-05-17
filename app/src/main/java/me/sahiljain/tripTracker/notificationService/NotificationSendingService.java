@@ -13,6 +13,7 @@ import android.os.IBinder;
 import com.parse.ParsePush;
 
 import java.util.Collection;
+import java.util.Date;
 
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
@@ -80,46 +81,71 @@ public class NotificationSendingService extends Service {
     }
 
     private void analyzeLocation(Trip activeTrip, Location location) {
+        /**
+         * In every case we also add the check whether the last notification sent on the source/destination
+         * was made <2 hours. If yes, don't send the notification.
+         */
 
         //Left Source
-        if (activeTrip.getLocationStatus().equals(LocationStatus.SOURCE) &&
+        if (getTimeDifference(activeTrip.getSourceTimeStamp()) &&
+                activeTrip.getLocationStatus().equals(LocationStatus.SOURCE) &&
                 location.distanceTo(getLocation(activeTrip.getLatSource(),
                         activeTrip.getLongSource())) > 500) {
             sendNotification(((App) getApplicationContext()).getUserName() + " has left " +
                     activeTrip.getSourceName());
             activeTrip.setLocationStatus(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION);
+            activeTrip.setSourceTimeStamp(new Date());
             updateLocationStatusOfTrip(activeTrip);
 
         }
         //Left Destination
-        else if (activeTrip.getLocationStatus().equals(LocationStatus.DESTINATION) &&
+        else if (getTimeDifference(activeTrip.getDestinationTimeStamp()) &&
+                activeTrip.getLocationStatus().equals(LocationStatus.DESTINATION) &&
                 location.distanceTo(getLocation(activeTrip.getLatDestination(),
                         activeTrip.getLongDestination())) > 500) {
             sendNotification(((App) getApplicationContext()).getUserName() + " has left " +
                     activeTrip.getDestinationName());
             activeTrip.setLocationStatus(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION);
+            activeTrip.setDestinationTimeStamp(new Date());
             updateLocationStatusOfTrip(activeTrip);
 
         } else if (activeTrip.getLocationStatus().equals(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION)) {
 
             //Reached  Source
-            if (location.distanceTo(getLocation(activeTrip.getLatSource(),
-                    activeTrip.getLongSource())) < 500) {
+            if (getTimeDifference(activeTrip.getSourceTimeStamp()) &&
+                    location.distanceTo(getLocation(activeTrip.getLatSource(),
+                            activeTrip.getLongSource())) < 500) {
                 sendNotification(((App) getApplicationContext()).getUserName() + " has reached " +
                         activeTrip.getSourceName());
                 activeTrip.setLocationStatus(LocationStatus.SOURCE);
+                activeTrip.setSourceTimeStamp(new Date());
                 updateLocationStatusOfTrip(activeTrip);
 
             }
             //Reached  destination
-            else if (location.distanceTo(getLocation(activeTrip.getLatDestination(),
-                    activeTrip.getLongDestination())) < 500) {
+            else if (getTimeDifference(activeTrip.getDestinationTimeStamp()) &&
+                    location.distanceTo(getLocation(activeTrip.getLatDestination(),
+                            activeTrip.getLongDestination())) < 500) {
                 sendNotification(((App) getApplicationContext()).getUserName() + " has reached " +
                         activeTrip.getDestinationName());
                 activeTrip.setLocationStatus(LocationStatus.DESTINATION);
+                activeTrip.setDestinationTimeStamp(new Date());
                 updateLocationStatusOfTrip(activeTrip);
             }
         }
+    }
+
+    private boolean getTimeDifference(Date sourceTimeStamp) {
+        if (sourceTimeStamp != null) {
+            long diff = new Date().getTime() - sourceTimeStamp.getTime();
+            long diffHours = diff / (60 * 60 * 1000);
+            if (diffHours > 2) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void updateLocationStatusOfTrip(Trip activeTrip) {
