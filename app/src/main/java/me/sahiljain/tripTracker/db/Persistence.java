@@ -297,4 +297,27 @@ public class Persistence extends Activity {
         }
         OpenHelperManager.releaseHelper();
     }
+
+    public Trip fetchTripById(Context context, int tripId) {
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            Trip trip;
+            if (dataBaseHelper != null) {
+                RuntimeExceptionDao<Trip, Integer> tripRuntimeExceptionDao =
+                        dataBaseHelper.getTripRuntimeExceptionDao();
+                trip = tripRuntimeExceptionDao.queryForId(tripId);
+
+                // Put Set of Trip Users in individual trip
+
+                RuntimeExceptionDao<UserTrip, Integer> userTripDAO =
+                        dataBaseHelper.getUserTripRuntimeExceptionDao();
+
+                trip.setFriendList(userTripDAO.queryForEq("tripId", trip.getTripId()));
+                return trip;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

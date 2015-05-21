@@ -3,16 +3,23 @@ package me.sahiljain.tripTracker.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Iterator;
+
 import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.db.Persistence;
+import me.sahiljain.tripTracker.entity.Trip;
+import me.sahiljain.tripTracker.entity.UserTrip;
 
 /**
  * Created by sahil on 6/5/15.
@@ -22,6 +29,7 @@ public class TripDetailedActivity extends Activity {
     private Button setDefault;
     private Button deleteTrip;
     private TextView tripNameTV;
+    private ScrollView scrollView;
 
     private int tripId;
     private String tripName;
@@ -46,6 +54,7 @@ public class TripDetailedActivity extends Activity {
         preferences = this.getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, 0);
         currentColor = preferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
         tripNameTV.setBackgroundColor(currentColor);
+        populateRecipientsInScrollView(tripId);
 
         deleteTrip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +77,34 @@ public class TripDetailedActivity extends Activity {
         windowManager.dimAmount = 0.75f;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
+
+    private void populateRecipientsInScrollView(int tripId) {
+        scrollView = (ScrollView) findViewById(R.id.scrollView_recipients);
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        persistence = new Persistence();
+        TextView textViewHeading = new TextView(this);
+        textViewHeading.setText(Constants.RECIPIENTS);
+        textViewHeading.setTextColor(Color.BLACK);
+        linearLayout.addView(textViewHeading);
+
+        Trip trip = persistence.fetchTripById(this, tripId);
+        if (trip != null) {
+            if (trip.getFriendList() != null) {
+                Iterator<UserTrip> userTripIterator = trip.getFriendList().iterator();
+                while (userTripIterator.hasNext()) {
+                    String userId = userTripIterator.next().getUserID().replace("c", "");
+                    TextView textView = new TextView(this);
+                    textView.setText(userId);
+                    textView.setBackgroundColor(currentColor);
+                    textView.setTextColor(Color.WHITE);
+                    linearLayout.addView(textView);
+                }
+            }
+        }
+        scrollView.addView(linearLayout);
+    }
+
 
     private void activateTrip(int tripId, String tripName) {
         persistence = new Persistence();

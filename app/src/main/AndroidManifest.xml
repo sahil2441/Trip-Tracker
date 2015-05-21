@@ -66,7 +66,7 @@
         <!-- Making Tab Activity the main activity now -->
         <activity
             android:name="me.sahiljain.tripTracker.main.TabMainActivity"
-            android:label="Trip Tracker"
+            android:label="Trip Tracer"
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
 

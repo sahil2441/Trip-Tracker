@@ -125,4 +125,5 @@ public class Constants {
      * Columns
      */
     public static final String DATE = "date";
+    public static final String RECIPIENTS = "Recipients:";
 }
