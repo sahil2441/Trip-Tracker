@@ -79,6 +79,13 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
             case 2:
                 this.onPushOpen(context, intent);
         }
+        /**
+         * For Notification Service
+         * This ensures that service resumes on restarting the phone
+         */
+        Intent startNotificationServiceIntent = new Intent(context, NotificationSendingService.class);
+        context.startService(startNotificationServiceIntent);
+
     }
 
 

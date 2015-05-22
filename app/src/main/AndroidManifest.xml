@@ -282,7 +282,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
                 <!-- For starting service on Reboot-->
-                <action android:name="android.intent.action._BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
 
                 <!-- HTC devices don't seem to catch BOOT_COMPLETED-->
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -312,7 +312,7 @@
             <intent-filter>
                 <!-- Receives the actual messages. -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="android.intent.action._BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
 
                 <!-- HTC devices dont seem to catch BOOT_COMPLETED-->
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
