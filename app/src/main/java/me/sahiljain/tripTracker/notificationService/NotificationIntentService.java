@@ -83,8 +83,6 @@ public class NotificationIntentService extends IntentService {
                     saveMessageToDataBase(message, timeInString, new Date(),
                             getSenderID(extras.toString()));
                 }
-                // Release the wake lock provided by the WakefulBroadcastReceiver.
-//                WakefulReceiver.completeWakefulIntent(intent);
             }
         }
 

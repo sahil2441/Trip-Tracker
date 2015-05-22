@@ -1,8 +1,10 @@
 package me.sahiljain.tripTracker.notificationService;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.parse.ParsePushBroadcastReceiver;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.UserBlocked;
+import me.sahiljain.tripTracker.main.Constants;
 
 /**
  * Created by sahil on 8/2/15.
@@ -34,18 +37,26 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
         /**
          * Check if user belongs to the block list
          */
+        Log.d(Constants.TAG + " Thread id:", String.valueOf(Thread.currentThread().getId()));
         boolean isUserBlocked;
         Bundle extras = intent.getExtras();
+        Log.i(Constants.NOTIFICATION_SERVICE_TAG, "ParseNotificationReceiver, Received : " + extras.toString());
 
-        //Waste some time
-        //TODO: This is tricky
         String senderID = null;
         //It needs some time process the variable extras--found while debugging
         if (extras != null) {
+            Log.d(Constants.TAG + " Thread id:", String.valueOf(Thread.currentThread().getId()));
             senderID = (getSenderID(extras.toString()));
         }
         isUserBlocked = checkIfUserBlocked(context, senderID);
 
+        /**
+         * For notification intent service
+         * Explicitly specify that NotificationIntentService will handle the intent.
+         */
+
+        ComponentName componentName = new ComponentName(context.getPackageName(),
+                NotificationIntentService.class.getName());
 
         String intentAction = intent.getAction();
         byte var5 = -1;
@@ -71,6 +82,9 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
                 //Call parent's onPushReceive only if user is not blocked
                 if (!isUserBlocked) {
                     this.onPushReceive(context, intent);
+                    //Start service that saves message into DB
+                    intent.setComponent(componentName);
+                    context.startService(intent);
                 }
                 break;
             case 1:
@@ -79,18 +93,20 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
             case 2:
                 this.onPushOpen(context, intent);
         }
+
         /**
          * For Notification Service
          * This ensures that service resumes on restarting the phone
          */
         Intent startNotificationServiceIntent = new Intent(context, NotificationSendingService.class);
         context.startService(startNotificationServiceIntent);
-
     }
 
 
     private String getSenderID(String string) {
+        Log.d(Constants.TAG + " Thread id:", String.valueOf(Thread.currentThread().getId()));
         if (string != null && string.contains("#")) {
+            Log.d(Constants.TAG + " Thread id:", String.valueOf(Thread.currentThread().getId()));
 
             String senderID = "";
             int indexOfHash = string.indexOf("#");

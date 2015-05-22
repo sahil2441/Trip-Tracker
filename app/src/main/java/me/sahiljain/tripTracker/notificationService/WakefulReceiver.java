@@ -1,7 +1,5 @@
 package me.sahiljain.tripTracker.notificationService;
 
-import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -11,6 +9,9 @@ import android.support.v4.content.WakefulBroadcastReceiver;
  */
 
 /**
+ * No use if this class as of now.
+ * Same work is done by ParseNotificationReceiver.
+ *
  * This {@code WakefulBroadcastReceiver} takes care of creating and managing a
  * partial wake lock for your app. It passes off the work of processing the GCM
  * message to an {@code IntentService}, while ensuring that the device does not
@@ -23,19 +24,24 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 public class WakefulReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+/*
         // Explicitly specify that NotificationIntentService will handle the intent.
         ComponentName componentName = new ComponentName(context.getPackageName(),
                 NotificationIntentService.class.getName());
+        Log.d(Constants.TAG + "Thrwakeful:", String.valueOf(Thread.currentThread().getId()));
 
         // Start the service, keeping the device awake while it is launching.
-        startWakefulService(context, intent.setComponent(componentName));
-        setResultCode(Activity.RESULT_OK);
+//        startWakefulService(context, intent.setComponent(componentName));
+//        setResultCode(Activity.RESULT_OK);
 
-        /**
+        */
+/**
          * For Notification Service
          * This ensures that service resumes on restarting the phone
-         */
+ *//*
+
         Intent startNotificationServiceIntent = new Intent(context, NotificationSendingService.class);
         context.startService(startNotificationServiceIntent);
+*/
     }
 }

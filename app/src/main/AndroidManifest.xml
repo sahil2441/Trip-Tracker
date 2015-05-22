@@ -66,7 +66,7 @@
         <!-- Making Tab Activity the main activity now -->
         <activity
             android:name="me.sahiljain.tripTracker.main.TabMainActivity"
-            android:label="Trip Tracer"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
 
@@ -282,7 +282,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
                 <!-- For starting service on Reboot-->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action._BOOT_COMPLETED" />
 
                 <!-- HTC devices don't seem to catch BOOT_COMPLETED-->
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -305,21 +305,23 @@
         </receiver>
 
         <!--This receiver's job is to trigger Notification Intent Service-->
-        <receiver
-            android:name=".notificationService.WakefulReceiver"
-            android:enabled="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <!-- Receives the actual messages. -->
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <!--
+                <receiver
+                    android:name=".notificationService.WakefulReceiver"
+                    android:enabled="true"
+                    android:permission="com.google.android.c2dm.permission.SEND">
+                    <intent-filter>
+                        &lt;!&ndash; Receives the actual messages. &ndash;&gt;
+                        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                        <action android:name="android.intent.action._BOOT_COMPLETED" />
 
-                <!-- HTC devices dont seem to catch BOOT_COMPLETED-->
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                        &lt;!&ndash; HTC devices dont seem to catch BOOT_COMPLETED&ndash;&gt;
+                        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
 
-                <category android:name="me.sahiljain.tripTracker" />
-            </intent-filter>
-        </receiver>
+                        <category android:name="me.sahiljain.tripTracker" />
+                    </intent-filter>
+                </receiver>
+        -->
 
         <!-- Service to send Notifications-->
         <service android:name="me.sahiljain.tripTracker.notificationService.NotificationIntentService" />
