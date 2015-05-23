@@ -412,15 +412,15 @@ ADDED from AndroidManifest.xml:299:17
 	android:name
 		ADDED from AndroidManifest.xml:299:25
 receiver#me.sahiljain.tripTracker.notificationService.WakefulReceiver
-ADDED from AndroidManifest.xml:308:9
+ADDED from AndroidManifest.xml:308:17
 	android:enabled
-		ADDED from AndroidManifest.xml:310:13
+		ADDED from AndroidManifest.xml:310:21
 	android:permission
-		ADDED from AndroidManifest.xml:311:13
+		ADDED from AndroidManifest.xml:311:21
 	android:name
-		ADDED from AndroidManifest.xml:309:13
-intent-filter#android.intent.action.QUICKBOOT_POWERON+android.intent.action._BOOT_COMPLETED+com.google.android.c2dm.intent.RECEIVE+me.sahiljain.tripTracker
-ADDED from AndroidManifest.xml:312:13
+		ADDED from AndroidManifest.xml:309:21
+intent-filter#android.intent.action.BOOT_COMPLETED+android.intent.action.QUICKBOOT_POWERON+com.google.android.c2dm.intent.RECEIVE+me.sahiljain.tripTracker
+ADDED from AndroidManifest.xml:312:21
 service#me.sahiljain.tripTracker.notificationService.NotificationIntentService
 ADDED from AndroidManifest.xml:325:9
 	android:name
