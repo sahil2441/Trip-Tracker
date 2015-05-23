@@ -60,6 +60,7 @@ public class NotificationIntentService extends IntentService {
 
             String messageType = googleCloudMessaging.getMessageType(intent);
             if (!extras.isEmpty()) { // has effect of unparcelling Bundle
+                Log.d(Constants.TAG + "Th DB id:", String.valueOf(Thread.currentThread().getId()));
 
             /*
              * Filter messages based on message type. Since it is likely that GCM will be
@@ -85,7 +86,6 @@ public class NotificationIntentService extends IntentService {
                 }
             }
         }
-
     }
 
     /**

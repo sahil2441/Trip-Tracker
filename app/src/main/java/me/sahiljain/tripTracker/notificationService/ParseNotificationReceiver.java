@@ -1,6 +1,5 @@
 package me.sahiljain.tripTracker.notificationService;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,14 +49,6 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
         }
         isUserBlocked = checkIfUserBlocked(context, senderID);
 
-        /**
-         * For notification intent service
-         * Explicitly specify that NotificationIntentService will handle the intent.
-         */
-
-        ComponentName componentName = new ComponentName(context.getPackageName(),
-                NotificationIntentService.class.getName());
-
         String intentAction = intent.getAction();
         byte var5 = -1;
         switch (intentAction.hashCode()) {
@@ -82,9 +73,6 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
                 //Call parent's onPushReceive only if user is not blocked
                 if (!isUserBlocked) {
                     this.onPushReceive(context, intent);
-                    //Start service that saves message into DB
-                    intent.setComponent(componentName);
-                    context.startService(intent);
                 }
                 break;
             case 1:

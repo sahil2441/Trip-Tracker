@@ -305,23 +305,21 @@
         </receiver>
 
         <!--This receiver's job is to trigger Notification Intent Service-->
-        <!--
                 <receiver
                     android:name=".notificationService.WakefulReceiver"
                     android:enabled="true"
                     android:permission="com.google.android.c2dm.permission.SEND">
                     <intent-filter>
-                        &lt;!&ndash; Receives the actual messages. &ndash;&gt;
+                        <!-- Receives the actual messages. -->
                         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                        <action android:name="android.intent.action._BOOT_COMPLETED" />
+                        <action android:name="android.intent.action.BOOT_COMPLETED" />
 
-                        &lt;!&ndash; HTC devices dont seem to catch BOOT_COMPLETED&ndash;&gt;
+                        <!-- HTC devices dont seem to catch BOOT_COMPLETED-->
                         <action android:name="android.intent.action.QUICKBOOT_POWERON" />
 
                         <category android:name="me.sahiljain.tripTracker" />
                     </intent-filter>
                 </receiver>
-        -->
 
         <!-- Service to send Notifications-->
         <service android:name="me.sahiljain.tripTracker.notificationService.NotificationIntentService" />
