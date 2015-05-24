@@ -15,10 +15,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.sahiljain.tripTracker.R;
-import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.Constants;
-import me.sahiljain.tripTracker.main.TabMainActivityUpdateListener;
 import me.sahiljain.tripTracker.main.TripDetailedActivity;
 
 /**
@@ -30,15 +28,11 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
 
     private List<Trip> trips;
 
-    private Persistence persistence;
-
     private SharedPreferences preferences;
 
     private int activeTripId;
 
     private int currentColor;
-
-    private TabMainActivityUpdateListener tabMainActivityUpdateListener;
 
     public TripsAdapter(Context context, List<Trip> resource) {
         super(context, R.layout.trips_list_item, resource);
@@ -46,7 +40,6 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
         this.context = context;
         preferences = context.getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, 0);
         activeTripId = preferences.getInt(Constants.ACTIVE_TRIP, 0);
-        persistence = new Persistence();
         currentColor = preferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
     }
 
@@ -61,7 +54,6 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.logo_trips_list_item);
         imageView.setImageResource(R.drawable.logo_trip);
 
-        final String name = trips.get(position).getTripName();
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,5 +96,4 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
                 }).
                 show();
     }
-
 }

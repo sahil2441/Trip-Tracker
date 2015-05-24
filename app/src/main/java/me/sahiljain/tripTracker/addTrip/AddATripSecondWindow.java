@@ -199,6 +199,7 @@ public class AddATripSecondWindow extends AppCompatActivity implements GoogleMap
 
     private void activateSetOnMapClickListener() {
         mMap.setOnMapClickListener(this);
+        mMap.clear();
     }
 
 
@@ -286,6 +287,12 @@ public class AddATripSecondWindow extends AppCompatActivity implements GoogleMap
         toast.show();
         mMap.addMarker(new MarkerOptions().position(latLng).
                 icon(BitmapDescriptorFactory.fromResource(R.drawable.source_icon_small)));
+        deActivateSetOnMapClickListener();
+    }
+
+    private void deActivateSetOnMapClickListener() {
+        //To disable a listener simple set it to null since it will only be called if it's not null.
+        mMap.setOnMapClickListener(null);
     }
 
     private void saveSourceCoordinates(LatLng latLng) {

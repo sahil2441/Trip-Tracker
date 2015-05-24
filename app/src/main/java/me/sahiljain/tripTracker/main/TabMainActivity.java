@@ -87,7 +87,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
 
         /**
          * Initialize screen only if view is null
-         * --it's a fix to that long time bug--where the screen doesnt render properly from
+         * --it's a fix to that long time bug--where the screen doesn't render properly from
          * on resume.
          */
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -115,7 +115,6 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
     @Override
     public void onUpdateCallToTabMainActivity() {
         //Refresh List View here
-        String a = null;
 
     }
 
@@ -368,14 +367,17 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         }
         currentColor = newColor;
 
-        /**
-         * save current color in shared preferences
-         */
-
+        // save current color in shared preferences
         preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Constants.CURRENT_COLOR, currentColor);
-        editor.apply();
+
+        if (editor.commit()) {
+            //Reload Adapter for View pager--long long time bug
+            TabMainActivityAdapter tabMainActivityAdapter = new TabMainActivityAdapter(getSupportFragmentManager());
+            tabMainActivityAdapter.notifyDataSetChanged();
+            viewPager.setAdapter(tabMainActivityAdapter);
+        }
     }
 
     /**
