@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Kahan Ho</string>
+    <string name="app_name">Musafir</string>
     <string name="title_activity_maps">Map</string>
     <string name="settings">settings</string>
     <string name="setUpHomeLoc">Set up Home Location</string>
@@ -15,13 +15,13 @@
     <string name="google_map_api_key">AIzaSyDlN2ZO5jrCofudbFbrJpFuf7U2mGjvXX4</string>
 
     <!--Intro view-->
-    <string name="Page1Title">Kahan Ho</string>
+    <string name="Page1Title">Musafir</string>
     <string name="Page2Title">Fast</string>
     <string name="Page3Title">Free</string>
     <string name="Page5Title">Powerful</string>
     <string name="Page1Message">The world\'s fastest tracking app.</string>
     <string name="Page2Message">Track your friends and family.</string>
-    <string name="Page3Message">Kahan Ho is free forever. No subscription fees.</string>
+    <string name="Page3Message">Musafir is free forever. No subscription fees.</string>
     <string name="Page5Message">Create as many trips as you wish.</string>
     <string name="StartTracking">START TRACKING</string>
 
