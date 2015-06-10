@@ -25,6 +25,10 @@ import me.sahiljain.tripTracker.main.Constants;
  * go back to sleep in the transition. The {@code IntentService} calls
  * {@code GcmBroadcastReceiver.completeWakefulIntent()} when it is ready to
  * release the wake lock.
+ *
+ * The objective of overriding ParsePushBroadcastReceiver is to block the users that are present in
+ * the user's block list. However, this still needs a lot of work since the information is not
+ * available, except while we debug. Weird!
  */
 
 

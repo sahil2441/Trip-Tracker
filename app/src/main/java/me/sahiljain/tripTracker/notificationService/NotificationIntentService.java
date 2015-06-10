@@ -78,7 +78,10 @@ public class NotificationIntentService extends IntentService {
 
                     Log.i(Constants.NOTIFICATION_SERVICE_TAG, "Received : " + extras.toString());
                     String time = getTime();
-                    Date date = new Date();
+                    Date date = getDateFromJSONObject(extras);
+                    if (date == null) {
+                        date = new Date();
+                    }
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                     String timeInString = time + " " + sdf.format(date).toString();
                     saveMessageToDataBase(message, timeInString, new Date(),
@@ -86,6 +89,15 @@ public class NotificationIntentService extends IntentService {
                 }
             }
         }
+    }
+
+    private Date getDateFromJSONObject(Bundle extras) {
+        try {
+            return extras.getParcelable(Constants.DATE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

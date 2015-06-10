@@ -42,7 +42,6 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:3.23.0'
     compile 'com.parse.bolts:bolts-android:1.0'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
-    compile files('libs/cognalys.jar')
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.shamanland:fab:0.0.8'
     compile 'joda-time:joda-time:2.7' // for joda

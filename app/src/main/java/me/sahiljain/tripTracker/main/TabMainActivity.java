@@ -40,6 +40,7 @@ import me.sahiljain.tripTracker.addTrip.AddATripSecondWindow;
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.notificationService.NotificationSendingService;
+import me.sahiljain.tripTracker.verification.IntroActivity;
 
 /**
  * Created by sahil on 21/3/15.

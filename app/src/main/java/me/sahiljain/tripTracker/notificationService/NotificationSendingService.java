@@ -12,6 +12,9 @@ import android.os.IBinder;
 
 import com.parse.ParsePush;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collection;
 import java.util.Date;
 
@@ -139,7 +142,7 @@ public class NotificationSendingService extends Service {
         if (sourceTimeStamp != null) {
             long diff = new Date().getTime() - sourceTimeStamp.getTime();
             long diffHours = diff / (60 * 60 * 1000);
-            if (diffHours > 2) {
+            if (diffHours > 1) {
                 return true;
             } else {
                 return false;
@@ -181,6 +184,12 @@ public class NotificationSendingService extends Service {
         Collection<UserTrip> userTrips = this.getActiveTrip().getFriendList();
         ParsePush push;
         String userID;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(Constants.DATE, new Date());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         /**
          * Send Push Message
@@ -188,11 +197,14 @@ public class NotificationSendingService extends Service {
         preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         userID = preferences.getString(Constants.USER_NAME, "");
         message += "#" + userID;
+        //Append time stamp
+        message += "!" + new Date().toString();
         if (userTrips != null && userTrips.size() > 0) {
             for (UserTrip userTrip : userTrips) {
                 push = new ParsePush();
                 push.setChannel("c" + userTrip.getUserID());
                 push.setMessage(message);
+                push.setData(jsonObject);
                 push.sendInBackground();
             }
         }
@@ -200,10 +212,6 @@ public class NotificationSendingService extends Service {
 
     public Trip getActiveTrip() {
         return activeTrip;
-    }
-
-    public void setActiveTrip(Trip activeTrip) {
-        this.activeTrip = activeTrip;
     }
 
     public Persistence getPersistence() {

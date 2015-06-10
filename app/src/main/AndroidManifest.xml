@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <permission
         android:name="me.sahiljain.tripTracker.permission.C2D_MESSAGE"
@@ -162,18 +164,18 @@
         <!-- Another child of the main activity -Technically not a child because on back press
         it doesnt go to main activity>-->
         <activity
-            android:name="me.sahiljain.tripTracker.main.IntroActivity"
+            android:name=".verification.IntroActivity"
             android:label="Welcome!" />
 
         <!-- A child of the intro activity -->
         <activity
-            android:name="me.sahiljain.tripTracker.main.SignUpActivity"
+            android:name=".verification.SignUpActivity"
             android:label="@string/YourPhone"
-            android:parentActivityName="me.sahiljain.tripTracker.main.IntroActivity">
+            android:parentActivityName=".verification.IntroActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.sahiljain.tripTracker.main.IntroActivity" />
+                android:value=".verification.IntroActivity" />
         </activity>
 
         <!-- Another child of the main activity -->
@@ -305,21 +307,21 @@
         </receiver>
 
         <!--This receiver's job is to trigger Notification Intent Service-->
-                <receiver
-                    android:name=".notificationService.WakefulReceiver"
-                    android:enabled="true"
-                    android:permission="com.google.android.c2dm.permission.SEND">
-                    <intent-filter>
-                        <!-- Receives the actual messages. -->
-                        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <receiver
+            android:name=".notificationService.WakefulReceiver"
+            android:enabled="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
 
-                        <!-- HTC devices dont seem to catch BOOT_COMPLETED-->
-                        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <!-- HTC devices dont seem to catch BOOT_COMPLETED-->
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
 
-                        <category android:name="me.sahiljain.tripTracker" />
-                    </intent-filter>
-                </receiver>
+                <category android:name="me.sahiljain.tripTracker" />
+            </intent-filter>
+        </receiver>
 
         <!-- Service to send Notifications-->
         <service android:name="me.sahiljain.tripTracker.notificationService.NotificationIntentService" />
@@ -327,5 +329,14 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="436bb5e61ae900c10fbab6b38ddd628bd1592b32" />
+
+        <!-- For receiving SMS sent to verify mobile number for the first time-->
+        <receiver android:name=".verification.SMSReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+        <activity android:name=".verification.VerificationActivity" />
+
     </application>
 </manifest>

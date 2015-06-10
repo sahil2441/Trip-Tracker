@@ -1,4 +1,4 @@
-package me.sahiljain.tripTracker.main;
+package me.sahiljain.tripTracker.verification;
 
 import android.app.Activity;
 import android.content.Intent;
