@@ -171,6 +171,7 @@
         <activity
             android:name=".verification.SignUpActivity"
             android:label="@string/YourPhone"
+            android:noHistory="true"
             android:parentActivityName=".verification.IntroActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -336,7 +337,10 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <activity android:name=".verification.VerificationActivity" />
+        <activity
+            android:name=".verification.VerificationActivity"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay" />
 
     </application>
 </manifest>

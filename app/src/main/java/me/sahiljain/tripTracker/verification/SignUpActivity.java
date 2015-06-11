@@ -113,7 +113,8 @@ public class SignUpActivity extends Activity {
 
     private void startCountDownTimer() {
         timerTextField = (TextView) findViewById(R.id.timerTextField);
-        new CountDownTimer(300000, 1000) {
+        timerTextField.setVisibility(View.VISIBLE);
+        new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timerTextField.setText("Seconds Remaining: " + millisUntilFinished / 1000);
@@ -131,6 +132,7 @@ public class SignUpActivity extends Activity {
         final SharedPreferences preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         final String mobileNumber = preferences.getString(Constants.MOBILE_NO, "");
         sendSMStoSelf(mobileNumber);
+        //SMS  is received in the Broadcast Receiver SMSReceiver
         Log.d(Constants.TAG, "SMS verification Started- SMS Sent");
     }
 

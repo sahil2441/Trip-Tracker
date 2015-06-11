@@ -2,8 +2,6 @@ package me.sahiljain.tripTracker.verification;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -121,32 +119,24 @@ public class VerificationActivity extends Activity {
 
         boolean status = preferences.getBoolean(Constants.FIRST_LOGIN, true);
         if (status) {
-            showVerificationSuccessfulDialog();
+            showVerificationSuccessfulToast();
             status = false;
             editor.putBoolean(Constants.FIRST_LOGIN, status);
             editor.apply();
         }
     }
 
-    private void showVerificationSuccessfulDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Success!")
-                .setMessage("Your Mobile number has been Successfully Verified.")
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        openMainTabActivityOnTopOfStack();
-                    }
-                })
-                .show();
+    private void showVerificationSuccessfulToast() {
+        Toast.makeText(getBaseContext(),
+                "Verification Successful!", Toast.LENGTH_LONG).show();
+        openMainTabActivityOnTopOfStack();
     }
 
     private void openMainTabActivityOnTopOfStack() {
         //Start Main Activity
         final Intent intentMainActivity = new Intent(this, TabMainActivity.class);
-        intentMainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentMainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentMainActivity);
-        finish();
     }
 }
 
