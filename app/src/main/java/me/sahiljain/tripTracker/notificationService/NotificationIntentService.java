@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -77,27 +76,34 @@ public class NotificationIntentService extends IntentService {
                     String message = getMessageFromBundle(extras.toString());
 
                     Log.i(Constants.NOTIFICATION_SERVICE_TAG, "Received : " + extras.toString());
-                    String time = getTime();
-                    Date date = getDateFromJSONObject(extras);
-                    if (date == null) {
-                        date = new Date();
-                    }
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                    String timeInString = time + " " + sdf.format(date).toString();
+                    String timeInString = getTimeFromMessage(extras.toString());
+                    String senderId = getSenderIdFromMessage(extras.toString());
                     saveMessageToDataBase(message, timeInString, new Date(),
-                            getSenderID(extras.toString()));
+                            senderId);
                 }
             }
         }
     }
 
-    private Date getDateFromJSONObject(Bundle extras) {
-        try {
-            return extras.getParcelable(Constants.DATE);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private String getSenderIdFromMessage(String message) {
+        String userId = "";
+        int indexOfHash = message.indexOf("#");
+        int indexOfDollar = message.indexOf("$");
+        for (int i = indexOfHash + 1; i < indexOfDollar; i++) {
+            userId += message.charAt(i);
         }
-        return null;
+        return userId;
+    }
+
+    private String getTimeFromMessage(String string) {
+        String timeInString = "";
+        int indexOfDollar = string.indexOf("$");
+        int indexOfPushHash = string.indexOf("push_hash");
+
+        for (int i = indexOfDollar + 1; i < indexOfPushHash - 3; i++) {
+            timeInString += string.charAt(i);
+        }
+        return timeInString;
     }
 
     /**

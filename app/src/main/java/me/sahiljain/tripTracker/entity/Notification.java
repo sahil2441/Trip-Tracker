@@ -13,6 +13,9 @@ public class Notification {
     @DatabaseField(generatedId = true)
     private long notificationId;
 
+    /**
+     * Message contained in a notification
+     */
     @DatabaseField
     private String message;
 

@@ -37,10 +37,7 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        /**
-         * Check if user belongs to the block list
-         */
-        Log.d(Constants.TAG + " Thread id:", String.valueOf(Thread.currentThread().getId()));
+
         boolean isUserBlocked;
         Bundle extras = intent.getExtras();
         Log.i(Constants.NOTIFICATION_SERVICE_TAG, "ParseNotificationReceiver, Received : " + extras.toString());
@@ -48,8 +45,7 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
         String senderID = null;
         //It needs some time process the variable extras--found while debugging
         if (extras != null) {
-            Log.d(Constants.TAG + " Thread id:", String.valueOf(Thread.currentThread().getId()));
-            senderID = (getSenderID(extras.toString()));
+            senderID = (getSenderID(extras));
         }
         isUserBlocked = checkIfUserBlocked(context, senderID);
 
@@ -95,24 +91,12 @@ public class ParseNotificationReceiver extends ParsePushBroadcastReceiver {
     }
 
 
-    private String getSenderID(String string) {
-        Log.d(Constants.TAG + " Thread id:", String.valueOf(Thread.currentThread().getId()));
-        if (string != null && string.contains("#")) {
-            Log.d(Constants.TAG + " Thread id:", String.valueOf(Thread.currentThread().getId()));
-
-            String senderID = "";
-            int indexOfHash = string.indexOf("#");
-            int indexOfPushHash = string.indexOf("push_hash");
-
-            indexOfHash += 1;
-            indexOfPushHash -= 3;
-            //int size=indexOfAndroidSupport-indexOfMessage+1;
-            for (int i = indexOfHash; i < indexOfPushHash; i++) {
-                senderID += string.charAt(i);
-            }
-            return senderID;
+    private String getSenderID(Bundle extras) {
+        String senderID = null;
+        if (extras != null) {
+            senderID = extras.getParcelable(Constants.SENDER_ID);
         }
-        return null;
+        return senderID;
     }
 
     /**

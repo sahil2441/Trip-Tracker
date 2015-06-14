@@ -38,6 +38,7 @@ import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.adapter.TabMainActivityAdapter;
 import me.sahiljain.tripTracker.addTrip.AddATripSecondWindow;
 import me.sahiljain.tripTracker.db.Persistence;
+import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.notificationService.NotificationSendingService;
 import me.sahiljain.tripTracker.verification.IntroActivity;
@@ -63,7 +64,16 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
 
-        if (preferences.getBoolean(Constants.LOGIN_STATUS, false) == false) {
+        //TODO: Remove it later after testing
+        //dummy code for testing
+
+/*
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(Constants.LOGIN_STATUS, true);
+        editor.apply();
+*/
+
+        if (!preferences.getBoolean(Constants.LOGIN_STATUS, false)) {
             Intent welcomeSignUpWindowIntent = new Intent(this, IntroActivity.class);
             startActivity(welcomeSignUpWindowIntent);
             finish();
@@ -280,6 +290,8 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
                  */
                 boolean isLocationServiceEnabled = getLocationServicesStatus();
                 if (isLocationServiceEnabled) {
+                    //Reset the trip field values
+                    ((App) getApplication()).setTrip(new Trip());
                     startActivity(intent);
                 } else {
                     showDialogToEnableLocationServices();

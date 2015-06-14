@@ -12,11 +12,12 @@ import android.os.IBinder;
 
 import com.parse.ParsePush;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
@@ -184,12 +185,7 @@ public class NotificationSendingService extends Service {
         Collection<UserTrip> userTrips = this.getActiveTrip().getFriendList();
         ParsePush push;
         String userID;
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(Constants.DATE, new Date());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String timeToShow = getTimeToShow();
 
         /**
          * Send Push Message
@@ -197,21 +193,44 @@ public class NotificationSendingService extends Service {
         preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         userID = preferences.getString(Constants.USER_NAME, "");
         message += "#" + userID;
-        //Append time stamp
-        message += "!" + new Date().toString();
+        message += "$" + timeToShow;
         if (userTrips != null && userTrips.size() > 0) {
             for (UserTrip userTrip : userTrips) {
                 push = new ParsePush();
                 push.setChannel("c" + userTrip.getUserID());
                 push.setMessage(message);
-                push.setData(jsonObject);
                 push.sendInBackground();
             }
         }
     }
 
+    private String getTimeToShow() {
+        String time = getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String timeInString = time + " " + sdf.format(new Date());
+        return timeInString;
+    }
+
+    private String getTime() {
+        Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
+        String s;
+        if (calendar.get(Calendar.AM_PM) == Calendar.AM) {
+            s = "AM";
+        } else {
+            s = "PM";
+        }
+        String curTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE))
+                + " " + s;
+        return curTime;
+    }
+
+
     public Trip getActiveTrip() {
         return activeTrip;
+    }
+
+    public void setActiveTrip(Trip activeTrip) {
+        this.activeTrip = activeTrip;
     }
 
     public Persistence getPersistence() {

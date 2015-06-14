@@ -9,19 +9,20 @@
     <ImageView
         android:id="@+id/logo_notifications_list_item"
         android:layout_gravity="center"
-        android:layout_width="20sp"
-        android:layout_height="20sp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginLeft="5sp"
         android:layout_marginRight="20sp"
         android:layout_marginStart="5sp"
         android:layout_marginEnd="5sp"
-        android:layout_marginTop="5sp" />
+        android:layout_marginTop="5sp"
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/text_view_notifications_list_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10sp"
+        android:padding="5dp"
         android:textSize="14sp"
         android:textStyle="normal"
         android:typeface="serif"
@@ -37,8 +38,7 @@
         android:id="@+id/time_stamp_notifications_list_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10sp"
-        android:paddingBottom="0sp"
+        android:padding="5dp"
         android:textSize="10sp"
         android:textStyle="normal"
         android:typeface="serif"
