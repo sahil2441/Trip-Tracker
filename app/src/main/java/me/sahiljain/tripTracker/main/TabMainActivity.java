@@ -46,6 +46,7 @@ import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.menu.AboutActivity;
+import me.sahiljain.tripTracker.menu.ProfileActivity;
 import me.sahiljain.tripTracker.notificationService.NotificationSendingService;
 import me.sahiljain.tripTracker.verification.IntroActivity;
 
@@ -69,6 +70,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
 
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
+        editor = preferences.edit();
 
         //TODO: Remove it later after testing
         //dummy code for testing
@@ -103,6 +105,12 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
 
         if (!flagRateOnPlayStore && timeDifference) {
             showRateUsDialog();
+        }
+
+        //set user name in shared preferences if user has not set one
+        String firstName = preferences.getString(Constants.FIRST_NAME, "");
+        if (firstName == "") {
+            editor.putString(Constants.FIRST_NAME, ((App) getApplication()).getUserName());
         }
     }
 
@@ -517,8 +525,15 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.about) {
             openAboutWindow();
+        } else if (item.getItemId() == R.id.profile) {
+            openProfileWindow();
         }
         return true;
+    }
+
+    private void openProfileWindow() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     private void openAboutWindow() {

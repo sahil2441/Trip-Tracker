@@ -38,6 +38,8 @@ public class NotificationSendingService extends Service {
 
     private SharedPreferences preferences;
 
+    private String firstName;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -85,6 +87,12 @@ public class NotificationSendingService extends Service {
     }
 
     private void analyzeLocation(Trip activeTrip, Location location) {
+
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
+        firstName = preferences.getString(Constants.FIRST_NAME, "");
+        if (firstName != null && firstName.equals("")) {
+            firstName = ((App) getApplicationContext()).getUserName();
+        }
         /**
          * In every case we also add the check whether the last notification sent on the source/destination
          * was made <2 hours. If yes, don't send the notification.
@@ -95,7 +103,7 @@ public class NotificationSendingService extends Service {
                 activeTrip.getLocationStatus().equals(LocationStatus.SOURCE) &&
                 location.distanceTo(getLocation(activeTrip.getLatSource(),
                         activeTrip.getLongSource())) > 500) {
-            sendNotification(((App) getApplicationContext()).getUserName() + " has left " +
+            sendNotification(firstName + " has left " +
                     activeTrip.getSourceName());
             activeTrip.setLocationStatus(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION);
             activeTrip.setSourceTimeStamp(new Date());
@@ -107,7 +115,7 @@ public class NotificationSendingService extends Service {
                 activeTrip.getLocationStatus().equals(LocationStatus.DESTINATION) &&
                 location.distanceTo(getLocation(activeTrip.getLatDestination(),
                         activeTrip.getLongDestination())) > 500) {
-            sendNotification(((App) getApplicationContext()).getUserName() + " has left " +
+            sendNotification(firstName + " has left " +
                     activeTrip.getDestinationName());
             activeTrip.setLocationStatus(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION);
             activeTrip.setDestinationTimeStamp(new Date());
@@ -119,7 +127,7 @@ public class NotificationSendingService extends Service {
             if (getTimeDifference(activeTrip.getSourceTimeStamp()) &&
                     location.distanceTo(getLocation(activeTrip.getLatSource(),
                             activeTrip.getLongSource())) < 500) {
-                sendNotification(((App) getApplicationContext()).getUserName() + " has reached " +
+                sendNotification(firstName + " has reached " +
                         activeTrip.getSourceName());
                 activeTrip.setLocationStatus(LocationStatus.SOURCE);
                 activeTrip.setSourceTimeStamp(new Date());
@@ -130,7 +138,7 @@ public class NotificationSendingService extends Service {
             else if (getTimeDifference(activeTrip.getDestinationTimeStamp()) &&
                     location.distanceTo(getLocation(activeTrip.getLatDestination(),
                             activeTrip.getLongDestination())) < 500) {
-                sendNotification(((App) getApplicationContext()).getUserName() + " has reached " +
+                sendNotification(firstName + " has reached " +
                         activeTrip.getDestinationName());
                 activeTrip.setLocationStatus(LocationStatus.DESTINATION);
                 activeTrip.setDestinationTimeStamp(new Date());

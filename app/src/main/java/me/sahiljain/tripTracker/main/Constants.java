@@ -71,4 +71,5 @@ public class Constants {
     public static final String SMS_NUMBER = "origNumber";
     public static final String FLAG_TO_RATE_ON_PLAY_STORE = "playStoreFlag";
     public static final String PACKAGE_NAME = "me.sahiljain.tripTracker";
+    public static final String FIRST_NAME = "first_name";
 }

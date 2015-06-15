@@ -14,17 +14,9 @@
     <string name="search">Search</string>
     <string name="google_map_api_key">AIzaSyDlN2ZO5jrCofudbFbrJpFuf7U2mGjvXX4</string>
     <string name="about">About</string>
+    <string name="profile">Profile</string>
     <string name="rate_on_play_store">Rate us on Play Store</string>
     <string name="about_us_text"></string>
-
-    <!--
-        <string name="about_us_text">Musafir- Trip Tracker '\n' Version 1.0 '\n'
-        Copyright "\u00a9" 2015 MusafirApps '\n' All Rights Reserved '\n'
-        Disclaimer: Please note that this app may show incorrect data usage if app is force closed by user
-        or if an unexpected system shutdown occurs. The developers are not responsible for any incorrect
-        location reports or any damages or loss in connection with the usage of this application.
-        </string>
-    -->
 
     <!--Intro view-->
     <string name="Page1Title">Musafir</string>

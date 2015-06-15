@@ -344,8 +344,13 @@
             android:theme="@android:style/Theme.NoDisplay" />
         <activity
             android:name=".menu.AboutActivity"
-            android:screenOrientation="portrait"
-            android:label="About Us" />
+            android:label="About Us"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".menu.ProfileActivity"
+            android:label="Your Name"
+            android:screenOrientation="portrait" />
 
 
     </application>
