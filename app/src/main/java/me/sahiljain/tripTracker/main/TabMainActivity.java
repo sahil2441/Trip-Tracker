@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -32,6 +36,7 @@ import com.parse.ParseUser;
 import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import me.sahiljain.tripTracker.R;
@@ -40,6 +45,7 @@ import me.sahiljain.tripTracker.addTrip.AddATripSecondWindow;
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.entity.UserDefault;
+import me.sahiljain.tripTracker.menu.AboutActivity;
 import me.sahiljain.tripTracker.notificationService.NotificationSendingService;
 import me.sahiljain.tripTracker.verification.IntroActivity;
 
@@ -86,6 +92,79 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
                 e.printStackTrace();
             }
         }
+
+        //Prompt user to rate on play store after 5 days
+        boolean flagRateOnPlayStore = false;
+        boolean timeDifference = getTimeDifference();
+        flagRateOnPlayStore = preferences.getBoolean(Constants.FLAG_TO_RATE_ON_PLAY_STORE, false);
+
+        //The flag is set true once user decides to rate or decides not to rate
+        //In the 'may be later' case it's still false
+
+        if (!flagRateOnPlayStore && timeDifference) {
+            showRateUsDialog();
+        }
+    }
+
+    private void showRateUsDialog() {
+        new AlertDialog.Builder(this).setTitle("Give a 5 Star Rating!")
+                .setMessage("If you liked our work " +
+                        "please leave a rating on play store. Thanks!")
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //open the play store
+                        openPlayStoreToRate();
+
+                        //set flag true so that this request is never shown again
+//                        setFlagTrue();
+                    }
+                })
+                .setNeutralButton("Later", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //set flag true so that this request is never shown again
+//                        setFlagTrue();
+                    }
+                })
+                .show();
+    }
+
+    private void openPlayStoreToRate() {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" +
+                    Constants.PACKAGE_NAME)));
+        } catch (Exception e) {
+            Log.e(Constants.TAG, e.toString());
+        }
+    }
+
+    private void setFlagTrue() {
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(Constants.FLAG_TO_RATE_ON_PLAY_STORE, true);
+        editor.apply();
+    }
+
+    private boolean getTimeDifference() {
+        long installed;
+        try {
+            installed = this.getPackageManager()
+                    .getPackageInfo(Constants.PACKAGE_NAME, 0)
+                    .firstInstallTime;
+            if (((new Date().getTime() - installed) / (1000 * 60 * 60 * 24)) > 5) {
+                return true;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -427,33 +506,24 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         outState.putInt("currentColor", currentColor);
     }
 
-/*
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        currentColor = savedInstanceState.getInt("currentColor");
-        changeColor(currentColor);
-    }
-*/
 
-/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.maps_activity_action_bar, menu);
+        getMenuInflater().inflate(R.menu.tab_main_activity_action_bar, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.preferences) {
-            openPreferencesWindow();
+        if (item.getItemId() == R.id.about) {
+            openAboutWindow();
         }
         return true;
     }
 
-    private void openPreferencesWindow() {
-        Intent preferencesIntent = new Intent(this, Preferences.class);
-        this.startActivity(preferencesIntent);
+    private void openAboutWindow() {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
     }
-*/
+
 }
