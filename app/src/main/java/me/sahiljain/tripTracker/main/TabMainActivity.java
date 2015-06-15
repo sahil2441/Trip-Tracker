@@ -117,7 +117,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
                         openPlayStoreToRate();
 
                         //set flag true so that this request is never shown again
-//                        setFlagTrue();
+                        setFlagTrue();
                     }
                 })
                 .setNeutralButton("Later", new DialogInterface.OnClickListener() {
@@ -130,7 +130,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //set flag true so that this request is never shown again
-//                        setFlagTrue();
+                        setFlagTrue();
                     }
                 })
                 .show();
