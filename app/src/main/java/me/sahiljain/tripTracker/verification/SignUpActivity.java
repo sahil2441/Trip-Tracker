@@ -172,4 +172,10 @@ public class SignUpActivity extends Activity {
         countryCode.setEnabled(true);
         createAccountButton.setEnabled(true);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

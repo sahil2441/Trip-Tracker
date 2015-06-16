@@ -63,9 +63,7 @@
             android:layout_height="wrap_content"
             android:text="Previous"
             android:id="@+id/previous_button_add_a_trip_third"
-            android:layout_above="@+id/progress_bar_add_a_trip_third"
-            android:layout_alignLeft="@+id/list_view_search_results"
-            android:layout_alignStart="@+id/list_view_search_results" />
+            android:layout_above="@+id/progress_bar_add_a_trip_third" />
 
         <Button
             android:layout_width="wrap_content"

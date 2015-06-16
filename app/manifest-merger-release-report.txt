@@ -462,11 +462,19 @@ ADDED from AndroidManifest.xml:341:9
 activity#me.sahiljain.tripTracker.menu.AboutActivity
 ADDED from AndroidManifest.xml:345:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:347:13
-	android:label
 		ADDED from AndroidManifest.xml:348:13
+	android:label
+		ADDED from AndroidManifest.xml:347:13
 	android:name
 		ADDED from AndroidManifest.xml:346:13
+activity#me.sahiljain.tripTracker.menu.ProfileActivity
+ADDED from AndroidManifest.xml:350:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:353:13
+	android:label
+		ADDED from AndroidManifest.xml:352:13
+	android:name
+		ADDED from AndroidManifest.xml:351:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:22.1.1:20:5

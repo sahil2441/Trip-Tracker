@@ -30,12 +30,12 @@ public class AboutActivity extends Activity {
         textViewAbout = (TextView) findViewById(R.id.text_view_about);
         disclaimerText = (TextView) findViewById(R.id.disclaimer_text_about);
 
-        textViewAbout.setText("Musafir- Trip Tracker \n Version 1.0 \n" +
+        textViewAbout.setText("Version 1.0 \n" +
                 "Copyright \u00a9 2015 MusafirApps \n All Rights Reserved \n Email: " +
                 "musafir.trip.tracker@gmail.com");
-        disclaimerText.setText("Disclaimer: Please note that this app may show incorrect data usage" +
-                " if app is force closed by user\n" +
-                "or if an unexpected system shutdown occurs. The developers are not responsible " +
+        disclaimerText.setText("Disclaimer: Please note that this app may show incorrect location coordinates" +
+                " if the app is force closed by user " +
+                "or an unexpected system shutdown occurs. The developers are not responsible " +
                 "for any incorrect " +
                 "location reports or any damages or loss in connection with the usage of this " +
                 "application.");
@@ -74,7 +74,7 @@ public class AboutActivity extends Activity {
             s += "\n OS Version: " + System.getProperty("os.version") + "(" + android.os.Build.VERSION.INCREMENTAL + ")";
             s += "\n OS API Level: " + android.os.Build.VERSION.SDK_INT;
             s += "\n Device: " + android.os.Build.DEVICE;
-            s += "\n Model (and Product): " + android.os.Build.MODEL + " (" + android.os.Build.PRODUCT + ")";
+            s += "\n Model (and Product): " + android.os.Build.MODEL + " (" + android.os.Build.PRODUCT + ")\n\n";
         } catch (Exception e) {
             Log.e(Constants.TAG, e.toString());
         }

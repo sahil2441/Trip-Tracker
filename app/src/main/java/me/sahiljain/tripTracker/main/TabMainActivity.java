@@ -160,6 +160,11 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         editor.apply();
     }
 
+    /**
+     * Show the dialog to user only after 5 days of installation of app
+     *
+     * @return
+     */
     private boolean getTimeDifference() {
         long installed;
         try {
