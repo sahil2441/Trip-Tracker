@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:background="@drawable/layout_bg"
+    tools:context=".menu.AboutActivity">
+
+
+    <ImageView
+        android:id="@+id/logo_help_activity"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:src="@drawable/intro1" />
+
+    <TextView
+        android:id="@+id/app_title_help_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo_help_activity"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:text="How does it work ?"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff070707" />
+
+    <TextView
+        android:id="@+id/disclaimer_text_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:gravity="center|center_vertical"
+        android:text="New Text"
+        android:textColor="#ff070707"
+        android:layout_below="@id/app_title_help_activity" />
+
+
+</RelativeLayout>

@@ -46,6 +46,7 @@ import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.entity.UserDefault;
 import me.sahiljain.tripTracker.menu.AboutActivity;
+import me.sahiljain.tripTracker.menu.HelpActivity;
 import me.sahiljain.tripTracker.menu.ProfileActivity;
 import me.sahiljain.tripTracker.notificationService.NotificationSendingService;
 import me.sahiljain.tripTracker.verification.IntroActivity;
@@ -75,11 +76,9 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         //TODO: Remove it later after testing
         //dummy code for testing
 
-/*
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Constants.LOGIN_STATUS, true);
         editor.apply();
-*/
 
         if (!preferences.getBoolean(Constants.LOGIN_STATUS, false)) {
             Intent welcomeSignUpWindowIntent = new Intent(this, IntroActivity.class);
@@ -532,8 +531,15 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
             openAboutWindow();
         } else if (item.getItemId() == R.id.profile) {
             openProfileWindow();
+        } else if (item.getItemId() == R.id.help) {
+            openHelpWindow();
         }
         return true;
+    }
+
+    private void openHelpWindow() {
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
     }
 
     private void openProfileWindow() {

@@ -351,6 +351,10 @@
             android:name=".menu.ProfileActivity"
             android:label="Your Name"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".menu.HelpActivity"
+            android:label="Help"
+            android:screenOrientation="portrait" />
 
 
     </application>

@@ -72,4 +72,14 @@ public class Constants {
     public static final String FLAG_TO_RATE_ON_PLAY_STORE = "playStoreFlag";
     public static final String PACKAGE_NAME = "me.sahiljain.tripTracker";
     public static final String FIRST_NAME = "first_name";
+    public static final String HELP_TEXT = "Navigate to the home screen in the tab 'List of Trips' and " +
+            " Create a new Trip by clicking on the icon in the bottom of the screen.\n \n" +
+            "Set the source and destination location for the trip and also select your friends whom " +
+            "you'd like " +
+            "to inform about your trip. Make sure your friends have also installed this app and " +
+            "registered with " +
+            "the same Mobile number.\n \n" +
+            "After creating a trip, navigate to the 'List of Trips' tab and touch the trip to activate it.\n\n" +
+            "Once a trip is activated Musafir will track your location coordinates for this trip and inform " +
+            "your recipients about your movement.\n\n";
 }
