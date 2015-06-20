@@ -95,7 +95,7 @@ public class NotificationSendingService extends Service {
         }
         /**
          * In every case we also add the check whether the last notification sent on the source/destination
-         * was made <2 hours. If yes, don't send the notification.
+         * was made <30 minutes . If yes, don't send the notification.
          */
 
         //Left Source
@@ -147,11 +147,17 @@ public class NotificationSendingService extends Service {
         }
     }
 
+    /**
+     * We assume that the person will not return to the same location before half an hour
+     *
+     * @param sourceTimeStamp
+     * @return
+     */
     private boolean getTimeDifference(Date sourceTimeStamp) {
         if (sourceTimeStamp != null) {
             long diff = new Date().getTime() - sourceTimeStamp.getTime();
-            long diffHours = diff / (60 * 60 * 1000);
-            if (diffHours > 1) {
+            double diffHours = diff / (60 * 60 * 1000);
+            if (2 * diffHours > 1) {
                 return true;
             } else {
                 return false;
