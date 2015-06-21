@@ -76,9 +76,11 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         //TODO: Remove it later after testing
         //dummy code for testing
 
+/*
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Constants.LOGIN_STATUS, true);
         editor.apply();
+*/
 
         if (!preferences.getBoolean(Constants.LOGIN_STATUS, false)) {
             Intent welcomeSignUpWindowIntent = new Intent(this, IntroActivity.class);
