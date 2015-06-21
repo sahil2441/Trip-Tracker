@@ -1,10 +1,8 @@
 package me.sahiljain.tripTracker.verification;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -101,10 +99,8 @@ public class VerificationActivity extends Activity {
 
     /**
      * Method called only once- when the user is successfully subscribed for the first time.
-     *
      * @param userName
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void updateLoginDetails(String userName) {
 
         SharedPreferences preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
