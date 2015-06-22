@@ -96,7 +96,7 @@ uses-permission#android.permission.ACCESS_FINE_LOCATION
 ADDED from AndroidManifest.xml:33:5
 	android:name
 		ADDED from AndroidManifest.xml:33:22
-uses-feature#0x00200000
+uses-feature#0x0020000
 ADDED from AndroidManifest.xml:35:5
 	android:required
 		ADDED from AndroidManifest.xml:37:9
