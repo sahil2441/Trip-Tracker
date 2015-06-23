@@ -320,4 +320,21 @@ public class Persistence extends Activity {
         }
         return null;
     }
+
+    public void clearAllNotifications(Context context) {
+        try {
+            dataBaseHelper = OpenHelperManager.getHelper(context, DataBaseHelper.class);
+            if (dataBaseHelper != null) {
+                RuntimeExceptionDao<Notification, Integer> notificationRuntimeExceptionDao =
+                        dataBaseHelper.getNotificationRuntimeExceptionDao();
+                List<Notification> allNotifications = notificationRuntimeExceptionDao.queryForAll();
+                notificationRuntimeExceptionDao.delete(allNotifications);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Release helper after using
+        OpenHelperManager.releaseHelper();
+
+    }
 }

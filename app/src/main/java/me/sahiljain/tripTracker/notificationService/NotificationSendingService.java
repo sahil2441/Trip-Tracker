@@ -150,12 +150,12 @@ public class NotificationSendingService extends Service {
     /**
      * We assume that the person will not return to the same location before half an hour
      *
-     * @param sourceTimeStamp
+     * @param timeStamp
      * @return
      */
-    private boolean getTimeDifference(Date sourceTimeStamp) {
-        if (sourceTimeStamp != null) {
-            long diff = new Date().getTime() - sourceTimeStamp.getTime();
+    private boolean getTimeDifference(Date timeStamp) {
+        if (timeStamp != null) {
+            long diff = new Date().getTime() - timeStamp.getTime();
             double diffHours = diff / (60 * 60 * 1000);
             if (2 * diffHours > 1) {
                 return true;

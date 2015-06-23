@@ -94,6 +94,14 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            //set user name in shared preferences if user has not set one
+            //Always prompt user to do so
+            String firstName = preferences.getString(Constants.FIRST_NAME, "");
+            if (firstName == null || firstName == "") {
+                openProfileWindow();
+            }
+
         }
 
         //Prompt user to rate on play store after 5 days
@@ -108,11 +116,6 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
             showRateUsDialog();
         }
 
-        //set user name in shared preferences if user has not set one
-        String firstName = preferences.getString(Constants.FIRST_NAME, "");
-        if (firstName == "") {
-            editor.putString(Constants.FIRST_NAME, ((App) getApplication()).getUserName());
-        }
     }
 
     private void showRateUsDialog() {
@@ -479,10 +482,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         editor.putInt(Constants.CURRENT_COLOR, currentColor);
 
         if (editor.commit()) {
-            //Reload Adapter for View pager--long long time bug
-            TabMainActivityAdapter tabMainActivityAdapter = new TabMainActivityAdapter(getSupportFragmentManager());
-            tabMainActivityAdapter.notifyDataSetChanged();
-            viewPager.setAdapter(tabMainActivityAdapter);
+            reloadAdapter();
         }
     }
 
@@ -535,8 +535,56 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
             openProfileWindow();
         } else if (item.getItemId() == R.id.help) {
             openHelpWindow();
+        } else if (item.getItemId() == R.id.share) {
+            openShareWindow();
+        } else if (item.getItemId() == R.id.clear_notifications) {
+            openConfirmClearNotifications();
         }
         return true;
+    }
+
+    private void openConfirmClearNotifications() {
+        new AlertDialog.Builder(this).setTitle("Clear Notifications ?")
+                .setMessage(Constants.CLEAR_NOTIFICATIONS)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Clear Notifications
+                        clearNotifications();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Returns back
+                    }
+                })
+                .show();
+
+    }
+
+    private void clearNotifications() {
+        persistence = new Persistence();
+        persistence.clearAllNotifications(this);
+        reloadAdapter();
+    }
+
+    /**
+     * Reload Adapter for View pager
+     */
+    private void reloadAdapter() {
+        TabMainActivityAdapter tabMainActivityAdapter = new TabMainActivityAdapter(getSupportFragmentManager());
+        tabMainActivityAdapter.notifyDataSetChanged();
+        viewPager.setAdapter(tabMainActivityAdapter);
+    }
+
+    private void openShareWindow() {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = Constants.SHARE_BODY;
+//        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, Constants.SHARE_SUBJECT);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
     private void openHelpWindow() {

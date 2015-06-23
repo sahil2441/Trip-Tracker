@@ -256,6 +256,10 @@ public class AddATripFourthWindow extends AppCompatActivity {
 
         //Set Trip name as combination of Source name+to+DestinationName
         trip.setTripName(trip.getSourceName() + " to " + trip.getDestinationName());
+
+        //set time stamp to null
+        trip.setSourceTimeStamp(null);
+        trip.setDestinationTimeStamp(null);
         return trip;
     }
 

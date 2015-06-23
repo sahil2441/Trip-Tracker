@@ -81,5 +81,10 @@ public class Constants {
             "the same Mobile number.\n \n" +
             "After creating a trip, navigate to the 'List of Trips' tab and touch the trip to activate it.\n\n" +
             "Once a trip is activated Musafir will track your location coordinates for this trip and inform " +
-            "your recipients about your movement.\n\n";
+            "your recipients whenever you leave/reach your source or destination.\n\n";
+
+    public static final String SHARE_BODY = "Check out \"Musafir-Trip Tracker\" - " +
+            "https://play.google.com/store/apps/details?id=me.sahiljain.tripTracker";
+    public static final String SHARE_SUBJECT = "Musafir-Trip Tracker";
+    public static final String CLEAR_NOTIFICATIONS = "Are you sure you want to clear all notifications ?";
 }

@@ -121,9 +121,15 @@ public class SignUpActivity extends Activity {
             }
 
             public void onFinish() {
-                Toast.makeText(getBaseContext(), "Verification Failed, Please try later.",
-                        Toast.LENGTH_LONG).show();
-                enableUIComponents();
+                //Check if user has successfully verified his mobile number.
+                //If not then show toast and enable UI components
+                SharedPreferences preferences = getSharedPreferences
+                        (Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
+                if (!preferences.getBoolean(Constants.LOGIN_STATUS, false)) {
+                    Toast.makeText(getBaseContext(), "Verification Failed, Please try later.",
+                            Toast.LENGTH_LONG).show();
+                    enableUIComponents();
+                }
             }
         }.start();
     }
