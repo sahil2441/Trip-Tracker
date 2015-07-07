@@ -1,5 +1,5 @@
 #
-# generated on 2015/05/17 11:49:19
+# generated on 2015/07/07 05:31:47
 #
 # --table-start--
 dataClass=me.sahiljain.tripTracker.entity.Trip
@@ -23,6 +23,12 @@ fieldName=destinationName
 fieldName=latSource
 # --field-end--
 # --field-start--
+fieldName=checkPoint1Name
+# --field-end--
+# --field-start--
+fieldName=checkPoint2Name
+# --field-end--
+# --field-start--
 fieldName=longSource
 # --field-end--
 # --field-start--
@@ -30,6 +36,24 @@ fieldName=latDestination
 # --field-end--
 # --field-start--
 fieldName=longDestination
+# --field-end--
+# --field-start--
+fieldName=latCheckPoint1
+# --field-end--
+# --field-start--
+fieldName=latCheckPoint2
+# --field-end--
+# --field-start--
+fieldName=longCheckPoint1
+# --field-end--
+# --field-start--
+fieldName=longCheckPoint2
+# --field-end--
+# --field-start--
+fieldName=checkPoint1Flag
+# --field-end--
+# --field-start--
+fieldName=checkPoint2Flag
 # --field-end--
 # --field-start--
 fieldName=toAndFro

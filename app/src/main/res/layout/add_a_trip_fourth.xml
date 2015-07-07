@@ -57,7 +57,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20sp"
         android:layout_marginRight="20sp"
-        android:progress="75" />
+        android:progressDrawable="@drawable/custom_progressbar"
+        android:progress="80" />
 
     <Button
         android:id="@+id/search_friends_add_trip_fourth"

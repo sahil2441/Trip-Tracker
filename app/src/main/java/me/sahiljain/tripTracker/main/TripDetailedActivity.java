@@ -29,6 +29,8 @@ public class TripDetailedActivity extends Activity {
     private Button setDefault;
     private Button deleteTrip;
     private TextView tripNameTV;
+    private TextView checkPoint1;
+    private TextView checkPoint2;
     private ScrollView scrollView;
 
     private int tripId;
@@ -45,15 +47,21 @@ public class TripDetailedActivity extends Activity {
         setDefault = (Button) findViewById(R.id.set_default_button);
         deleteTrip = (Button) findViewById(R.id.delete_trip_button);
         tripNameTV = (TextView) findViewById(R.id.textView_trip_name);
+        checkPoint1 = (TextView) findViewById(R.id.textView_check_point1);
+        checkPoint2 = (TextView) findViewById(R.id.textView_check_point2);
 
         Intent intent = getIntent();
         tripName = intent.getStringExtra(Constants.TRIP_NAME);
         tripId = intent.getIntExtra(Constants.TRIP_ID, 0);
         tripNameTV.setText(intent.getStringExtra(Constants.TRIP_NAME));
+        checkPoint1.setText("Check Point 1: " + intent.getStringExtra(Constants.CHECK_POINT_1));
+        checkPoint2.setText("Check Point 2: " + intent.getStringExtra(Constants.CHECK_POINT_2));
 
         preferences = this.getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, 0);
         currentColor = preferences.getInt(Constants.CURRENT_COLOR, 0xFF666666);
         tripNameTV.setBackgroundColor(currentColor);
+        checkPoint1.setBackgroundColor(currentColor);
+        checkPoint2.setBackgroundColor(currentColor);
         populateRecipientsInScrollView(tripId);
 
         deleteTrip.setOnClickListener(new View.OnClickListener() {
@@ -117,8 +125,9 @@ public class TripDetailedActivity extends Activity {
         editor.putInt(Constants.ACTIVE_TRIP, tripId);
         editor.apply();
 
-        Toast toast = Toast.makeText(this, tripName + " " + "has been set as Default Trip",
-                Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, tripName + " " + "has been activated. Musafir will now track" +
+                        " this trip and send updates.",
+                Toast.LENGTH_LONG);
         toast.show();
         launchTabMainActivity();
     }

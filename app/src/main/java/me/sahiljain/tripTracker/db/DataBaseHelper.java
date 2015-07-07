@@ -26,7 +26,7 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME = "tripTracker.db";
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
 
     private Dao<Trip, Integer> tripDao = null;
     private Dao<UserDefault, Integer> userDefaultDao = null;
@@ -51,14 +51,14 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTableIfNotExists(connectionSource, Notification.class);
             TableUtils.createTableIfNotExists(connectionSource, UserTrip.class);
             TableUtils.createTableIfNotExists(connectionSource, UserBlocked.class);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i2) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion
+            , int newVersion) {
         try {
             TableUtils.dropTable(connectionSource, Trip.class, true);
             TableUtils.dropTable(connectionSource, Notification.class, true);
@@ -68,6 +68,23 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //Introduced Check point feature in version 5
+/*
+        if (oldVersion < 5) {
+            try {
+                tripDao.executeRaw("ALTER TABLE 'tt_trips_all' ADD COLUMN latCheckPoint1 FLOAT;");
+                tripDao.executeRaw("ALTER TABLE 'tt_trips_all' ADD COLUMN latCheckPoint2 FLOAT;");
+                tripDao.executeRaw("ALTER TABLE 'tt_trips_all' ADD COLUMN longCheckPoint1 FLOAT;");
+                tripDao.executeRaw("ALTER TABLE 'tt_trips_all' ADD COLUMN longCheckPoint2 FLOAT;");
+                tripDao.executeRaw("ALTER TABLE 'tt_trips_all' ADD COLUMN checkPoint1Name STRING;");
+                tripDao.executeRaw("ALTER TABLE 'tt_trips_all' ADD COLUMN checkPoint2Name STRING;");
+                tripDao.executeRaw("ALTER TABLE 'tt_trips_all' ADD COLUMN checkPoint1Flag BOOLEAN;");
+                tripDao.executeRaw("ALTER TABLE 'tt_trips_all' ADD COLUMN checkPoint2Flag BOOLEAN;");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+*/
     }
 
     public Dao<Trip, Integer> getTripDao() throws SQLException {

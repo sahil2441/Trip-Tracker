@@ -104,7 +104,7 @@
 
         <!-- Child of the TabMainActivity-->
         <activity
-            android:name="me.sahiljain.tripTracker.addTrip.AddATripSecondWindow"
+            android:name=".addTrip.AddATripSourceWindow"
             android:label="Add Trip: Select Source"
             android:parentActivityName="me.sahiljain.tripTracker.main.TabMainActivity"
             android:screenOrientation="portrait"
@@ -112,33 +112,58 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow" />
+                android:value="me.sahiljain.tripTracker.main.TabMainActivity" />
         </activity>
 
-        <!-- Child of the Add Trip Second window-->
+        <!-- Child of the Add Trip Source window-->
         <activity
-            android:name="me.sahiljain.tripTracker.addTrip.AddATripThirdWindow"
-            android:label="Add Trip: Select Destination"
-            android:parentActivityName="me.sahiljain.tripTracker.addTrip.AddATripSecondWindow"
+            android:name=".addTrip.AddATripFirstCheckPointWindow"
+            android:label="Add Trip: Select 1st CheckPoint"
+            android:parentActivityName=".addTrip.AddATripSourceWindow"
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.sahiljain.tripTracker.addTrip.AddATripSecondWindow" />
+                android:value=".addTrip.AddATripSourceWindow" />
+        </activity>
+        <!-- Child of the Add Trip CP1 window-->
+        <activity
+            android:name="me.sahiljain.tripTracker.addTrip.AddATripSecondCheckPointWindow"
+            android:label="Add Trip: Select 2nd CheckPoint"
+            android:parentActivityName=".addTrip.AddATripFirstCheckPointWindow"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".addTrip.AddATripFirstCheckPointWindow" />
         </activity>
 
-        <!-- Child of the Add Trip Second window-->
+        <!-- Child of the Add Trip CP2 window-->
+        <activity
+            android:name=".addTrip.AddATripDestinationWindow"
+            android:label="Add Trip: Select Destination"
+            android:parentActivityName=".addTrip.AddATripSecondCheckPointWindow"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".addTrip.AddATripSecondCheckPointWindow" />
+        </activity>
+
+        <!-- Child of the Add Trip Third window-->
         <activity
             android:name="me.sahiljain.tripTracker.addTrip.AddATripFourthWindow"
             android:label="Add Trip: Select Friends"
-            android:parentActivityName="me.sahiljain.tripTracker.addTrip.AddATripThirdWindow"
+            android:parentActivityName=".addTrip.AddATripDestinationWindow"
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.sahiljain.tripTracker.addTrip.AddATripThirdWindow" />
+                android:value=".addTrip.AddATripDestinationWindow" />
         </activity>
 
         <activity
@@ -238,7 +263,7 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow" />
+                android:value="me.sahiljain.tripTracker.main.TabMainActivity" />
         </activity>
 
         <!-- Child of the TabMainActivity-->
@@ -251,7 +276,7 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.sahiljain.tripTracker.addTrip.AddATripFirstWindow" />
+                android:value="me.sahiljain.tripTracker.main.TabMainActivity" />
         </activity>
 
 

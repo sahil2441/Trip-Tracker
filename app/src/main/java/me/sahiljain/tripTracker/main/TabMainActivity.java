@@ -41,7 +41,7 @@ import java.util.List;
 
 import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.adapter.TabMainActivityAdapter;
-import me.sahiljain.tripTracker.addTrip.AddATripSecondWindow;
+import me.sahiljain.tripTracker.addTrip.AddATripSourceWindow;
 import me.sahiljain.tripTracker.db.Persistence;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.entity.UserDefault;
@@ -371,7 +371,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         });
 
         //Intent to be launched on click of fab button
-        final Intent intent = new Intent(this, AddATripSecondWindow.class);
+        final Intent intent = new Intent(this, AddATripSourceWindow.class);
 
         //Fab Button
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);

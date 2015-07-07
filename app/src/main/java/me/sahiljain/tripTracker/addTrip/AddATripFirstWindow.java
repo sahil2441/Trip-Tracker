@@ -24,6 +24,8 @@ import me.sahiljain.tripTracker.main.Constants;
 
 /**
  * Created by sahil on 22/3/15.
+ *
+ * This class is not in use till version 5. May be used later.
  */
 public class AddATripFirstWindow extends ActionBarActivity {
 
@@ -100,7 +102,7 @@ public class AddATripFirstWindow extends ActionBarActivity {
             }
         });
 
-        final Intent secondWindow = new Intent(this, AddATripSecondWindow.class);
+        final Intent secondWindow = new Intent(this, AddATripSourceWindow.class);
 
         Button button = (Button) findViewById(R.id.next_button_add_a_trip_first);
         button.setOnClickListener(new View.OnClickListener() {

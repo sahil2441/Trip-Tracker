@@ -8,7 +8,7 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map_add_a_trip_second"
+        android:id="@+id/map_add_a_trip_second_cp"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,12 +25,12 @@
         android:padding="0sp">
 
         <Button
-            android:id="@+id/set_source_location_button"
+            android:id="@+id/set_cp2_location_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/previous_button_add_a_trip_second_cp"
             android:layout_centerHorizontal="true"
-            android:text="Set Source Location" />
+            android:text="Set Second CheckPoint Location" />
 
         <Button
             android:id="@+id/previous_button_add_a_trip_second_cp"
@@ -42,7 +42,7 @@
             android:text="Previous" />
 
         <Button
-            android:id="@+id/next_button_add_a_trip_second"
+            android:id="@+id/next_button_add_a_trip_second_cp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/progress_bar_add_a_trip_second_cp"
@@ -54,11 +54,11 @@
             android:id="@+id/progress_bar_add_a_trip_second_cp"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="15dp"
+            android:layout_height="15sp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:progress="40"
             android:layout_margin="4dp"
-            android:progress="0"
             android:progressDrawable="@drawable/custom_progressbar" />
 
 

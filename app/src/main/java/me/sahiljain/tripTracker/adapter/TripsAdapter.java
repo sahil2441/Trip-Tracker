@@ -60,7 +60,7 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
                 /**
                  * Launch new Activity- TripDetailView
                  */
-                launchTripDetailViewActivity(trips.get(position).getTripId(), trips.get(position).getTripName());
+                launchTripDetailViewActivity(trips.get(position));
             }
         });
 
@@ -72,10 +72,22 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
         return rowView;
     }
 
-    private void launchTripDetailViewActivity(Integer tripId, String tripName) {
+    private void launchTripDetailViewActivity(Trip trip) {
+        Integer tripId = trip.getTripId();
+        String tripName = trip.getTripName();
+        String checkPoint1 = trip.getCheckPoint1Name();
+        String checkPoint2 = trip.getCheckPoint2Name();
         Intent intent = new Intent(context, TripDetailedActivity.class);
         intent.putExtra(Constants.TRIP_ID, tripId);
         intent.putExtra(Constants.TRIP_NAME, tripName);
+        if (checkPoint1 == null) {
+            checkPoint1 = "Not Set";
+        }
+        if (checkPoint2 == null) {
+            checkPoint2 = "Not Set";
+        }
+        intent.putExtra(Constants.CHECK_POINT_1, checkPoint1);
+        intent.putExtra(Constants.CHECK_POINT_2, checkPoint2);
         context.startActivity(intent);
     }
 

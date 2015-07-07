@@ -81,7 +81,7 @@ public class NotificationSendingService extends Service {
 
             }
         };
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 120000, 100, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, locationListener);
 
         return Service.START_STICKY;
     }
@@ -95,7 +95,11 @@ public class NotificationSendingService extends Service {
         }
         /**
          * In every case we also add the check whether the last notification sent on the source/destination
-         * was made <30 minutes . If yes, don't send the notification.
+         * was made <15 minutes . If yes, don't send the notification.
+         * But for a checkpoint this time duration is just 5 minutes.
+         * Also, distance radius for Source/Destination is 500 m. If user is within this radius,
+         * he's considered to be at source/destination.
+         * Whereas for a checkpoint this radius is 1000 m.
          */
 
         //Left Source
@@ -107,6 +111,7 @@ public class NotificationSendingService extends Service {
                     activeTrip.getSourceName());
             activeTrip.setLocationStatus(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION);
             activeTrip.setSourceTimeStamp(new Date());
+            resetAllCheckpointsFlag(activeTrip);
             updateLocationStatusOfTrip(activeTrip);
 
         }
@@ -119,9 +124,15 @@ public class NotificationSendingService extends Service {
                     activeTrip.getDestinationName());
             activeTrip.setLocationStatus(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION);
             activeTrip.setDestinationTimeStamp(new Date());
+            resetAllCheckpointsFlag(activeTrip);
             updateLocationStatusOfTrip(activeTrip);
 
-        } else if (activeTrip.getLocationStatus().equals(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION)) {
+        }
+        /**
+         * If it's between source and destination, it can reach source, destination or
+         * either of the checkpoints.
+         */
+        else if (activeTrip.getLocationStatus().equals(LocationStatus.BETWEEN_SOURCE_AND_DESTINATION)) {
 
             //Reached  Source
             if (getTimeDifference(activeTrip.getSourceTimeStamp()) &&
@@ -131,8 +142,8 @@ public class NotificationSendingService extends Service {
                         activeTrip.getSourceName());
                 activeTrip.setLocationStatus(LocationStatus.SOURCE);
                 activeTrip.setSourceTimeStamp(new Date());
+                resetAllCheckpointsFlag(activeTrip);
                 updateLocationStatusOfTrip(activeTrip);
-
             }
             //Reached  destination
             else if (getTimeDifference(activeTrip.getDestinationTimeStamp()) &&
@@ -142,13 +153,55 @@ public class NotificationSendingService extends Service {
                         activeTrip.getDestinationName());
                 activeTrip.setLocationStatus(LocationStatus.DESTINATION);
                 activeTrip.setDestinationTimeStamp(new Date());
+                //Set all checkpoints flag ==false
+                resetAllCheckpointsFlag(activeTrip);
+                updateLocationStatusOfTrip(activeTrip);
+            }
+            /**
+             * There shouldn't be anything like leaving the checkpoint. A checkpoint is only reached and
+             * only reached once in the entire trip.
+             * When the user reaches/leaves source/destination, the flag on all checkpoints
+             * is set to false.
+             */
+            //Reached checkpoint1
+            else if (!activeTrip.isCheckPoint1Flag() &&
+                    checkLocationCoordinatesNotNull(activeTrip.getLatCheckPoint1(),
+                            activeTrip.getLongCheckPoint1()) &&
+                    location.distanceTo(getLocation(activeTrip.getLatCheckPoint1(),
+                            activeTrip.getLongCheckPoint1())) < 1000) {
+                sendNotification(firstName + " has reached " + activeTrip.getCheckPoint1Name());
+                activeTrip.setCheckPoint1Flag(true);
+                updateLocationStatusOfTrip(activeTrip);
+            }
+
+            //Reached checkpoint2
+            else if (!activeTrip.isCheckPoint2Flag() &&
+                    checkLocationCoordinatesNotNull(activeTrip.getLatCheckPoint2(), activeTrip.getLongCheckPoint2())
+                    &&
+                    location.distanceTo(getLocation(activeTrip.getLatCheckPoint2(),
+                            activeTrip.getLongCheckPoint2())) < 1000) {
+                sendNotification(firstName + " has reached " + activeTrip.getCheckPoint2Name());
+                activeTrip.setCheckPoint2Flag(true);
                 updateLocationStatusOfTrip(activeTrip);
             }
         }
     }
 
+    private void resetAllCheckpointsFlag(Trip activeTrip) {
+        activeTrip.setCheckPoint1Flag(false);
+        activeTrip.setCheckPoint2Flag(false);
+    }
+
+    private boolean checkLocationCoordinatesNotNull(Float latitude, Float longitude) {
+
+        if (latitude != null && longitude != null) {
+            return true;
+        }
+        return false;
+    }
+
     /**
-     * We assume that the person will not return to the same location before half an hour
+     * We assume that the person will not return to the same location before 15 minutes
      *
      * @param timeStamp
      * @return
@@ -156,8 +209,8 @@ public class NotificationSendingService extends Service {
     private boolean getTimeDifference(Date timeStamp) {
         if (timeStamp != null) {
             long diff = new Date().getTime() - timeStamp.getTime();
-            double diffHours = diff / (60 * 60 * 1000);
-            if (2 * diffHours > 1) {
+            double diffHours = diff / (60 * 1000);
+            if (diffHours > 15) {
                 return true;
             } else {
                 return false;

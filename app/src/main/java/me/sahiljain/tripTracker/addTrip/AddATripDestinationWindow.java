@@ -5,13 +5,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.Trip;
@@ -36,7 +38,7 @@ import me.sahiljain.tripTracker.service.GPSTracker;
 /**
  * Created by sahil on 22/3/15.
  */
-public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.OnMapClickListener {
+public class AddATripDestinationWindow extends AppCompatActivity implements GoogleMap.OnMapClickListener {
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -97,44 +99,9 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
 
             }
         }
-        /**
-         * Put a flag for destination location saved earlier--if available in shared preferences
-         * and zoom map on it
-         */
-        if (trip == null) {
-            trip = ((App) getApplication()).getTrip();
-        }
-        if (trip.getLatDestination() != null && trip.getLongDestination() != null) {
-            Float lat = trip.getLatDestination();
-            Float lon = trip.getLongDestination();
-            if (lat != 0 && lon != 0) {
-                LatLng latLng = new LatLng(lat, lon);
-                mMap.addMarker(new MarkerOptions().position(latLng).
-                        icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_icon_small)));
-                Location location = new Location("dummy");
-                location.setLatitude(lat);
-                location.setLongitude(lon);
-                centerMapOnMYLocation(location);
-            }
-        }
-        /**
-         * Code for Dynamic Search in edit text
-         */
 
-/*
-        final EditText editText = (EditText) findViewById(R.id.edit_text_maps_add_a_trip_third);
-        final Intent intent = new Intent(this, SearchResults.class);
-        if (editText != null) {
-            editText.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    editText.setCursorVisible(true);
-                    startActivity(intent);
-                    return true;
-                }
-            });
-        }
-*/
+        //Draw default balloons
+        drawDefaultBalloonsOnMap();
 
         final Button previousButton = (Button) findViewById(R.id.previous_button_add_a_trip_third);
         previousButton.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +127,90 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
                 showAlertDialog();
             }
         });
+    }
+
+    private void drawDefaultBalloonsOnMap() {
+        if (trip == null) {
+            trip = ((App) getApplication()).getTrip();
+        }
+        LatLng latLngSource = null;
+        LatLng latLngCheckPoint1 = null;
+        LatLng latLngCheckPoint2 = null;
+        LatLng latLngDestination = null;
+        if (trip.getLatDestination() != null && trip.getLongDestination() != null) {
+            Float lat = trip.getLatDestination();
+            Float lon = trip.getLongDestination();
+            if (lat != 0 && lon != 0) {
+                latLngDestination = new LatLng(lat, lon);
+                mMap.addMarker(new MarkerOptions().position(latLngDestination).
+                        icon(BitmapDescriptorFactory.fromResource(R.drawable.source_icon_small)));
+                Location location = new Location("dummy");
+                location.setLatitude(lat);
+                location.setLongitude(lon);
+            }
+        }
+        if (trip.getLatCheckPoint1() != null && trip.getLongCheckPoint1() != null) {
+            Float lat = trip.getLatCheckPoint1();
+            Float lon = trip.getLongCheckPoint1();
+            //Assuming source was not on (0,0)
+            if (lat != 0 && lon != 0) {
+                latLngCheckPoint1 = new LatLng(lat, lon);
+                mMap.addMarker(new MarkerOptions().position(latLngCheckPoint1).
+                        icon(BitmapDescriptorFactory.fromResource(R.drawable.source_icon_small)));
+                Location location = new Location("dummy");
+                location.setLatitude(lat);
+                location.setLongitude(lon);
+            }
+        }
+        if (trip.getLatCheckPoint2() != null && trip.getLongCheckPoint2() != null) {
+            Float lat = trip.getLatCheckPoint2();
+            Float lon = trip.getLongCheckPoint2();
+            //Assuming source was not on (0,0)
+            if (lat != 0 && lon != 0) {
+                latLngCheckPoint2 = new LatLng(lat, lon);
+                mMap.addMarker(new MarkerOptions().position(latLngCheckPoint2).
+                        icon(BitmapDescriptorFactory.fromResource(R.drawable.source_icon_small)));
+                Location location = new Location("dummy");
+                location.setLatitude(lat);
+                location.setLongitude(lon);
+            }
+        }
+        if (trip.getLatSource() != null && trip.getLongSource() != null) {
+            Float lat = trip.getLatSource();
+            Float lon = trip.getLongSource();
+            //Assuming source was not on (0,0)
+            if (lat != 0 && lon != 0) {
+                latLngSource = new LatLng(lat, lon);
+                mMap.addMarker(new MarkerOptions().position(latLngSource).
+                        icon(BitmapDescriptorFactory.fromResource(R.drawable.source_icon_small)));
+                Location location = new Location("dummy");
+                location.setLatitude(lat);
+                location.setLongitude(lon);
+                centerMapOnMYLocation(location);
+            }
+        }
+        drawLineOnMap(latLngSource, latLngCheckPoint1, latLngCheckPoint2, latLngDestination);
+    }
+
+    private void drawLineOnMap(LatLng latLngSource, LatLng latLngCheckPoint1, LatLng latLngCheckPoint2, LatLng latLngDestination) {
+        try {
+            PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+            if (latLngSource != null) {
+                options.add(latLngSource);
+            }
+            if (latLngCheckPoint1 != null) {
+                options.add(latLngCheckPoint1);
+            }
+            if (latLngCheckPoint2 != null) {
+                options.add(latLngCheckPoint2);
+            }
+            if (latLngDestination != null) {
+                options.add(latLngDestination);
+            }
+            mMap.addPolyline(options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlertDialogueOnClickOfNext() {
@@ -195,9 +246,11 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
                 .show();
     }
 
+    /**
+     * This method activates the on map click listener,
+     */
     private void activateSetOnMapClickListener() {
         mMap.setOnMapClickListener(this);
-        mMap.clear();
     }
 
     @TargetApi(16)
@@ -248,7 +301,7 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
     }
 
     public void centerMapOnMYLocation(Location location) {
-        float zoom = 16;
+        float zoom = 10;
         mMap.setMyLocationEnabled(true);
         LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom));
@@ -277,13 +330,14 @@ public class AddATripThirdWindow extends ActionBarActivity implements GoogleMap.
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
+    public void
+    onMapClick(LatLng latLng) {
 
         saveDestinationCoordinates(latLng);
         Toast toast = Toast.makeText(this, Constants.DESTINATION_LOCATION_SAVED, Toast.LENGTH_SHORT);
         toast.show();
-        mMap.addMarker(new MarkerOptions().position(latLng).
-                icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_icon_small)));
+        mMap.clear();
+        drawDefaultBalloonsOnMap();
         deActivateSetOnMapClickListener();
     }
 

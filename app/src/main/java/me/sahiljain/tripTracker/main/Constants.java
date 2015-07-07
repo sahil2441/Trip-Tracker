@@ -44,7 +44,11 @@ public class Constants {
     public static final String SOURCE_DIALOG_MESSAGE = "Touch Anywhere on Map to set Source Location";
     public static final String DESTINATION_DIALOG_MESSAGE = "Touch Anywhere on Map to set Destination Location";
 
+    public static final String CHECKPOINT_DIALOG_TITLE = "Set CheckPoint";
+    public static final String CHECKPOINT_DIALOG_MESSAGE = "Touch Anywhere on Map to set Checkpoint Location";
+
     public static final String SOURCE_LOCATION_SAVED = "Source Location Saved";
+    public static final String CHECKPOINT_LOCATION_SAVED = "Checkpoint Location Saved";
     public static final String DESTINATION_LOCATION_SAVED = "Destination Location Saved";
 
     public static final String FIND_A_MATCH_FLAG = "FIND_A_MATCH_FLAG";
@@ -62,6 +66,9 @@ public class Constants {
     public static final String TRIP_NAME = "tripName";
     public static final String NOTIFICATION = "notification";
     public static final String SENDER_ID = "senderID";
+
+    public static final String ENTER_LOCATION_NAME = "Enter Location Name";
+    public static final String ENTER_LOCATION_DESC = "Give a name to your Location.";
 
     /**
      * Columns
@@ -87,4 +94,7 @@ public class Constants {
             "https://play.google.com/store/apps/details?id=me.sahiljain.tripTracker";
     public static final String SHARE_SUBJECT = "Musafir-Trip Tracker";
     public static final String CLEAR_NOTIFICATIONS = "Are you sure you want to clear all notifications ?";
+
+    public static final String CHECK_POINT_1 = "checkP1";
+    public static final String CHECK_POINT_2 = "checkP2";
 }
