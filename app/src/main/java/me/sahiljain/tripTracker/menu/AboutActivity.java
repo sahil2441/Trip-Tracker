@@ -30,7 +30,7 @@ public class AboutActivity extends Activity {
         textViewAbout = (TextView) findViewById(R.id.text_view_about);
         disclaimerText = (TextView) findViewById(R.id.disclaimer_text_about);
 
-        textViewAbout.setText("Version 1.0 \n" +
+        textViewAbout.setText("Version 1.2 \n" +
                 "Copyright \u00a9 2015 MusafirApps \n All Rights Reserved \n Email: " +
                 "musafir.trip.tracker@gmail.com");
         disclaimerText.setText("Disclaimer: Please note that this app may show incorrect location coordinates" +

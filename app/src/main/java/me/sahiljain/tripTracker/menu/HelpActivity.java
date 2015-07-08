@@ -2,6 +2,7 @@ package me.sahiljain.tripTracker.menu;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
 import me.sahiljain.tripTracker.R;
@@ -19,7 +20,7 @@ public class HelpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help_activity);
         textViewHelp = (TextView) findViewById(R.id.disclaimer_text_help);
-
+        textViewHelp.setMovementMethod(new ScrollingMovementMethod());
         textViewHelp.setText(Constants.HELP_TEXT);
     }
 
