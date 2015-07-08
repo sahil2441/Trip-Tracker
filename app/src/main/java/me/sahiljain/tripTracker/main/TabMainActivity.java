@@ -26,6 +26,9 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.parse.FindCallback;
@@ -76,11 +79,9 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         //TODO: Remove it later after testing
         //dummy code for testing
 
-/*
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Constants.LOGIN_STATUS, true);
         editor.apply();
-*/
 
         if (!preferences.getBoolean(Constants.LOGIN_STATUS, false)) {
             Intent welcomeSignUpWindowIntent = new Intent(this, IntroActivity.class);
@@ -352,8 +353,12 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
 
                 //Disable the visibility of floating button of Notification tab is selected
                 if (position != 0) {
+                    //Trying to hide the FAB which had the animation earlier
+                    Animation animation = new AlphaAnimation(0, 0);
+                    floatingActionButton.startAnimation(animation);
                     floatingActionButton.setVisibility(View.GONE);
                 } else {
+                    floatingActionButton.startAnimation(getAnimationForFAB());
                     floatingActionButton.setVisibility(View.VISIBLE);
                 }
 
@@ -378,6 +383,7 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
         floatingActionButton.setColor(currentColor);
         floatingActionButton.setSize(FloatingActionButton.SIZE_NORMAL);
         floatingActionButton.initBackground();
+        floatingActionButton.startAnimation(getAnimationForFAB());
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -392,10 +398,26 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
                 } else {
                     showDialogToEnableLocationServices();
                 }
+                //Stop animation services
+                v.clearAnimation();
             }
         });
 
         changeColor(currentColor);
+    }
+
+    /**
+     * Animation for FAB
+     *
+     * @return
+     */
+    private Animation getAnimationForFAB() {
+        Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        animation.setDuration(500); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back i
+        return animation;
     }
 
     private void showDialogToEnableLocationServices() {

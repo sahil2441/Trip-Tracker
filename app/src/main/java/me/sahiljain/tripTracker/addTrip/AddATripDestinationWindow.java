@@ -16,6 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -33,6 +36,7 @@ import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
+import me.sahiljain.tripTracker.menu.HelpActivity;
 import me.sahiljain.tripTracker.service.GPSTracker;
 
 /**
@@ -44,6 +48,7 @@ public class AddATripDestinationWindow extends AppCompatActivity implements Goog
     private SharedPreferences.Editor editor;
     private Location searchLocation;
     private int currentColor;
+    private Button helpButton;
 
     //Global instance of Trip
     private Trip trip;
@@ -91,7 +96,7 @@ public class AddATripDestinationWindow extends AppCompatActivity implements Goog
         //Restore map state
         if (flag) {
             try {
-                setContentView(R.layout.add_a_trip_third);
+                setContentView(R.layout.add_a_trip_destination);
                 setUpMapIfNeeded();
             } catch (Exception e) {
                 Log.d(Constants.TAG, "Error: " + e.toString() +
@@ -121,12 +126,32 @@ public class AddATripDestinationWindow extends AppCompatActivity implements Goog
         });
 
         Button setDestinationTripButton = (Button) findViewById(R.id.set_destination_location_button);
+        setDestinationTripButton.startAnimation(getAnimation());
         setDestinationTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAlertDialog();
+                v.clearAnimation();
             }
         });
+
+        final Intent helpActivity = new Intent(this, HelpActivity.class);
+        helpButton = (Button) findViewById(R.id.help_button);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(helpActivity);
+            }
+        });
+
+        //disable animation if location has been set
+        if (trip == null) {
+            trip = ((App) getApplication()).getTrip();
+        }
+        if (trip.getLatDestination() != null && trip.getLongDestination() != null) {
+            Animation animation = new AlphaAnimation(1, 1);
+            setDestinationTripButton.startAnimation(animation);
+        }
     }
 
     private void drawDefaultBalloonsOnMap() {
@@ -218,8 +243,7 @@ public class AddATripDestinationWindow extends AppCompatActivity implements Goog
         final Intent intentAddATripFourthWindow = new Intent(this, AddATripFourthWindow.class);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setHint("e.g. Office");
-        new AlertDialog.Builder(this).setTitle(Constants.ENTER_DESTINATION_NAME_TITLE).
-                setMessage(Constants.ENTER_DESTINATION_NAME_MESSAGE)
+        new AlertDialog.Builder(this).setTitle(Constants.ENTER_DESTINATION_NAME_TITLE)
                 .setView(input)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -232,8 +256,6 @@ public class AddATripDestinationWindow extends AppCompatActivity implements Goog
                 })
                 .show();
     }
-
-
     private void showAlertDialog() {
         new AlertDialog.Builder(this).setTitle(Constants.SET_DESTINATION_LOCATION)
                 .setMessage(Constants.DESTINATION_DIALOG_MESSAGE)
@@ -353,5 +375,19 @@ public class AddATripDestinationWindow extends AppCompatActivity implements Goog
         trip.setLatDestination((float) latLng.latitude);
         trip.setLongDestination((float) latLng.longitude);
         ((App) getApplication()).setTrip(trip);
+    }
+
+    /**
+     * Animation for Location Button
+     *
+     * @return
+     */
+    private Animation getAnimation() {
+        Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        animation.setDuration(500); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back i
+        return animation;
     }
 }

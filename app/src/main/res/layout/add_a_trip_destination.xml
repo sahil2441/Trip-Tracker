@@ -30,34 +30,51 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/previous_button_add_a_trip_third"
             android:layout_centerHorizontal="true"
-            android:text="Set Destination Location" />
+            android:background="@drawable/button_background"
+            android:padding="5dp"
+            android:text="Select Destination Location" />
 
         <Button
             android:id="@+id/previous_button_add_a_trip_third"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/progress_bar_add_a_trip_third"
+            android:layout_above="@+id/imageView"
+            android:background="@drawable/button_background"
+            android:padding="5dp"
             android:text="Previous" />
 
         <Button
             android:id="@+id/next_button_add_a_trip_third"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:background="@drawable/button_background"
+            android:padding="5dp"
+            android:text="Next"
+            android:layout_above="@+id/imageView"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/set_destination_location_button"
-            android:text="Next" />
+            android:layout_alignParentEnd="true" />
 
-        <ProgressBar
-            android:id="@+id/progress_bar_add_a_trip_third"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="15sp"
+        <Button
+            android:id="@+id/help_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/button_background"
+            android:padding="5dp"
+            android:text="\?" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
             android:layout_alignParentBottom="true"
+            android:id="@+id/imageView"
             android:layout_centerHorizontal="true"
-            android:layout_margin="4dp"
-            android:progress="60"
-            android:progressDrawable="@drawable/custom_progressbar" />
+            android:src="@drawable/flow4"
+            android:layout_marginTop="5dp" />
 
 
     </RelativeLayout>

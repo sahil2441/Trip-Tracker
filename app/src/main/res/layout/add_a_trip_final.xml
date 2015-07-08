@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".addTrip.AddATripFourthWindow">
+
+    <LinearLayout
+        android:id="@+id/ll_add_a_trip_fourth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/help_button"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:paddingLeft="20sp">
+
+        <TextView
+            android:id="@+id/tick_friends_add_a_trip_fourth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/select_friends_add_a_trip_fourth"
+            android:layout_alignStart="@+id/select_friends_add_a_trip_fourth"
+            android:layout_below="@+id/select_friends_add_a_trip_fourth"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingBottom="10sp"
+            android:text="Add friends whom you&apos;d like to send notifications."
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="25sp" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/previous_button_add_a_trip_fourth"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:padding="5dp"
+        android:text="Previous"
+        android:layout_above="@+id/imageView"
+        android:layout_alignLeft="@+id/help_button"
+        android:layout_alignStart="@+id/help_button" />
+
+    <Button
+        android:id="@+id/save_button_add_a_trip_fourth"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:padding="5dp"
+        android:text="Save"
+        android:layout_above="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignEnd="@+id/imageView" />
+
+    <Button
+        android:id="@+id/search_friends_add_trip_fourth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/previous_button_add_a_trip_fourth"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_background"
+        android:padding="5dp"
+        android:text="Select Contact" />
+
+    <Button
+        android:id="@+id/help_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/button_background"
+        android:padding="0dp"
+        android:text="\?" />
+
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/search_friends_add_trip_fourth"
+        android:layout_below="@+id/ll_add_a_trip_fourth"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="40sp"
+        android:layout_marginRight="40sp"
+        android:padding="20sp">
+
+        <LinearLayout
+            android:id="@+id/ll_inside_scroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/flow5"
+        android:layout_marginTop="5dp" />
+</RelativeLayout>

@@ -39,15 +39,15 @@ public class Constants {
     public static final String CURRENT_COLOR = "CURRENT_COLOR";
 
     public static final String SET_DESTINATION_LOCATION = "Set Destination Location";
-    public static final String SET_SOURCE_LOCATION = "Set Source Location";
+    public static final String SET_SOURCE_LOCATION = "Select Starting Location";
 
-    public static final String SOURCE_DIALOG_MESSAGE = "Touch Anywhere on Map to set Source Location";
+    public static final String SOURCE_DIALOG_MESSAGE = "Touch Anywhere on Map to set the starting location for the trip";
     public static final String DESTINATION_DIALOG_MESSAGE = "Touch Anywhere on Map to set Destination Location";
 
     public static final String CHECKPOINT_DIALOG_TITLE = "Set CheckPoint";
     public static final String CHECKPOINT_DIALOG_MESSAGE = "Touch Anywhere on Map to set Checkpoint Location";
 
-    public static final String SOURCE_LOCATION_SAVED = "Source Location Saved";
+    public static final String SOURCE_LOCATION_SAVED = "Starting Location Saved";
     public static final String CHECKPOINT_LOCATION_SAVED = "Checkpoint Location Saved";
     public static final String DESTINATION_LOCATION_SAVED = "Destination Location Saved";
 
@@ -55,9 +55,9 @@ public class Constants {
 
     public static final String ACTIVE_TRIP = "ACTIVE_TRIP";
 
-    public static final String ENTER_SOURCE_NAME_TITLE = "Enter Source Name";
-    public static final String ENTER_SOURCE_NAME_MESSAGE = "Give a name to your Source Location.";
-    public static final String ENTER_DESTINATION_NAME_TITLE = "Enter Destination Name";
+    public static final String ENTER_SOURCE_NAME_TITLE = "Give a name to your Starting Location.";
+    public static final String ENTER_SOURCE_NAME_MESSAGE = "Give a name to your Starting Location.";
+    public static final String ENTER_DESTINATION_NAME_TITLE = "Give a name to your Destination Location.";
     public static final String ENTER_DESTINATION_NAME_MESSAGE = "Give a name to your Destination Location.";
     public static final String EMPTY_STRING = "";
     public static final String ENABLE_LOCATION_SERVICES_MESSAGE = "Enable Location Services before adding a new Trip.";
@@ -67,7 +67,7 @@ public class Constants {
     public static final String NOTIFICATION = "notification";
     public static final String SENDER_ID = "senderID";
 
-    public static final String ENTER_LOCATION_NAME = "Enter Location Name";
+    public static final String ENTER_LOCATION_NAME = "Give a name to this checkpoint.";
     public static final String ENTER_LOCATION_DESC = "Give a name to your Location.";
 
     /**
@@ -79,16 +79,23 @@ public class Constants {
     public static final String FLAG_TO_RATE_ON_PLAY_STORE = "playStoreFlag";
     public static final String PACKAGE_NAME = "me.sahiljain.tripTracker";
     public static final String FIRST_NAME = "first_name";
-    public static final String HELP_TEXT = "Navigate to the home screen in the tab 'List of Trips' and " +
-            " Create a new Trip by clicking on the icon in the bottom of the screen.\n \n" +
-            "Set the source and destination location for the trip and also select your friends whom " +
-            "you'd like " +
-            "to inform about your trip. Make sure your friends have also installed this app and " +
-            "registered with " +
-            "the same Mobile number.\n \n" +
-            "After creating a trip, navigate to the 'List of Trips' tab and touch the trip to activate it.\n\n" +
-            "Once a trip is activated Musafir will track your location coordinates for this trip and inform " +
-            "your recipients whenever you leave/reach your source or destination.\n\n";
+    public static final String HELP_TEXT =
+
+            "1. Navigate to the home screen in the tab 'List of Trips' and " +
+                    " create a new Trip by clicking the icon 'Pen' in the bottom of the screen.\n \n" +
+
+                    "2. Tap on the button 'Select Starting Point' to set starting location and click next. \n\n" +
+
+                    "3. In the subsequent screens select your check points and destination location. \n\n" +
+
+                    "4. Finally select your friends whom you'd like to inform about your trip. " +
+                    "Your friend needs to install Musafir and register with the same Mobile number as " +
+                    "shown in your contacts list.\n \n" +
+
+                    "5. After creating a trip, navigate to the 'List of Trips' tab and touch the trip to activate it.\n\n" +
+                    "Once a trip is activated Musafir will track your trip and inform your friends.\n\n" +
+                    "Happy Tracking!!\n" +
+                    ":)";
 
     public static final String SHARE_BODY = "Check out \"Musafir-Trip Tracker\" - " +
             "https://play.google.com/store/apps/details?id=me.sahiljain.tripTracker";

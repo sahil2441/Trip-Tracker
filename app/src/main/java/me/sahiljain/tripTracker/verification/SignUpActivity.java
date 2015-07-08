@@ -114,7 +114,7 @@ public class SignUpActivity extends Activity {
     private void startCountDownTimer() {
         timerTextField = (TextView) findViewById(R.id.timerTextField);
         timerTextField.setVisibility(View.VISIBLE);
-        new CountDownTimer(60000, 1000) {
+        new CountDownTimer(300000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timerTextField.setText("Seconds Remaining: " + millisUntilFinished / 1000);

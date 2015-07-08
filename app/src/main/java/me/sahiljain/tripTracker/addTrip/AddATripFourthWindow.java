@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -16,6 +18,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -32,6 +37,7 @@ import me.sahiljain.tripTracker.entity.UserTrip;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
 import me.sahiljain.tripTracker.main.TabMainActivity;
+import me.sahiljain.tripTracker.menu.HelpActivity;
 
 /**
  * Created by sahil on 22/3/15.
@@ -49,13 +55,14 @@ public class AddATripFourthWindow extends AppCompatActivity {
     private Button saveButton;
     private Button searchButton;
     private LinearLayout linearLayout;
+    private Button helpButton;
 
     private Persistence persistence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_a_trip_fourth);
+        setContentView(R.layout.add_a_trip_final);
 
         //Method for previous and SAVE button
         previousButton = (Button) findViewById(R.id.previous_button_add_a_trip_fourth);
@@ -76,16 +83,27 @@ public class AddATripFourthWindow extends AppCompatActivity {
             }
         });
         searchButton = (Button) findViewById(R.id.search_friends_add_trip_fourth);
+        searchButton.startAnimation(getAnimation());
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Open Contacts Intent
                 openContactsIntent();
+                v.clearAnimation();
             }
         });
 
         //Instance of Trip from the application class
         trip = ((App) getApplication()).getTrip();
+
+        final Intent helpActivity = new Intent(this, HelpActivity.class);
+        helpButton = (Button) findViewById(R.id.help_button);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(helpActivity);
+            }
+        });
 
     }
 
@@ -160,6 +178,9 @@ public class AddATripFourthWindow extends AppCompatActivity {
         if (name != null && name != "") {
             TextView textView = new TextView(this);
             textView.setText("Choose contacts of: " + name + ".");
+            textView.setTextSize(20);
+            textView.setTypeface(Typeface.SANS_SERIF);
+            textView.setTextColor(Color.BLACK);
             linearLayout.addView(textView);
         }
 
@@ -168,6 +189,8 @@ public class AddATripFourthWindow extends AppCompatActivity {
             CheckBox checkBox = new CheckBox(this);
             checkBox.setId(rand.nextInt() % 10000);
             checkBox.setText(allPhoneNumbers.get(i));
+            checkBox.setTextSize(15);
+            checkBox.setTextColor(Color.BLACK);
             linearLayout.addView(checkBox);
         }
     }
@@ -184,7 +207,6 @@ public class AddATripFourthWindow extends AppCompatActivity {
                 })
                 .show();
     }
-
 
     @Override
     protected void onResume() {
@@ -279,6 +301,20 @@ public class AddATripFourthWindow extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    /**
+     * Animation for Location Button
+     *
+     * @return
+     */
+    private Animation getAnimation() {
+        Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        animation.setDuration(500); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back i
+        return animation;
     }
 }
 

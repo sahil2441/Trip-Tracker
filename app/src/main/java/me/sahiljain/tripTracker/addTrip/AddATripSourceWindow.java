@@ -16,9 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
+import me.sahiljain.tripTracker.menu.HelpActivity;
 import me.sahiljain.tripTracker.service.GPSTracker;
 
 /**
@@ -46,7 +49,10 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
     private SharedPreferences.Editor editor;
     private Location searchLocation;
     private int currentColor;
-    private ProgressBar progressBar;
+    private Button previousButton;
+    private Button nextButton;
+    private Button setSourceTripButton;
+    private Button helpButton;
 
     //Global instance of Trip from Application class
     private Trip trip;
@@ -94,7 +100,7 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
         //Restore map state
         if (flag) {
             try {
-                setContentView(R.layout.add_a_trip_second);
+                setContentView(R.layout.add_a_trip_source);
                 setUpMapIfNeeded();
             } catch (Exception e) {
                 Log.d(Constants.TAG, "Error: " + e.toString() +
@@ -105,7 +111,7 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
         //Draw default balloons
         drawDefaultBalloonsOnMap();
 
-        final Button previousButton = (Button) findViewById(R.id.previous_button_add_a_trip_second_cp);
+        previousButton = (Button) findViewById(R.id.previous_button_add_a_trip_second_cp);
         previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +120,7 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
             }
         });
 
-        Button nextButton = (Button) findViewById(R.id.next_button_add_a_trip_second);
+        nextButton = (Button) findViewById(R.id.next_button_add_a_trip_second);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,14 +128,47 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
             }
         });
 
-        Button setSourceTripButton = (Button) findViewById(R.id.set_source_location_button);
+        setSourceTripButton = (Button) findViewById(R.id.set_source_location_button);
+        setSourceTripButton.startAnimation(getAnimation());
         setSourceTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAlertDialog();
+                v.clearAnimation();
             }
         });
 
+        final Intent helpActivity = new Intent(this, HelpActivity.class);
+        helpButton = (Button) findViewById(R.id.help_button);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(helpActivity);
+            }
+        });
+
+        //disable animation if source location has been set
+        if (trip == null) {
+            trip = ((App) getApplication()).getTrip();
+        }
+        if (trip.getLatSource() != null && trip.getLongSource() != null) {
+            Animation animation = new AlphaAnimation(1, 1);
+            setSourceTripButton.startAnimation(animation);
+        }
+    }
+
+    /**
+     * Animation for Location Button
+     *
+     * @return
+     */
+    private Animation getAnimation() {
+        Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        animation.setDuration(500); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back i
+        return animation;
     }
 
     private void drawDefaultBalloonsOnMap() {
@@ -221,8 +260,7 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
         final Intent intentAddATripFirstCPWindow = new Intent(this, AddATripFirstCheckPointWindow.class);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setHint("e.g. Home");
-        new AlertDialog.Builder(this).setTitle(Constants.ENTER_SOURCE_NAME_TITLE).
-                setMessage(Constants.ENTER_SOURCE_NAME_MESSAGE)
+        new AlertDialog.Builder(this).setTitle(Constants.ENTER_SOURCE_NAME_TITLE)
                 .setView(input)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -283,7 +321,7 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
 
         Location location = new Location("dummy");
         GPSTracker gpsTracker = new GPSTracker(this);
-        if (gpsTracker.canGetLocation() == true) {
+        if (gpsTracker.canGetLocation()) {
             location = gpsTracker.getLocation();
         }
         /**
@@ -304,10 +342,26 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
     }
 
     public void centerMapOnMYLocation(Location location) {
-        float zoom = 12;
+        float zoom = getZoomLevel();
         mMap.setMyLocationEnabled(true);
         LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom));
+    }
+
+    /**
+     * TODO
+     * If first check point location set then return zoom level based on logic,
+     * else return 12.
+     *
+     * @return zoom
+     */
+    private float getZoomLevel() {
+        float zoom = 12;
+        return zoom;
+    }
+
+    private float getDistance(LatLng latLngSource, LatLng latLngCheckPoint1) {
+        return 0;
     }
 
     private void setButtonPosition() {
@@ -336,7 +390,7 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
 
         //Save Source coordinates
         saveSourceCoordinates(latLng);
-        Toast toast = Toast.makeText(this, Constants.SOURCE_LOCATION_SAVED, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, Constants.SOURCE_LOCATION_SAVED, Toast.LENGTH_LONG);
         toast.show();
         mMap.clear();
         drawDefaultBalloonsOnMap();

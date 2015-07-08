@@ -16,6 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.entity.Trip;
 import me.sahiljain.tripTracker.main.App;
 import me.sahiljain.tripTracker.main.Constants;
+import me.sahiljain.tripTracker.menu.HelpActivity;
 import me.sahiljain.tripTracker.service.GPSTracker;
 
 /**
@@ -45,6 +49,7 @@ public class AddATripSecondCheckPointWindow extends AppCompatActivity implements
     private Location searchLocation;
     private int currentColor;
     private Button setCheckPointLocation;
+    private Button helpButton;
 
     //Global instance of Trip from Application class
     private Trip trip;
@@ -123,21 +128,41 @@ public class AddATripSecondCheckPointWindow extends AppCompatActivity implements
 
         setCheckPointLocation = (Button) findViewById(R.id.set_cp2_location_button);
         setCheckPointLocation.setText("Set 2nd Checkpoint Location");
+        setCheckPointLocation.startAnimation(getAnimation());
         setCheckPointLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAlertDialog();
+                v.clearAnimation();
             }
         });
+
+        final Intent helpActivity = new Intent(this, HelpActivity.class);
+        helpButton = (Button) findViewById(R.id.help_button);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(helpActivity);
+            }
+        });
+
+        //disable animation if location has been set
+        if (trip == null) {
+            trip = ((App) getApplication()).getTrip();
+        }
+        if (trip.getLatCheckPoint2() != null && trip.getLongCheckPoint2() != null) {
+            Animation animation = new AlphaAnimation(1, 1);
+            setCheckPointLocation.startAnimation(animation);
+        }
+
     }
 
     private void showAlertDialogueOnClickOfNext() {
         final EditText input = new EditText(this);
         final Intent intentAddATripThirdWindow = new Intent(this, AddATripDestinationWindow.class);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setHint("e.g. Home");
-        new AlertDialog.Builder(this).setTitle(Constants.ENTER_LOCATION_NAME).
-                setMessage(Constants.ENTER_LOCATION_DESC)
+        input.setHint("e.g. Downtown");
+        new AlertDialog.Builder(this).setTitle(Constants.ENTER_LOCATION_NAME)
                 .setView(input)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -335,5 +360,19 @@ public class AddATripSecondCheckPointWindow extends AppCompatActivity implements
             trip.setLongCheckPoint2((float) latLng.longitude);
         }
         ((App) getApplication()).setTrip(trip);
+    }
+
+    /**
+     * Animation for Location Button
+     *
+     * @return
+     */
+    private Animation getAnimation() {
+        Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        animation.setDuration(500); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back i
+        return animation;
     }
 }

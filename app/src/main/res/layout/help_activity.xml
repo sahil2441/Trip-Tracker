@@ -12,12 +12,15 @@
 
     <ImageView
         android:id="@+id/logo_help_activity"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:src="@drawable/intro1" />
+        android:src="@drawable/flow_chart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp" />
 
     <TextView
         android:id="@+id/app_title_help_activity"
@@ -26,9 +29,10 @@
         android:layout_below="@id/logo_help_activity"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
-        android:text="How does it work ?"
+        android:text="How to use Musafir?"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#ff070707" />
+        android:textColor="#ff070707"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/disclaimer_text_help"
