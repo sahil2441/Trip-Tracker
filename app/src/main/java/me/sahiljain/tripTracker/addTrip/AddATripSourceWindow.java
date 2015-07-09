@@ -333,7 +333,6 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
             editor.putString(Constants.SEARCH_LAT, "");
             editor.putString(Constants.SEARCH_LONG, "");
             editor.apply();
-            //TODO: Put a balloon on map in this case
         }
 
         if (location != null) {
@@ -349,7 +348,7 @@ public class AddATripSourceWindow extends AppCompatActivity implements GoogleMap
     }
 
     /**
-     * TODO
+     * TODO: Zoom level based on distance between two locations
      * If first check point location set then return zoom level based on logic,
      * else return 12.
      *

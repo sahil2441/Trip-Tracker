@@ -363,12 +363,6 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
                     floatingActionButton.startAnimation(getAnimationForFAB());
                     floatingActionButton.setVisibility(View.VISIBLE);
                 }
-
-                //Reload the list view through Adapter
-/*
-                viewPager.setAdapter(new TabMainActivityAdapter(getSupportFragmentManager()));
-                tabs.setViewPager(viewPager);
-*/
             }
 
             @Override

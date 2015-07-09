@@ -314,7 +314,6 @@ public class AddATripDestinationWindow extends AppCompatActivity implements Goog
             editor.putString(Constants.SEARCH_LAT, "");
             editor.putString(Constants.SEARCH_LONG, "");
             editor.apply();
-            //TODO: Put a balloon on map in this case
         }
 
         if (location != null) {
@@ -333,7 +332,6 @@ public class AddATripDestinationWindow extends AppCompatActivity implements Goog
         /**
          * Move the button
          */
-        //TODO: Button not visible
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
                 findFragmentById(R.id.map_add_a_trip_third);
         View mapView = mapFragment.getView();

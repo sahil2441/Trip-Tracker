@@ -26,9 +26,17 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.parse.ParsePush;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.TimeZone;
 
 import me.sahiljain.tripTracker.R;
 import me.sahiljain.tripTracker.db.Persistence;
@@ -46,6 +54,7 @@ public class AddATripFourthWindow extends AppCompatActivity {
 
     private SharedPreferences preferences;
     private int currentColor;
+    private String firstName;
 
     //Instance of Trip from the application class
     private Trip trip;
@@ -231,6 +240,9 @@ public class AddATripFourthWindow extends AppCompatActivity {
 
         persistence.saveTripInDataBase(this, trip);
 
+        activateThisNewTrip(trip);
+        informAllRecipients(trip);
+
         //show dialogue for successful operation
         final Intent intent = new Intent(this, TabMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         new AlertDialog.Builder(this).setTitle("Success!")
@@ -242,6 +254,81 @@ public class AddATripFourthWindow extends AppCompatActivity {
                     }
                 })
                 .show();
+
+    }
+
+    /**
+     * This method informs all the recipients regarding the creation of the trip.
+     *
+     * @param trip
+     */
+    private void informAllRecipients(Trip trip) {
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
+        firstName = preferences.getString(Constants.FIRST_NAME, "");
+
+        sendNotification(firstName + " has added you as a recipient for the trip - " + trip.getTripName(), trip);
+    }
+
+    private void sendNotification(String message, Trip trip) {
+
+        Collection<UserTrip> userTrips = trip.getFriendList();
+        ParsePush push;
+        String userID;
+        String timeToShow = getTimeToShow();
+
+        /**
+         * Send Push Message
+         */
+        preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
+        userID = preferences.getString(Constants.USER_NAME, "");
+        message += "#" + userID;
+        message += "$" + timeToShow;
+        if (userTrips != null && userTrips.size() > 0) {
+            for (UserTrip userTrip : userTrips) {
+                push = new ParsePush();
+                push.setChannel("c" + userTrip.getUserID());
+                push.setMessage(message);
+                push.sendInBackground();
+            }
+        }
+    }
+
+    private String getTimeToShow() {
+        String time = getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String timeInString = time + " " + sdf.format(new Date());
+        return timeInString;
+    }
+
+    private String getTime() {
+        Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
+        String s;
+        if (calendar.get(Calendar.AM_PM) == Calendar.AM) {
+            s = "AM";
+        } else {
+            s = "PM";
+        }
+        String curTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE))
+                + " " + s;
+        return curTime;
+    }
+
+
+    /**
+     * This method will activate the the newly created trip and will deactivate the other trip
+     *
+     * @param trip
+     */
+    private void activateThisNewTrip(Trip trip) {
+        Integer tripId = trip.getTripId();
+        persistence = new Persistence();
+        persistence.activateTrip(this, tripId);
+
+        //save default active trip is in shared preferences
+        preferences = this.getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, 0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(Constants.ACTIVE_TRIP, tripId);
+        editor.apply();
     }
 
     private Trip setUpTrip() {

@@ -236,7 +236,6 @@ public class AddATripSecondCheckPointWindow extends AppCompatActivity implements
             editor.putString(Constants.SEARCH_LAT, "");
             editor.putString(Constants.SEARCH_LONG, "");
             editor.apply();
-            //TODO: Put a balloon on map in this case
         }
 
         if (location != null) {
