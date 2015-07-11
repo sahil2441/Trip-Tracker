@@ -13,6 +13,7 @@ import android.os.IBinder;
 import com.parse.ParsePush;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -249,26 +250,36 @@ public class NotificationSendingService extends Service {
 
     private void sendNotification(String message) {
 
-        Collection<UserTrip> userTrips = this.getActiveTrip().getFriendList();
+        Collection<String> listOfChannels = getListOfChannels();
         ParsePush push;
         String userID;
         String timeToShow = getTimeToShow();
 
-        /**
-         * Send Push Message
-         */
+        //Send Push Message
         preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         userID = preferences.getString(Constants.USER_NAME, "");
         message += "#" + userID;
         message += "$" + timeToShow;
-        if (userTrips != null && userTrips.size() > 0) {
-            for (UserTrip userTrip : userTrips) {
-                push = new ParsePush();
-                push.setChannel("c" + userTrip.getUserID());
-                push.setMessage(message);
-                push.sendInBackground();
+        try {
+            push = new ParsePush();
+            push.setChannels(listOfChannels);
+            push.setMessage(message);
+            push.sendInBackground();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Collection<String> getListOfChannels() {
+        Collection<String> collectionOfChannels = new ArrayList<>();
+        Trip activeTrip = getActiveTripFromDB();
+        if (activeTrip != null && activeTrip.getFriendList() != null &&
+                activeTrip.getFriendList().size() > 0) {
+            for (UserTrip userTrip : activeTrip.getFriendList()) {
+                collectionOfChannels.add("c" + userTrip.getUserID());
             }
         }
+        return collectionOfChannels;
     }
 
     private String getTimeToShow() {

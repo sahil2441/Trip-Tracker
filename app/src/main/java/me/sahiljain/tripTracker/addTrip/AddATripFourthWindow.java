@@ -271,27 +271,37 @@ public class AddATripFourthWindow extends AppCompatActivity {
 
     private void sendNotification(String message, Trip trip) {
 
-        Collection<UserTrip> userTrips = trip.getFriendList();
+        Collection<String> listOfChannels = getListOfChannels(trip);
         ParsePush push;
         String userID;
         String timeToShow = getTimeToShow();
 
-        /**
-         * Send Push Message
-         */
+        //Send Push Message
         preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
         userID = preferences.getString(Constants.USER_NAME, "");
         message += "#" + userID;
         message += "$" + timeToShow;
-        if (userTrips != null && userTrips.size() > 0) {
-            for (UserTrip userTrip : userTrips) {
-                push = new ParsePush();
-                push.setChannel("c" + userTrip.getUserID());
-                push.setMessage(message);
-                push.sendInBackground();
-            }
+        try {
+            push = new ParsePush();
+            push.setChannels(listOfChannels);
+            push.setMessage(message);
+            push.sendInBackground();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+    private Collection<String> getListOfChannels(Trip trip) {
+        Collection<String> collectionOfChannels = new ArrayList<>();
+        if (trip != null && trip.getFriendList() != null &&
+                trip.getFriendList().size() > 0) {
+            for (UserTrip userTrip : trip.getFriendList()) {
+                collectionOfChannels.add("c" + userTrip.getUserID());
+            }
+        }
+        return collectionOfChannels;
+    }
+
 
     private String getTimeToShow() {
         String time = getTime();
