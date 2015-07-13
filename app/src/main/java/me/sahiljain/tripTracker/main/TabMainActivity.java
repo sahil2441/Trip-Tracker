@@ -119,6 +119,10 @@ public class TabMainActivity extends AppCompatActivity implements TabMainActivit
             showRateUsDialog();
         }
 
+        //Store Version Number
+        editor.putString(Constants.VERSION_NUMBER, "1.2.3");
+        editor.apply();
+
     }
 
     private void showRateUsDialog() {

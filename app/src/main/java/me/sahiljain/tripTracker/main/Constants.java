@@ -104,4 +104,5 @@ public class Constants {
 
     public static final String CHECK_POINT_1 = "checkP1";
     public static final String CHECK_POINT_2 = "checkP2";
+    public static final String VERSION_NUMBER = "VERSION_NUMBER";
 }

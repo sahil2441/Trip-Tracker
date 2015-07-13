@@ -2,6 +2,7 @@ package me.sahiljain.tripTracker.menu;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +31,7 @@ public class AboutActivity extends Activity {
         textViewAbout = (TextView) findViewById(R.id.text_view_about);
         disclaimerText = (TextView) findViewById(R.id.disclaimer_text_about);
 
-        textViewAbout.setText("Version 1.2 \n" +
+        textViewAbout.setText("Version 1.2.3 \n" +
                 "Copyright \u00a9 2015 MusafirApps \n All Rights Reserved \n Email: " +
                 "musafir.trip.tracker@gmail.com");
         disclaimerText.setText("Disclaimer: Please note that this app may show incorrect location coordinates" +
@@ -69,11 +70,14 @@ public class AboutActivity extends Activity {
 
     private String getDeviceInfo() {
         String s = "";
+        SharedPreferences preferences = getSharedPreferences(Constants.TRIP_TRACKER_SHARED_PREFERENCES, MODE_PRIVATE);
+        String versionNumber = preferences.getString(Constants.VERSION_NUMBER, "");
         try {
             s = "Debug-infos:";
             s += "\n OS Version: " + System.getProperty("os.version") + "(" + android.os.Build.VERSION.INCREMENTAL + ")";
             s += "\n OS API Level: " + android.os.Build.VERSION.SDK_INT;
             s += "\n Device: " + android.os.Build.DEVICE;
+            s += "\nMusafir Version Number: " + versionNumber;
             s += "\n Model (and Product): " + android.os.Build.MODEL + " (" + android.os.Build.PRODUCT + ")\n\n";
         } catch (Exception e) {
             Log.e(Constants.TAG, e.toString());
