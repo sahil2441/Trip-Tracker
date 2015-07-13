@@ -54,7 +54,7 @@ public class SignUpActivity extends Activity {
 
                 String userName = countryCode + mobileNumber;
 
-                if (mobileNumber == "") {
+                if (mobileNumber.equalsIgnoreCase("")) {
                     showErrorDialog("Please enter a valid mobile number");
                 } else {
                     showConfirmationDialog(userName, mobileNumber, countryCode);

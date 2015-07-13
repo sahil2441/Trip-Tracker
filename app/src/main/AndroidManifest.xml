@@ -197,6 +197,7 @@
             android:name=".verification.SignUpActivity"
             android:label="@string/YourPhone"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:parentActivityName=".verification.IntroActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
