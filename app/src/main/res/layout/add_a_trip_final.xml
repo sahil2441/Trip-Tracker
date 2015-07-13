@@ -21,10 +21,10 @@
             android:layout_alignLeft="@+id/select_friends_add_a_trip_fourth"
             android:layout_alignStart="@+id/select_friends_add_a_trip_fourth"
             android:layout_below="@+id/select_friends_add_a_trip_fourth"
-            android:fontFamily="sans-serif-condensed"
             android:paddingBottom="10sp"
             android:text="Add friends whom you&apos;d like to send notifications."
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:fontFamily="sans-serif-condensed"
             android:textSize="25sp" />
 
 

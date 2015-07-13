@@ -254,7 +254,6 @@ public class AddATripFourthWindow extends AppCompatActivity {
                     }
                 })
                 .show();
-
     }
 
     /**

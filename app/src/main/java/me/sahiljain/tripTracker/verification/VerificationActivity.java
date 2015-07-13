@@ -31,7 +31,8 @@ public class VerificationActivity extends Activity {
         String origNumber = getIntent().getStringExtra(Constants.SMS_NUMBER);
         if (origNumber != null && origNumber != "" && !preferences.getBoolean(Constants.LOGIN_STATUS,
                 false)) {
-            if (origNumber.equalsIgnoreCase(preferences.getString(Constants.USER_NAME, ""))) {
+            if ((origNumber.equalsIgnoreCase(preferences.getString(Constants.USER_NAME, "")))
+                    || (origNumber.equalsIgnoreCase(preferences.getString(Constants.MOBILE_NO, "")))) {
                 Log.d(Constants.TAG, "SMS verification successful; Now starting " +
                         "parse process");
                 startParseProcess();
@@ -99,6 +100,7 @@ public class VerificationActivity extends Activity {
 
     /**
      * Method called only once- when the user is successfully subscribed for the first time.
+     *
      * @param userName
      */
     private void updateLoginDetails(String userName) {
