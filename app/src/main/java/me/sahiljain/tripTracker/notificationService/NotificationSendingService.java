@@ -210,8 +210,8 @@ public class NotificationSendingService extends Service {
     private boolean getTimeDifference(Date timeStamp) {
         if (timeStamp != null) {
             long diff = new Date().getTime() - timeStamp.getTime();
-            double diffHours = diff / (60 * 1000);
-            if (diffHours > 15) {
+            double diffMinutes = diff / (60 * 1000);
+            if (diffMinutes > 15) {
                 return true;
             } else {
                 return false;
