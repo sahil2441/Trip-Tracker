@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Trip-Tracker.iml" filepath="$PROJECT_DIR$/Trip-Tracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/locationstat.iml" filepath="$PROJECT_DIR$/locationstat.iml" />
     </modules>
   </component>
 </project>
-
